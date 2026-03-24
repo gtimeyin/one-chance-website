@@ -94,7 +94,7 @@ export default function ReadySection() {
           padding: "16px 32px",
           background: "white",
           color: "rgb(18, 27, 25)",
-          borderRadius: 999,
+          borderRadius: 0,
           textDecoration: "none",
         }}
       >

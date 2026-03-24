@@ -15,12 +15,12 @@ export default function Navbar() {
 
   return (
     <nav
-      className="fixed bottom-0 right-0 w-full flex items-center justify-center overflow-hidden z-10"
+      className="fixed top-0 left-0 w-full flex items-center justify-center overflow-hidden z-10"
       style={{ padding: 0 }}
     >
       <div
-        className="flex items-center justify-end w-full overflow-hidden"
-        style={{ maxWidth: 1440, padding: "0 100px 24px" }}
+        className="flex items-center justify-start w-full overflow-hidden"
+        style={{ maxWidth: 1440, padding: "24px 100px 0" }}
       >
         {/* Menu toggle button */}
         <motion.button

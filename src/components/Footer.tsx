@@ -63,7 +63,7 @@ export default function Footer() {
             padding: "16px 32px",
             background: "white",
             color: "rgb(18, 27, 25)",
-            borderRadius: 999,
+            borderRadius: 0,
             textDecoration: "none",
           }}
         >
@@ -107,7 +107,7 @@ export default function Footer() {
             style={{
               background: "rgba(255,255,255,0.1)",
               border: "1px solid rgba(255,255,255,0.2)",
-              borderRadius: 999,
+              borderRadius: 0,
               padding: "12px 20px",
               fontSize: 14,
               color: "white",
@@ -121,7 +121,7 @@ export default function Footer() {
             style={{
               background: "white",
               color: "rgb(18, 27, 25)",
-              borderRadius: 999,
+              borderRadius: 0,
               padding: "12px 24px",
               fontSize: 14,
               fontWeight: 600,

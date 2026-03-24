@@ -1,12 +1,14 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import LottieBackground from "./LottieBackground";
+
+const rotatingWords = ["A CHAOTIC", "AN AWESOME", "A FUN"];
 
 const headingLines = [
   { words: ["LAGOS", "CAN", "BE"], startIndex: 0 },
-  { words: ["A CHAOTIC"], startIndex: 3 },
-  { words: ["PLACE"], startIndex: 4 },
+  { words: ["__ROTATING__", "PLACE"], startIndex: 3 },
 ];
 
 const wordAnimation = {
@@ -43,6 +45,45 @@ const headingStyle = {
   fontWeight: 800,
   color: "white",
 } as const;
+
+function RotatingWord() {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % rotatingWords.length);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <motion.span
+      custom={3}
+      variants={wordAnimation}
+      initial="initial"
+      animate="animate"
+      style={{
+        display: "inline-block",
+        background: "black",
+        padding: "4px 12px",
+        lineHeight: "82px",
+      }}
+    >
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={rotatingWords[index]}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.3 }}
+          style={{ display: "inline-block" }}
+        >
+          {rotatingWords[index]}
+        </motion.span>
+      </AnimatePresence>
+    </motion.span>
+  );
+}
 
 export default function Hero() {
   return (
@@ -112,6 +153,9 @@ export default function Hero() {
             >
               {line.words.map((word, wi) => {
                 const globalIndex = line.startIndex + wi;
+                if (word === "__ROTATING__") {
+                  return <RotatingWord key="rotating" />;
+                }
                 return (
                   <motion.span
                     key={globalIndex}
@@ -160,7 +204,7 @@ export default function Hero() {
             padding: "16px 32px",
             background: "white",
             color: "rgb(18, 27, 25)",
-            borderRadius: 999,
+            borderRadius: 0,
             textDecoration: "none",
           }}
         >

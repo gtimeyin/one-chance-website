@@ -51,7 +51,7 @@ export default function HowToPlay() {
       style={{
         backgroundColor: "#fccd21",
         minHeight: "80vh",
-        scrollMarginTop: 300,
+        marginTop: -300,
         zIndex: 3,
         overflow: "visible",
         padding: 0,
@@ -81,7 +81,7 @@ export default function HowToPlay() {
           <div className="w-full">
             <h1
               className="font-barlow-condensed uppercase hero-heading"
-              style={{ color: "#121B19" }}
+              style={{ color: "#121B19", fontWeight: 800, wordWrap: "break-word", overflowWrap: "break-word" }}
             >
               A quick start guide on how to play the game.
             </h1>
