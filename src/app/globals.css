@@ -83,24 +83,17 @@ h1, h2, h3, h4, h5, h6, p, figure {
 }
 
 .howtoplay-container {
-  height: 1251px;
+  height: auto;
+  padding-left: 48px;
+  padding-right: 48px;
 }
 
 .howtoplay-card {
   padding: 60px;
-}
-
-@media (max-width: 1439px) and (min-width: 810px) {
-  .howtoplay-container {
-    height: 932px;
-  }
+  margin-top: -100px;
 }
 
 @media (max-width: 809px) {
-  .howtoplay-container {
-    height: auto;
-  }
-
   .howtoplay-card {
     padding: 40px 20px;
   }

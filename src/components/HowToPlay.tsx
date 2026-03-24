@@ -47,11 +47,10 @@ export default function HowToPlay() {
     <section
       id="howtoplay"
       ref={ref}
-      className="relative flex flex-col items-center justify-center w-full"
+      className="relative flex flex-col items-center justify-start w-full"
       style={{
         backgroundColor: "#fccd21",
-        minHeight: "80vh",
-        marginTop: -300,
+        marginTop: 0,
         zIndex: 3,
         overflow: "visible",
         padding: 0,
@@ -61,8 +60,8 @@ export default function HowToPlay() {
         initial={{ opacity: 0, y: 146 }}
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 146 }}
         transition={{ type: "spring", damping: 25, stiffness: 100, duration: 1 }}
-        className="flex items-center justify-center w-full howtoplay-container"
-        style={{ maxWidth: 1440, overflow: "visible" }}
+        className="flex items-center justify-start w-full howtoplay-container"
+        style={{ maxWidth: 1440, overflow: "visible", paddingBottom: 80 }}
       >
         {/* White card */}
         <div
@@ -70,7 +69,6 @@ export default function HowToPlay() {
           style={{
             backgroundColor: "rgb(255, 255, 255)",
             width: "100%",
-            height: "100%",
             maxWidth: 1360,
             gap: 32,
             overflow: "visible",
@@ -108,7 +106,7 @@ export default function HowToPlay() {
                       background: "none",
                       border: "none",
                       borderBottom: isActive
-                        ? `1px solid ${step.color}`
+                        ? `6px solid rgba(114, 191, 253, 1)`
                         : "none",
                       width: "100%",
                       overflow: "visible",
@@ -173,7 +171,7 @@ export default function HowToPlay() {
               className="flex-1 relative overflow-hidden"
               style={{
                 padding: "57px 49px",
-                borderRadius: 16,
+                borderRadius: 0,
                 background:
                   "linear-gradient(180deg, #263435 0%, #1a2b2c 100%)",
               }}
@@ -186,7 +184,7 @@ export default function HowToPlay() {
                 className="font-barlow"
                 style={{
                   fontSize: 32,
-                  lineHeight: "32px",
+                  lineHeight: "37px",
                   color: "rgb(255, 255, 255)",
                   maxWidth: 486,
                   position: "relative",
