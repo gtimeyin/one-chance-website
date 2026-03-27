@@ -73,6 +73,7 @@ export default function HowToPlay() {
             gap: 32,
             overflow: "visible",
             position: "relative",
+            marginTop: -100,
           }}
         >
           {/* Heading */}
@@ -106,7 +107,7 @@ export default function HowToPlay() {
                       background: "none",
                       border: "none",
                       borderBottom: isActive
-                        ? `6px solid rgba(114, 191, 253, 1)`
+                        ? `3px solid rgba(114, 191, 253, 1)`
                         : "none",
                       width: "100%",
                       overflow: "visible",

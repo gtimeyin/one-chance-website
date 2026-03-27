@@ -54,6 +54,7 @@ export default function FAQs() {
       className="flex flex-col items-center justify-center w-full"
       style={{
         padding: "clamp(60px, 6vw, 96px) clamp(20px, 4vw, 96px) clamp(60px, 8vw, 120px)",
+        backgroundColor: "white",
         scrollMarginTop: 80,
         gap: 60,
       }}

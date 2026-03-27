@@ -5,14 +5,17 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
 const characters = [
-  { name: "The Mama", image: "/images/char-mama.png", width: 181, height: 648, left: 0, top: 0 },
-  { name: "The Business Woman", image: "/images/char-business-woman.png", width: 277, height: 577, left: 51, top: 95 },
-  { name: "The Worker", image: "/images/char-worker.png", width: 245, height: 661, left: 225, top: 95 },
-  { name: "The Big Man", image: "/images/char-big-man.png", width: 317, height: 657, left: 385, top: 131 },
-  { name: "The Slay Queen", image: "/images/char-slay-queen.png", width: 315, height: 659, left: 501, top: 95 },
-  { name: "The Laughing Girl", image: "/images/char-laughing-girl.png", width: 287, height: 672, left: 685, top: 95 },
-  { name: "The Area Boy", image: "/images/char-area-boy.png", width: 255, height: 680, left: 837, top: 74 },
-  { name: "The Chief", image: "/images/char-chief.png", width: 234, height: 625, left: 985, top: 71 },
+  // Row 1 — apex (centered)
+  { name: "The Mama", image: "/images/char-mama.png", width: 181, height: 648, left: 519, top: 12, zIndex: 1 },
+  // Row 2 — middle (3 characters, narrower spread)
+  { name: "The Business Woman", image: "/images/char-business-woman.png", width: 277, height: 577, left: 160, top: 153, zIndex: 2 },
+  { name: "The Worker", image: "/images/char-worker.png", width: 245, height: 661, left: 468, top: 69, zIndex: 2 },
+  { name: "The Big Man", image: "/images/char-big-man.png", width: 317, height: 657, left: 743, top: 73, zIndex: 2 },
+  // Row 3 — base (4 characters, full width)
+  { name: "The Slay Queen", image: "/images/char-slay-queen.png", width: 315, height: 659, left: 0, top: 129, zIndex: 3 },
+  { name: "The Laughing Girl", image: "/images/char-laughing-girl.png", width: 287, height: 672, left: 358, top: 116, zIndex: 3 },
+  { name: "The Area Boy", image: "/images/char-area-boy.png", width: 255, height: 680, left: 687, top: 108, zIndex: 3 },
+  { name: "The Chief", image: "/images/char-chief.png", width: 234, height: 625, left: 985, top: 163, zIndex: 3 },
 ];
 
 export default function Characters() {
@@ -39,7 +42,7 @@ export default function Characters() {
         style={{ top: 0, left: 0, right: 0 }}
       >
         <h2
-          className="font-barlow-condensed uppercase text-center"
+          className="font-barlow-condensed uppercase text-center font-extrabold"
           style={{
             fontSize: "clamp(60px, 14vw, 256px)",
             lineHeight: "78%",
@@ -79,6 +82,7 @@ export default function Characters() {
               top: char.top,
               width: char.width,
               height: char.height,
+              zIndex: char.zIndex,
             }}
           >
             <Image
