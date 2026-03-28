@@ -20,8 +20,8 @@ export default function RelatedProducts({ products }: RelatedProductsProps) {
       ref={ref}
       className="w-full"
       style={{
-        padding: "clamp(40px, 6vw, 80px) clamp(20px, 4vw, 60px)",
-        background: "var(--color-light-bg)",
+        padding: "clamp(60px, 6vw, 96px) clamp(20px, 4vw, 60px)",
+        background: "white",
       }}
     >
       <div className="mx-auto" style={{ maxWidth: 1280 }}>
@@ -31,11 +31,11 @@ export default function RelatedProducts({ products }: RelatedProductsProps) {
           transition={{ duration: 0.5 }}
           className="font-barlow-condensed font-extrabold uppercase"
           style={{
-            fontSize: "clamp(28px, 4vw, 44px)",
+            fontSize: "clamp(32px, 5vw, 64px)",
             color: "var(--color-dark)",
-            letterSpacing: "-2px",
-            lineHeight: 1,
-            marginBottom: 40,
+            letterSpacing: "-0.02em",
+            lineHeight: "100%",
+            marginBottom: 48,
           }}
         >
           YOU MIGHT ALSO LIKE

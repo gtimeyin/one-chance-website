@@ -52,10 +52,11 @@ export default function ShopProductGrid({ products }: ShopProductGridProps) {
             className="font-barlow"
             style={{
               fontSize: 14,
-              color: "var(--color-text-muted)",
+              color: "var(--color-dark)",
               marginTop: 12,
               maxWidth: 480,
-              lineHeight: 1.6,
+              lineHeight: 1.5,
+              opacity: 0.7,
             }}
           >
             Shop our wide selection of merch, games and expansion packs. Order directly from One Chance and enjoy a 90-day risk-free trial. Try it, love it.

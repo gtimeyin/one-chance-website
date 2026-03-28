@@ -31,7 +31,7 @@ export default function TestimonialsSection() {
       ref={ref}
       className="w-full"
       style={{
-        padding: "clamp(40px, 6vw, 80px) clamp(20px, 4vw, 60px)",
+        padding: "clamp(60px, 6vw, 96px) clamp(20px, 4vw, 60px)",
         background: "white",
       }}
     >
@@ -46,10 +46,10 @@ export default function TestimonialsSection() {
           <h2
             className="font-barlow-condensed font-extrabold uppercase"
             style={{
-              fontSize: "clamp(28px, 4vw, 44px)",
-              color: "var(--color-dark)",
-              letterSpacing: "-2px",
-              lineHeight: 1,
+              fontSize: "clamp(32px, 5vw, 64px)",
+              color: "black",
+              letterSpacing: "-0.02em",
+              lineHeight: "100%",
             }}
           >
             WORDS ON THE<br />STREET ABOUT US

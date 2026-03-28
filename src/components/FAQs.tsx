@@ -48,7 +48,7 @@ interface FAQsProps {
   subheading?: string;
 }
 
-export default function FAQs({ faqs = defaultFaqs, heading = "Have a question?", subheading }: FAQsProps) {
+export default function FAQs({ faqs = defaultFaqs, heading = "HAVE A QUESTION?", subheading = "WE HAVE ANSWERS" }: FAQsProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -60,7 +60,7 @@ export default function FAQs({ faqs = defaultFaqs, heading = "Have a question?",
       className="flex flex-col items-center justify-center w-full"
       style={{
         padding: "clamp(60px, 6vw, 96px) clamp(20px, 4vw, 96px) clamp(60px, 8vw, 120px)",
-        backgroundColor: "white",
+        backgroundColor: "#121B19",
         scrollMarginTop: 80,
         gap: 60,
       }}
@@ -83,37 +83,23 @@ export default function FAQs({ faqs = defaultFaqs, heading = "Have a question?",
               fontSize: 12,
               lineHeight: "130%",
               letterSpacing: "0.15em",
-              color: "rgba(8, 59, 47, 0.8)",
+              color: "rgb(163, 163, 163)",
+              marginBottom: 8
             }}
           >
             {heading}
           </p>
-          {subheading && (
-            <p
-              className="font-barlow"
-              style={{
-                fontSize: "clamp(18px, 3vw, 24px)",
-                lineHeight: "130%",
-                letterSpacing: "-0.01em",
-                color: "rgb(207, 209, 208)",
-              }}
-            >
-              {subheading}
-            </p>
-          )}
-          {!subheading && (
-            <p
-              className="font-barlow"
-              style={{
-                fontSize: "clamp(18px, 3vw, 24px)",
-                lineHeight: "130%",
-                letterSpacing: "-0.01em",
-                color: "rgb(207, 209, 208)",
-              }}
-            >
-              We&apos;ve got the answers
-            </p>
-          )}
+          <h2
+            className="font-barlow-condensed font-extrabold uppercase"
+            style={{
+              fontSize: "clamp(32px, 5vw, 64px)",
+              lineHeight: "100%",
+              letterSpacing: "-0.02em",
+              color: "white",
+            }}
+          >
+            {subheading}
+          </h2>
         </motion.div>
 
         {/* FAQ items */}
@@ -130,20 +116,20 @@ export default function FAQs({ faqs = defaultFaqs, heading = "Have a question?",
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
                 className="w-full flex items-center justify-between cursor-pointer text-left"
                 style={{
-                  padding: "20px 0",
+                  padding: "24px 0",
                   background: "none",
                   border: "none",
-                  borderBottom: "1px solid rgba(207, 209, 208, 0.2)",
+                  borderBottom: "1px solid rgba(255, 255, 255, 0.2)",
                 }}
               >
                 <span
                   className="font-barlow"
                   style={{
-                    fontSize: "clamp(18px, 2vw, 24px)",
+                    fontSize: "clamp(18px, 1.5vw, 20px)",
                     lineHeight: "130%",
                     letterSpacing: "-0.01em",
                     fontWeight: 600,
-                    color: "rgb(18, 27, 25)",
+                    color: "white",
                     paddingRight: 16,
                   }}
                 >
@@ -158,8 +144,8 @@ export default function FAQs({ faqs = defaultFaqs, heading = "Have a question?",
                   style={{ width: 24, height: 24 }}
                 >
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <line x1="12" y1="4" x2="12" y2="20" stroke="rgb(122, 122, 122)" strokeWidth="2" strokeLinecap="round" />
-                    <line x1="4" y1="12" x2="20" y2="12" stroke="rgb(122, 122, 122)" strokeWidth="2" strokeLinecap="round" />
+                    <line x1="12" y1="4" x2="12" y2="20" stroke="white" strokeWidth="2" strokeLinecap="round" />
+                    <line x1="4" y1="12" x2="20" y2="12" stroke="white" strokeWidth="2" strokeLinecap="round" />
                   </svg>
                 </motion.div>
               </button>
@@ -180,7 +166,7 @@ export default function FAQs({ faqs = defaultFaqs, heading = "Have a question?",
                         fontSize: 18,
                         lineHeight: "140%",
                         letterSpacing: "-0.01em",
-                        color: "rgb(122, 122, 122)",
+                        color: "rgb(163, 163, 163)",
                         padding: "0 0 20px",
                       }}
                     >

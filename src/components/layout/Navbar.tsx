@@ -75,6 +75,20 @@ export default function Navbar() {
               Menu
             </span>
           </button>
+          {/* Middle: Logo */}
+          <Link
+            href="/"
+            className="font-barlow-condensed font-extrabold uppercase no-underline"
+            style={{
+              fontSize: 24,
+              color: "var(--color-dark)",
+              letterSpacing: "-1px",
+              lineHeight: 1,
+              textDecoration: "none",
+            }}
+          >
+            ONE CHANCE
+          </Link>
 
           {/* Right: Search + Cart */}
           <div className="flex items-center gap-4">

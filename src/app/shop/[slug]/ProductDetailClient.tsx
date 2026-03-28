@@ -94,7 +94,6 @@ export default function ProductDetailClient({
 
         {/* FAQ */}
         <FAQs
-          heading="WE HAVE ANSWERS"
           faqs={productFaqs}
         />
       </div>

@@ -26,20 +26,18 @@ export default function FooterShop() {
   const isInView = useInView(ref, { once: true, margin: "-50px" });
 
   return (
-    <footer ref={ref} className="w-full" style={{ background: "var(--color-dark)" }}>
-      <div className="mx-auto" style={{ maxWidth: 1440 }}>
-        <div className="grid grid-cols-1 lg:grid-cols-12">
-          {/* Left Column: Yellow area with CTA + Characters on bus */}
+    <footer ref={ref} className="w-full" style={{ background: "var(--color-yellow)" }}>
+      <div className="mx-auto" style={{ maxWidth: 1440, position: "relative" }}>
+        <div className="grid grid-cols-1 lg:grid-cols-12 relative z-10">
+          {/* Left Column: Yellow area with CTA */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6 }}
             className="lg:col-span-4 flex flex-col"
             style={{
-              background: "var(--color-yellow)",
-              padding: "clamp(30px, 4vw, 48px) clamp(20px, 3vw, 40px) 0",
+              padding: "clamp(30px, 4vw, 48px) clamp(20px, 3vw, 40px) 120px",
               position: "relative",
-              overflow: "hidden",
             }}
           >
             {/* Text content */}
@@ -63,7 +61,7 @@ export default function FooterShop() {
                   fontSize: 13,
                   color: "var(--color-dark)",
                   marginTop: 12,
-                  opacity: 0.7,
+                  opacity: 0.8,
                   lineHeight: 1.5,
                 }}
               >
@@ -73,35 +71,17 @@ export default function FooterShop() {
                 href="/shop"
                 className="inline-block font-barlow font-bold no-underline uppercase"
                 style={{
-                  marginTop: 16,
-                  padding: "12px 20px",
+                  marginTop: 24,
+                  padding: "12px 32px",
                   background: "var(--color-dark)",
                   color: "var(--color-yellow)",
-                  fontSize: 13,
+                  fontSize: 14,
                   textDecoration: "none",
                   letterSpacing: "0.02em",
                 }}
               >
                 BUY A GAME NOW !
               </Link>
-            </div>
-
-            {/* Characters on bus image */}
-            <div
-              className="relative w-full"
-              style={{
-                marginTop: "auto",
-                paddingTop: 20,
-                height: "clamp(160px, 22vw, 240px)",
-              }}
-            >
-              <Image
-                src="/images/characters-bus.png"
-                alt="One Chance characters on a Lagos bus"
-                fill
-                className="object-contain object-bottom"
-                sizes="(max-width: 1024px) 100vw, 33vw"
-              />
             </div>
           </motion.div>
 
@@ -112,22 +92,22 @@ export default function FooterShop() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="lg:col-span-3"
             style={{
-              padding: "clamp(30px, 4vw, 48px) clamp(20px, 3vw, 40px)",
+              padding: "clamp(30px, 4vw, 48px) clamp(20px, 3vw, 40px) 120px",
             }}
           >
             <p
               className="font-barlow uppercase"
               style={{
-                fontSize: 12,
+                fontSize: 13,
                 letterSpacing: "0.08em",
-                color: "rgba(255,255,255,0.5)",
-                marginBottom: 16,
-                fontWeight: 500,
+                color: "var(--color-dark)",
+                marginBottom: 20,
+                fontWeight: 600,
               }}
             >
               DISCOVER
             </p>
-            <div className="flex flex-col" style={{ gap: 10 }}>
+            <div className="flex flex-col" style={{ gap: 12 }}>
               {discoverLinks.map((link) => (
                 <Link
                   key={link.label}
@@ -135,9 +115,9 @@ export default function FooterShop() {
                   className="font-barlow no-underline"
                   style={{
                     fontSize: 14,
-                    color: "var(--color-yellow)",
+                    color: "var(--color-dark)",
                     textDecoration: "none",
-                    fontWeight: 400,
+                    fontWeight: 500,
                   }}
                 >
                   {link.label}
@@ -145,6 +125,37 @@ export default function FooterShop() {
               ))}
             </div>
           </motion.div>
+
+          {/* Bus Image Absolute Container (Spanning Left + Middle) */}
+          <div
+            className="hidden lg:block absolute bottom-0 left-0"
+            style={{
+              width: "66.66%", // Spans approximately 8 columns
+              height: "clamp(200px, 26vw, 320px)",
+              zIndex: 5,
+              pointerEvents: "none",
+            }}
+          >
+            <Image
+              src="/images/characters-bus.png"
+              alt="One Chance characters on a Lagos bus"
+              fill
+              className="object-contain object-bottom"
+              sizes="60vw"
+              priority
+            />
+          </div>
+
+          {/* Mobile Bus Image (Inside spacing) */}
+          <div className="lg:hidden w-full relative h-[200px] mt-4">
+             <Image
+              src="/images/characters-bus.png"
+              alt="One Chance characters on a Lagos bus"
+              fill
+              className="object-contain object-bottom"
+              sizes="100vw"
+            />
+          </div>
 
           {/* Right Column: Join Our Community + Social */}
           <motion.div
@@ -160,9 +171,9 @@ export default function FooterShop() {
             <h3
               className="font-barlow-condensed font-extrabold uppercase"
               style={{
-                fontSize: "clamp(22px, 3vw, 28px)",
+                fontSize: "clamp(24px, 3vw, 32px)",
                 lineHeight: 1.1,
-                color: "white",
+                color: "var(--color-dark)",
                 letterSpacing: "-1px",
               }}
             >
@@ -171,9 +182,10 @@ export default function FooterShop() {
             <p
               className="font-barlow"
               style={{
-                fontSize: 12,
-                color: "rgba(255,255,255,0.5)",
+                fontSize: 13,
+                color: "var(--color-dark)",
                 marginTop: 6,
+                opacity: 0.8,
               }}
             >
               Get news, photos, events, and business updates
@@ -185,11 +197,11 @@ export default function FooterShop() {
                 e.preventDefault();
                 setEmail("");
               }}
-              className="flex"
+              className="flex items-stretch"
               style={{
-                marginTop: 14,
-                maxWidth: 340,
-                border: "1px solid var(--color-yellow)",
+                marginTop: 20,
+                maxWidth: 400,
+                border: "1px solid var(--color-dark)",
               }}
             >
               <input
@@ -201,9 +213,9 @@ export default function FooterShop() {
                 style={{
                   background: "transparent",
                   border: "none",
-                  padding: "10px 12px",
-                  fontSize: 11,
-                  color: "white",
+                  padding: "12px 16px",
+                  fontSize: 12,
+                  color: "var(--color-dark)",
                   outline: "none",
                   letterSpacing: "0.04em",
                 }}
@@ -213,14 +225,15 @@ export default function FooterShop() {
                 type="submit"
                 className="cursor-pointer border-none flex items-center justify-center"
                 style={{
-                  padding: "10px 14px",
-                  background: "var(--color-yellow)",
+                  padding: "0 16px",
+                  background: "transparent",
                   color: "var(--color-dark)",
+                  borderLeft: "1px solid var(--color-dark)",
                 }}
               >
                 <svg
-                  width="16"
-                  height="16"
+                  width="18"
+                  height="18"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -228,55 +241,69 @@ export default function FooterShop() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                  <polyline points="12 5 19 12 12 19" />
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 8 16 12 12 16" />
+                  <line x1="8" y1="12" x2="16" y2="12" />
                 </svg>
               </button>
             </form>
 
-            {/* Social Links */}
-            <div className="flex flex-col" style={{ marginTop: 28, gap: 16 }}>
-              {socialLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  className="no-underline flex flex-col"
-                  style={{ textDecoration: "none" }}
-                >
-                  <span
-                    className="font-barlow uppercase"
-                    style={{
-                      fontSize: 10,
-                      letterSpacing: "0.08em",
-                      color: "rgba(255,255,255,0.4)",
-                      fontWeight: 500,
-                    }}
+            {/* Social Links with Separators */}
+            <div className="flex flex-col" style={{ marginTop: 40 }}>
+              {socialLinks.map((link, index) => (
+                <div key={link.label}>
+                  {index > 0 && (
+                    <div
+                      style={{
+                        height: "1px",
+                        background: "rgba(0,0,0,0.1)",
+                        width: "100%",
+                        margin: "12px 0",
+                      }}
+                    />
+                  )}
+                  <a
+                    href={link.href}
+                    className="no-underline flex flex-col group"
+                    style={{ textDecoration: "none" }}
                   >
-                    {link.prefix}
-                  </span>
-                  <span className="flex items-center gap-2" style={{ marginTop: 2 }}>
                     <span
-                      className="font-barlow font-semibold"
-                      style={{ fontSize: 18, color: "white" }}
+                      className="font-barlow uppercase"
+                      style={{
+                        fontSize: 11,
+                        letterSpacing: "0.08em",
+                        color: "var(--color-dark)",
+                        opacity: 0.7,
+                        fontWeight: 500,
+                      }}
                     >
-                      {link.label}
+                      {link.prefix}
                     </span>
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="rgba(255,255,255,0.4)"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <circle cx="12" cy="12" r="10" />
-                      <line x1="7" y1="17" x2="17" y2="7" />
-                      <polyline points="7 7 17 7 17 17" />
-                    </svg>
-                  </span>
-                </a>
+                    <span className="flex items-center gap-2" style={{ marginTop: 2 }}>
+                      <span
+                        className="font-barlow font-bold uppercase transition-transform group-hover:translate-x-1"
+                        style={{ fontSize: 20, color: "var(--color-dark)" }}
+                      >
+                        {link.label}
+                      </span>
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="var(--color-dark)"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="7" y1="17" x2="17" y2="7" />
+                        <polyline points="7 7 17 7 17 17" />
+                      </svg>
+                    </span>
+                  </a>
+                </div>
               ))}
             </div>
 
@@ -284,13 +311,14 @@ export default function FooterShop() {
             <p
               className="font-barlow"
               style={{
-                fontSize: 10,
-                color: "rgba(255,255,255,0.3)",
-                marginTop: 30,
+                fontSize: 11,
+                color: "var(--color-dark)",
+                opacity: 0.7,
+                marginTop: 48,
                 textAlign: "right",
               }}
             >
-              DESIGNED BY <span style={{ fontWeight: 700, color: "rgba(255,255,255,0.5)" }}>KE</span>
+              DESIGNED BY <span style={{ fontWeight: 800, color: "var(--color-dark)" }}>NK</span>
             </p>
           </motion.div>
         </div>

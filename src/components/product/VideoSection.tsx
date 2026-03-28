@@ -12,8 +12,8 @@ export default function VideoSection() {
       ref={ref}
       className="w-full"
       style={{
-        padding: "clamp(40px, 6vw, 80px) clamp(20px, 4vw, 60px)",
-        background: "var(--color-light-bg)",
+        padding: "clamp(60px, 6vw, 96px) clamp(20px, 4vw, 60px)",
+        background: "#FFD600",
       }}
     >
       <div className="mx-auto" style={{ maxWidth: 1280 }}>
@@ -23,12 +23,12 @@ export default function VideoSection() {
           transition={{ duration: 0.5 }}
           className="font-barlow-condensed font-extrabold uppercase"
           style={{
-            fontSize: "clamp(28px, 4vw, 44px)",
-            color: "var(--color-dark)",
-            letterSpacing: "-2px",
-            lineHeight: 1.05,
-            marginBottom: 40,
-            maxWidth: 600,
+            fontSize: "clamp(32px, 5vw, 64px)",
+            color: "black",
+            letterSpacing: "-0.02em",
+            lineHeight: "100%",
+            marginBottom: 48,
+            maxWidth: 800,
           }}
         >
           HEY! READING IS THE WORST WAY TO LEARN HOW TO PLAY A GAME.
@@ -44,8 +44,9 @@ export default function VideoSection() {
           className="relative w-full flex items-center justify-center cursor-pointer"
           style={{
             aspectRatio: "16/9",
-            background: "var(--color-dark)",
-            maxWidth: 800,
+            background: "black",
+            maxWidth: 1000,
+            boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
           }}
         >
           {/* Play button */}

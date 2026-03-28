@@ -23,7 +23,7 @@ export default function WhatsInTheBox() {
       ref={ref}
       className="w-full"
       style={{
-        padding: "clamp(40px, 6vw, 80px) clamp(20px, 4vw, 60px)",
+        padding: "clamp(60px, 6vw, 96px) clamp(20px, 4vw, 60px)",
         background: "white",
       }}
     >
@@ -34,11 +34,11 @@ export default function WhatsInTheBox() {
           transition={{ duration: 0.5 }}
           className="font-barlow-condensed font-extrabold uppercase"
           style={{
-            fontSize: "clamp(32px, 4vw, 48px)",
-            color: "var(--color-dark)",
-            letterSpacing: "-2px",
-            lineHeight: 1,
-            marginBottom: 40,
+            fontSize: "clamp(32px, 5vw, 64px)",
+            color: "black",
+            letterSpacing: "-0.02em",
+            lineHeight: "100%",
+            marginBottom: 48,
           }}
         >
           WHAT&apos;S IN THE BOX?
