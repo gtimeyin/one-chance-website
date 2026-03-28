@@ -14,29 +14,29 @@ export default function QuantitySelector({
   max = 99,
 }: QuantitySelectorProps) {
   return (
-    <div className="flex items-center" style={{ border: "1px solid var(--color-border-light)" }}>
+    <div className="flex items-center gap-4">
       <button
         onClick={() => onChange(Math.max(min, quantity - 1))}
         disabled={quantity <= min}
-        className="cursor-pointer font-barlow font-bold flex items-center justify-center bg-white border-none"
+        className="cursor-pointer flex items-center justify-center bg-white"
         style={{
-          width: 40,
-          height: 40,
-          fontSize: 18,
-          color: quantity <= min ? "var(--color-border-light)" : "var(--color-dark)",
+          width: 32,
+          height: 32,
+          borderRadius: "50%",
+          border: "2px solid #000",
+          fontSize: 20,
+          color: "#000",
+          opacity: quantity <= min ? 0.3 : 1,
         }}
       >
-        -
+        <span style={{ transform: "translateY(-1px)" }}>−</span>
       </button>
       <span
-        className="font-barlow font-semibold flex items-center justify-center"
+        className="font-barlow font-bold flex items-center justify-center underline decoration-2 underline-offset-4"
         style={{
-          width: 48,
-          height: 40,
-          fontSize: 16,
+          fontSize: 20,
           color: "var(--color-dark)",
-          borderLeft: "1px solid var(--color-border-light)",
-          borderRight: "1px solid var(--color-border-light)",
+          minWidth: 20
         }}
       >
         {quantity}
@@ -44,15 +44,18 @@ export default function QuantitySelector({
       <button
         onClick={() => onChange(Math.min(max, quantity + 1))}
         disabled={quantity >= max}
-        className="cursor-pointer font-barlow font-bold flex items-center justify-center bg-white border-none"
+        className="cursor-pointer flex items-center justify-center bg-white"
         style={{
-          width: 40,
-          height: 40,
-          fontSize: 18,
-          color: quantity >= max ? "var(--color-border-light)" : "var(--color-dark)",
+          width: 32,
+          height: 32,
+          borderRadius: "50%",
+          border: "2px solid #000",
+          fontSize: 20,
+          color: "#000",
+          opacity: quantity >= max ? 0.3 : 1,
         }}
       >
-        +
+        <span style={{ transform: "translateY(-1px)" }}>+</span>
       </button>
     </div>
   );

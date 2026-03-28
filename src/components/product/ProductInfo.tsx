@@ -46,93 +46,78 @@ export default function ProductInfo({ product }: ProductInfoProps) {
         {product.name}
       </h1>
 
+      {/* Badges */}
+      <div className="flex items-center gap-2">
+        <div className="px-3 py-1.5 rounded-md font-barlow font-medium" style={{ background: "#E1F2FF", color: "#4A5568", fontSize: 13 }}>
+          Age 16+
+        </div>
+        <div className="px-3 py-1.5 rounded-md font-barlow font-medium flex items-center gap-1.5" style={{ background: "#E1F2FF", color: "#4A5568", fontSize: 13 }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          2-6
+        </div>
+        <div className="px-3 py-1.5 rounded-md font-barlow font-medium flex items-center gap-1.5" style={{ background: "#E1F2FF", color: "#4A5568", fontSize: 13 }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          15 MIN
+        </div>
+      </div>
+
       {/* Rating */}
       <div className="flex items-center gap-3">
-        <StarRating rating={5} size={16} />
+        <StarRating rating={5} size={18} />
         <span className="font-barlow" style={{ fontSize: 13, color: "var(--color-text-muted)" }}>
-          (5.0)
+          98 Reviews
         </span>
       </div>
 
       {/* Price */}
-      <div className="flex items-center gap-3">
+      <div className="flex flex-col gap-1" style={{ marginTop: 10 }}>
         <span
-          className="font-barlow font-bold"
-          style={{ fontSize: 32, color: "var(--color-dark)" }}
+          className="font-barlow-condensed font-extrabold"
+          style={{ fontSize: 64, color: "#1A202C", lineHeight: 1 }}
         >
           {formatPrice(product.price)}
         </span>
-        {product.on_sale && product.regular_price && (
-          <span
-            className="font-barlow"
-            style={{
-              fontSize: 20,
-              color: "var(--color-text-muted)",
-              textDecoration: "line-through",
-            }}
-          >
-            {formatPrice(product.regular_price)}
-          </span>
-        )}
+      </div>
+
+      {/* Quantity + Total Price */}
+      <div className="flex items-center gap-6" style={{ marginTop: 10 }}>
+        <QuantitySelector quantity={quantity} onChange={setQuantity} />
+        <span className="font-barlow font-bold" style={{ fontSize: 28, color: "var(--color-dark)" }}>
+          {formatPrice(parseFloat(product.price) * quantity)}
+        </span>
       </div>
 
       {/* Short Description */}
-      {product.short_description && (
-        <p className="font-barlow" style={{ fontSize: 14, color: "var(--color-text-muted)", lineHeight: 1.6 }}>
-          {stripHtml(product.short_description)}
+      {product.short_description ? (
+        <div 
+          className="font-barlow" 
+          style={{ fontSize: 16, color: "#4A5568", lineHeight: 1.5, marginTop: 16, maxWidth: "45ch" }}
+          dangerouslySetInnerHTML={{ __html: product.short_description }}
+        />
+      ) : (
+        <p className="font-barlow" style={{ fontSize: 16, color: "#4A5568", lineHeight: 1.5, marginTop: 16, maxWidth: "45ch" }}>
+          One Chance is the perfect game for bringing people together and creating lasting memories while learning how the world and money truly work.
         </p>
       )}
 
-      {/* Quantity + Add to Cart */}
-      <div className="flex items-center gap-4" style={{ marginTop: 8 }}>
-        <QuantitySelector quantity={quantity} onChange={setQuantity} />
+      {/* Add to Cart Button */}
+      <div style={{ marginTop: 24 }}>
         <button
           onClick={handleAddToCart}
-          className="flex-1 font-barlow font-bold uppercase cursor-pointer border-none"
+          className="w-full font-barlow font-bold uppercase cursor-pointer border-none flex items-center justify-center gap-3"
           style={{
-            padding: "14px 24px",
-            background: "var(--color-yellow)",
+            padding: "18px 24px",
+            background: "#FFD600",
             color: "var(--color-dark)",
-            fontSize: 16,
-            letterSpacing: "0.02em",
+            fontSize: 18,
+            letterSpacing: "0.05em",
           }}
         >
           ADD TO CART
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
         </button>
       </div>
 
-      {/* Description section */}
-      <div style={{ marginTop: 24, paddingTop: 24, borderTop: "1px solid var(--color-border-light)" }}>
-        <h3 className="font-barlow font-bold" style={{ fontSize: 16, color: "var(--color-dark)", marginBottom: 8 }}>
-          Description
-        </h3>
-        <div
-          className="font-barlow"
-          style={{ fontSize: 14, color: "var(--color-text-muted)", lineHeight: 1.7 }}
-          dangerouslySetInnerHTML={{ __html: product.description || "One Chance is an intense and exciting party experience. It is also fun and highly educational. The very first authentically Nigerian board game. One Chance packs the highs and lows of being Nigerian into a very intense and exciting experience for everyone." }}
-        />
-      </div>
-
-      {/* Additional Info */}
-      <div style={{ paddingTop: 16 }}>
-        <h3 className="font-barlow font-bold" style={{ fontSize: 16, color: "var(--color-dark)", marginBottom: 8 }}>
-          Additional Information
-        </h3>
-        <div className="flex flex-col gap-2 font-barlow" style={{ fontSize: 14, color: "var(--color-text-muted)" }}>
-          <div className="flex justify-between" style={{ borderBottom: "1px solid var(--color-border-light)", paddingBottom: 8 }}>
-            <span>Players</span>
-            <span>2 - 12</span>
-          </div>
-          <div className="flex justify-between" style={{ borderBottom: "1px solid var(--color-border-light)", paddingBottom: 8 }}>
-            <span>Dimensions</span>
-            <span>25cm * 25cm * 6cm</span>
-          </div>
-          <div className="flex justify-between" style={{ paddingBottom: 8 }}>
-            <span>Weight</span>
-            <span>30 - 50 mins</span>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

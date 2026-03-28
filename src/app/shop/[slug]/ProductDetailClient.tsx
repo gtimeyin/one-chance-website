@@ -10,6 +10,7 @@ import QuickStartGuide from "@/components/product/QuickStartGuide";
 import TestimonialsSection from "@/components/product/TestimonialsSection";
 import RelatedProducts from "@/components/product/RelatedProducts";
 import FAQs from "@/components/FAQs";
+import ProductDescription from "@/components/product/ProductDescription";
 import FooterShop from "@/components/layout/FooterShop";
 import SmoothScroll from "@/components/SmoothScroll";
 import type { WooProduct } from "@/lib/woocommerce";
@@ -84,6 +85,9 @@ export default function ProductDetailClient({
             <ProductInfo product={product} />
           </div>
         </section>
+
+        {/* New Description Section */}
+        <ProductDescription product={product} />
 
         {/* Sections */}
         <WhatsInTheBox />

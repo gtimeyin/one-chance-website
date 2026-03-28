@@ -7,14 +7,19 @@ import Image from "next/image";
 export default function ShopHeroBanner() {
   return (
     <section
-      className="w-full relative overflow-hidden"
+      className="w-full relative"
       style={{
-        background: "var(--color-hero-blue, #68C5F2)",
+        padding: "0",
+        background: "white",
       }}
     >
       <div
-        className="mx-auto flex items-stretch"
-        style={{ maxWidth: 1440 }}
+        className="mx-auto flex items-stretch overflow-hidden"
+        style={{ 
+          maxWidth: 1280,
+          background: "var(--color-hero-blue, #68C5F2)",
+          margin: "0 auto",
+        }}
       >
         {/* Left: Text content */}
         <motion.div

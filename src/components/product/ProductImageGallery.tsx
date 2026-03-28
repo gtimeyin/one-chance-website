@@ -23,7 +23,8 @@ export default function ProductImageGallery({ product }: ProductImageGalleryProp
       <div
         className="relative w-full"
         style={{
-          aspectRatio: "1/1",
+          flex: 1,
+          minHeight: 300,
           background: "var(--color-yellow)",
           overflow: "hidden",
         }}
@@ -40,17 +41,17 @@ export default function ProductImageGallery({ product }: ProductImageGalleryProp
 
       {/* Thumbnails */}
       {images.length > 1 && (
-        <div className="flex gap-2 overflow-x-auto">
+        <div className="flex gap-3 mt-4">
           {images.map((img, i) => (
             <button
-              key={img.id}
+              key={img.id || i}
               onClick={() => setSelectedIndex(i)}
-              className="relative shrink-0 cursor-pointer bg-transparent"
+              className="relative shrink-0 cursor-pointer p-0 bg-transparent overflow-hidden"
               style={{
-                width: 72,
-                height: 72,
-                border: i === selectedIndex ? "2px solid var(--color-yellow)" : "2px solid var(--color-border-light)",
-                padding: 0,
+                width: 90,
+                height: 90,
+                border: i === selectedIndex ? "3px solid #3182CE" : "none",
+                opacity: i === selectedIndex ? 1 : 0.6,
               }}
             >
               <Image
@@ -58,7 +59,7 @@ export default function ProductImageGallery({ product }: ProductImageGalleryProp
                 alt={img.alt || `${product.name} ${i + 1}`}
                 fill
                 className="object-cover"
-                sizes="72px"
+                sizes="90px"
               />
             </button>
           ))}

@@ -12,7 +12,8 @@ export const metadata = {
 };
 
 export default async function ShopPage() {
-  const products = await getProducts({ per_page: 12 });
+  const allProducts = await getProducts({ per_page: 12 });
+  const products = allProducts.filter((p) => p.slug === "one-chance-board-game");
 
   return (
     <div className="flex flex-col w-full" style={{ background: "white" }}>

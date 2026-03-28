@@ -34,7 +34,9 @@ export default function ProductCard({ product }: ProductCardProps) {
         className="relative block no-underline overflow-hidden"
         style={{
           aspectRatio: "1/1",
-          background: "#E8E8E8",
+          background: (product.name.toLowerCase().includes("one chance") && product.name.toLowerCase().includes("game")) 
+            ? "#FFD600" 
+            : "#E8E8E8",
         }}
       >
         <Image
