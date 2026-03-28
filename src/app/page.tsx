@@ -1,4 +1,4 @@
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/Hero";
 import HowToPlay from "@/components/HowToPlay";
 import Characters from "@/components/Characters";
@@ -16,7 +16,9 @@ export default function Home() {
     >
       <SmoothScroll />
       <Navbar />
-      <Hero />
+      <div style={{ paddingTop: 56 }}>
+        <Hero />
+      </div>
       <HowToPlay />
       <Characters />
       <Gallery />

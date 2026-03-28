@@ -14,6 +14,9 @@
   --color-gray-dark: #3F4745;
   --color-gray-mid: #7A7A7A;
   --color-white: #FFFFFF;
+  --color-light-bg: #F5F5F5;
+  --color-text-muted: #6B7280;
+  --color-border-light: #E5E7EB;
   --font-barlow: 'Barlow', sans-serif;
   --font-barlow-condensed: 'Barlow Condensed', sans-serif;
 }

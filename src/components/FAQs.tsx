@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { useRef } from "react";
 
-const faqs = [
+const defaultFaqs = [
   {
     question: "What is the recommended age range for players of the game?",
     answer:
@@ -42,7 +42,13 @@ const faqs = [
   },
 ];
 
-export default function FAQs() {
+interface FAQsProps {
+  faqs?: { question: string; answer: string }[];
+  heading?: string;
+  subheading?: string;
+}
+
+export default function FAQs({ faqs = defaultFaqs, heading = "Have a question?", subheading }: FAQsProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -80,19 +86,34 @@ export default function FAQs() {
               color: "rgba(8, 59, 47, 0.8)",
             }}
           >
-            Have a question?
+            {heading}
           </p>
-          <p
-            className="font-barlow"
-            style={{
-              fontSize: "clamp(18px, 3vw, 24px)",
-              lineHeight: "130%",
-              letterSpacing: "-0.01em",
-              color: "rgb(207, 209, 208)",
-            }}
-          >
-            We&apos;ve got the answers
-          </p>
+          {subheading && (
+            <p
+              className="font-barlow"
+              style={{
+                fontSize: "clamp(18px, 3vw, 24px)",
+                lineHeight: "130%",
+                letterSpacing: "-0.01em",
+                color: "rgb(207, 209, 208)",
+              }}
+            >
+              {subheading}
+            </p>
+          )}
+          {!subheading && (
+            <p
+              className="font-barlow"
+              style={{
+                fontSize: "clamp(18px, 3vw, 24px)",
+                lineHeight: "130%",
+                letterSpacing: "-0.01em",
+                color: "rgb(207, 209, 208)",
+              }}
+            >
+              We&apos;ve got the answers
+            </p>
+          )}
         </motion.div>
 
         {/* FAQ items */}
