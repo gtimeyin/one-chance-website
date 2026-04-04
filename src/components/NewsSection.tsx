@@ -76,7 +76,7 @@ export default function NewsSection() {
         </div>
 
         {/* Cards */}
-        <div className="flex w-full items-start gap-4" style={{ minWidth: 0 }}>
+        <div className="flex w-full flex-col items-start gap-4" style={{ minWidth: 0 }}>
           {newsItems.map((item, i) => (
             <motion.div
               key={i}
@@ -85,7 +85,7 @@ export default function NewsSection() {
               transition={{ duration: 0.5, delay: 0.1 + i * 0.1 }}
               className="flex flex-1 flex-col items-start justify-between cursor-pointer"
               style={{
-                height: 448,
+                height: 477,
                 minWidth: 288,
                 background: item.color,
                 padding: 24,

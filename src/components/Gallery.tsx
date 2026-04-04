@@ -36,7 +36,7 @@ export default function Gallery() {
           Gallery
         </motion.span>
 
-        <div className="flex w-full flex-wrap items-start gap-6 mobile:flex-col mobile:gap-6">
+        <div className="flex w-full min-w-full flex-wrap items-start gap-6 mobile:flex-col mobile:gap-6">
           {/* Left column: text + large image */}
           <div className="flex min-w-[320px] grow shrink-0 basis-0 flex-col items-start gap-2 self-stretch">
             <motion.div
@@ -92,12 +92,12 @@ export default function Gallery() {
               />
             </motion.div>
 
-            <div className="flex w-full items-start gap-6">
+            <div className="flex h-fit w-full flex-col items-start gap-6">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.7, delay: 0.5 }}
-                className="relative h-64 min-w-0 grow shrink-0 basis-0 overflow-hidden"
+                className="relative h-[240px] w-full min-w-0 overflow-hidden"
               >
                 <Image
                   src={galleryImages[2].src}
@@ -111,7 +111,7 @@ export default function Gallery() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.7, delay: 0.6 }}
-                className="relative h-64 min-w-0 grow shrink-0 basis-0 overflow-hidden"
+                className="relative h-64 w-full min-w-0 overflow-hidden"
               >
                 <Image
                   src={galleryImages[3].src}

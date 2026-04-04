@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Char } from "@/ui/components/Char";
@@ -38,8 +37,8 @@ export default function Characters() {
           MEET THE LAGOSIANS
         </motion.span>
 
-        {/* Characters row - desktop */}
-        <div className="hidden md:flex h-[625px] w-full max-w-[1024px] flex-none items-end gap-8 mt-[20px]">
+        {/* Same character art as desktop; narrow viewports scroll horizontally */}
+        <div className="flex h-[420px] w-full max-w-[1024px] flex-none items-end gap-3 overflow-x-auto px-4 pb-1 [-webkit-overflow-scrolling:touch] [scrollbar-gutter:stable] mt-[20px] md:h-[625px] md:gap-8 md:overflow-visible md:px-0 md:pb-0">
           {characters.map((char, i) => (
             <motion.div
               key={char.name}
@@ -51,7 +50,7 @@ export default function Characters() {
                 stiffness: 200,
                 delay: 0.1 + i * 0.08,
               }}
-              className="h-auto grow shrink-0 basis-0 self-stretch"
+              className="h-auto w-[min(28vw,140px)] shrink-0 self-stretch md:w-auto md:grow md:basis-0"
             >
               <Char
                 className="h-full w-full"
@@ -59,17 +58,6 @@ export default function Characters() {
               />
             </motion.div>
           ))}
-        </div>
-
-        {/* Mobile: group image */}
-        <div className="block md:hidden px-6 pt-16 pb-8">
-          <Image
-            src="/images/characters-group.png"
-            alt="All the Lagosian characters"
-            width={1920}
-            height={957}
-            className="w-full h-auto"
-          />
         </div>
 
         {/* Subtitle */}

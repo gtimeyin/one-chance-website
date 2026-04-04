@@ -27,8 +27,8 @@ export default function VideoSection() {
       >
         <div className="flex items-center justify-center gap-6">
           <svg
-            width="64"
-            height="64"
+            width="48"
+            height="48"
             viewBox="0 0 24 24"
             fill="none"
             stroke="rgb(18, 27, 25)"
@@ -42,9 +42,9 @@ export default function VideoSection() {
           <span
             className="font-barlow-condensed uppercase"
             style={{
-              fontSize: "clamp(48px, 6vw, 96px)",
+              fontSize: "36px",
               fontWeight: 800,
-              letterSpacing: "-3px",
+              letterSpacing: "-1px",
               color: "rgb(18, 27, 25)",
             }}
           >
