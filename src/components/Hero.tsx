@@ -143,7 +143,7 @@ export default function Hero() {
             animate="animate"
             className="text-button-large font-button-large text-default-font text-center mobile:text-[16px] mobile:leading-[16px]"
           >
-            The Lagos board game of hustle, luck, and survival for 2–6 players.
+            so we made a board game out of it
           </motion.span>
         </div>
 

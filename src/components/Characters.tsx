@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { AnimatePresence, motion, useInView } from "framer-motion";
+import { useRef, useState } from "react";
 import { Char } from "@/ui/components/Char";
 
 const characters = [
@@ -18,6 +18,7 @@ const characters = [
 export default function Characters() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-200px" });
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
     <section
@@ -27,6 +28,24 @@ export default function Characters() {
       style={{ padding: "clamp(60px, 8vw, 128px) 24px" }}
     >
       <div className="flex w-full max-w-[1280px] flex-col items-center">
+        {/* Overline — character name on hover */}
+        <div style={{ height: 32 }}>
+          <AnimatePresence mode="wait">
+            {hoveredIndex !== null && (
+              <motion.span
+                key={characters[hoveredIndex].name}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.15 }}
+                className="font-['Barlow'] text-[16px] font-[600] uppercase tracking-[0.15em] text-neutral-500 text-center block"
+              >
+                {characters[hoveredIndex].name}
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </div>
+
         {/* Giant title */}
         <motion.span
           initial={{ opacity: 0 }}
@@ -37,20 +56,36 @@ export default function Characters() {
           MEET THE LAGOSIANS
         </motion.span>
 
-        {/* Same character art as desktop; narrow viewports scroll horizontally */}
+        {/* Character row — fixed height container, scale via CSS transform to avoid layout shift */}
         <div className="flex h-[420px] w-full max-w-[1024px] flex-none items-end gap-3 overflow-x-auto px-4 pb-1 [-webkit-overflow-scrolling:touch] [scrollbar-gutter:stable] mt-[20px] md:h-[625px] md:gap-8 md:overflow-visible md:px-0 md:pb-0">
           {characters.map((char, i) => (
             <motion.div
               key={char.name}
               initial={{ opacity: 0, y: 40 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+              animate={
+                isInView
+                  ? {
+                      opacity:
+                        hoveredIndex === null || hoveredIndex === i ? 1 : 0.15,
+                      y: 0,
+                    }
+                  : { opacity: 0, y: 40 }
+              }
               transition={{
                 type: "spring",
                 damping: 30,
                 stiffness: 200,
-                delay: 0.1 + i * 0.08,
+                delay: isInView && hoveredIndex === null ? 0.1 + i * 0.08 : 0,
               }}
               className="h-auto w-[min(28vw,140px)] shrink-0 self-stretch md:w-auto md:grow md:basis-0"
+              style={{
+                transformOrigin: "bottom center",
+                transform: hoveredIndex === i ? "scale(1.5)" : "scale(1)",
+                transition: "transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                zIndex: hoveredIndex === i ? 10 : 0,
+              }}
+              onMouseEnter={() => setHoveredIndex(i)}
+              onMouseLeave={() => setHoveredIndex(null)}
             >
               <Char
                 className="h-full w-full"
