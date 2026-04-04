@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { Button } from "@/ui/components/Button";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
@@ -32,12 +33,8 @@ export default function Footer() {
           style={{ minWidth: 320, gap: 16 }}
         >
           <h2
-            className="font-barlow-condensed uppercase"
+            className="text-display-title-bold font-display-title-bold uppercase -tracking-[3px] mobile:text-[48px] mobile:leading-[48px]"
             style={{
-              fontSize: "clamp(48px, 6vw, 80px)",
-              fontWeight: 800,
-              lineHeight: "90%",
-              letterSpacing: "-2px",
               color: "#121B19",
               whiteSpace: "pre-wrap",
             }}
@@ -71,8 +68,8 @@ export default function Footer() {
 
         {/* Right: Newsletter + Social */}
         <div
-          className="flex flex-1 flex-wrap items-start"
-          style={{ gap: 48, minWidth: 288 }}
+          className="flex flex-1 flex-col items-start"
+          style={{ gap: 32, minWidth: 288 }}
         >
           {/* Newsletter */}
           <motion.div
@@ -117,20 +114,13 @@ export default function Footer() {
                 }}
                 required
               />
-              <button
+              <Button
+                variant="white"
+                size="small"
                 type="submit"
-                className="font-barlow font-semibold cursor-pointer"
-                style={{
-                  height: 48,
-                  background: "white",
-                  color: "rgb(18, 27, 25)",
-                  padding: "0 24px",
-                  fontSize: 16,
-                  border: "none",
-                }}
               >
                 Sign Up
-              </button>
+              </Button>
             </form>
           </motion.div>
 

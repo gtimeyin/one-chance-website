@@ -46,13 +46,8 @@ export default function ShopHeroBanner() {
             GRAB UP TO 60% OFF ON SELECTED PRODUCTS
           </p>
           <h1
-            className="font-barlow-condensed font-extrabold uppercase"
-            style={{
-              fontSize: "clamp(36px, 6vw, 68px)",
-              lineHeight: 0.92,
-              letterSpacing: "-2px",
-              color: "var(--color-dark)",
-            }}
+            className="text-heading-xxlarge-bold font-heading-xxlarge-bold uppercase -tracking-[2px] mobile:text-[36px] mobile:leading-[36px]"
+            style={{ color: "var(--color-dark)" }}
           >
             SHOP FROM OUR
             <br />

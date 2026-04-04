@@ -40,13 +40,8 @@ export default function VideoSection() {
             <polygon points="5 3 19 12 5 21 5 3" />
           </svg>
           <span
-            className="font-barlow-condensed uppercase"
-            style={{
-              fontSize: "36px",
-              fontWeight: 800,
-              letterSpacing: "-1px",
-              color: "rgb(18, 27, 25)",
-            }}
+            className="text-heading-xlarge-bold font-heading-xlarge-bold uppercase -tracking-[1px] mobile:text-[24px] mobile:leading-[28px]"
+            style={{ color: "rgb(18, 27, 25)" }}
           >
             Watch game play
           </span>

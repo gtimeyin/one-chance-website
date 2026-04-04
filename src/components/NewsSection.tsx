@@ -39,14 +39,8 @@ export default function NewsSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6 }}
-            className="font-barlow-condensed uppercase"
-            style={{
-              fontSize: "clamp(48px, 6vw, 96px)",
-              fontWeight: 800,
-              letterSpacing: "-3px",
-              color: "rgb(18, 27, 25)",
-              lineHeight: "90%",
-            }}
+            className="text-display-title-bold font-display-title-bold uppercase -tracking-[3px] mobile:text-[48px] mobile:leading-[48px]"
+            style={{ color: "rgb(18, 27, 25)" }}
           >
             {"News, Updates\n& Amebo"}
           </motion.h2>
@@ -76,7 +70,7 @@ export default function NewsSection() {
         </div>
 
         {/* Cards */}
-        <div className="flex w-full flex-col items-start gap-4" style={{ minWidth: 0 }}>
+        <div className="flex w-full flex-col md:flex-row items-start gap-4" style={{ minWidth: 0 }}>
           {newsItems.map((item, i) => (
             <motion.div
               key={i}

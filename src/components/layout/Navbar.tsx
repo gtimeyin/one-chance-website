@@ -26,7 +26,7 @@ const navLinks = [
   { label: "RULES", href: "/#howtoplay" },
   { label: "CHARACTERS", href: "/#meetthelagosians" },
   { label: "UPDATES", href: "/updates" },
-  { label: "CONTACT US", href: "/#contact" },
+  { label: "CONTACT US", href: "/contact" },
 ];
 
 const secondaryLinks = [
@@ -40,6 +40,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
   const [isMobileNav, setIsMobileNav] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const cartItemCount = useCart((s) => s.getItemCount());
   const toggleCart = useCart((s) => s.toggleCart);
   const isCartOpen = useCart((s) => s.isOpen);
@@ -57,6 +58,21 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (y > lastY && y > 100) {
+        setHidden(true);
+      } else {
+        setHidden(false);
+      }
+      lastY = y;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else {
@@ -69,7 +85,14 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="flex w-full max-w-[1280px] items-start justify-between px-6 fixed top-6 left-1/2 -translate-x-1/2 z-50">
+      <div
+        className="flex w-full max-w-[1280px] items-start justify-between px-6 fixed left-1/2 z-50 transition-all duration-300"
+        style={{
+          top: hidden && !isOpen ? -100 : 24,
+          transform: "translateX(-50%)",
+          opacity: hidden && !isOpen ? 0 : 1,
+        }}
+      >
         <div className="flex items-start">
           <Button
             size="small"

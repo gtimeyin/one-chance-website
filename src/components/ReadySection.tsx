@@ -44,14 +44,7 @@ export default function ReadySection() {
             initial={{ opacity: 0, y: 40 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ type: "spring", damping: 30, stiffness: 200, delay: 0.2 }}
-            className="font-barlow-condensed uppercase text-center"
-            style={{
-              fontSize: "clamp(60px, 10vw, 96px)",
-              lineHeight: "82px",
-              letterSpacing: "-3px",
-              fontWeight: 800,
-              color: "white",
-            }}
+            className="text-display-title-bold font-display-title-bold uppercase text-center text-white -tracking-[3px] mobile:text-[48px] mobile:leading-[48px]"
           >
             Ready
             <br />

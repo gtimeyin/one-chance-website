@@ -92,24 +92,6 @@ h1, h2, h3, h4, h5, h6, p, figure {
   border-radius: 4px;
 }
 
-.hero-heading {
-  font-size: 96px;
-  line-height: 82px;
-  width: 100%;
-}
-
-@media (max-width: 1199px) and (min-width: 810px) {
-  .hero-heading {
-    font-size: 77px;
-  }
-}
-
-@media (max-width: 809px) {
-  .hero-heading {
-    font-size: 60px;
-    line-height: 54px;
-  }
-}
 
 .howtoplay-container {
   height: auto;
