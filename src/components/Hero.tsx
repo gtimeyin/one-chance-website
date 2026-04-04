@@ -57,11 +57,12 @@ function RotatingWord() {
       variants={wordAnimation}
       initial="initial"
       animate="animate"
+      className="leading-[82px] mobile:leading-[60px]"
       style={{
         display: "inline-block",
         background: "black",
         padding: "4px 12px",
-        lineHeight: "82px",
+        marginRight: "0.125em",
       }}
     >
       <AnimatePresence mode="wait">
@@ -83,7 +84,7 @@ function RotatingWord() {
 export default function Hero() {
   return (
     <section
-      className="relative flex flex-col items-center justify-start w-full overflow-visible"
+      className="relative flex flex-col items-center justify-start w-full overflow-hidden max-md:min-h-[100vh]"
       style={{
         background:
           "linear-gradient(180deg, #37bbf0 8.37%, #66d8ea 27.3%, rgba(255,222,156,0.49) 66.67%)",
@@ -113,7 +114,7 @@ export default function Hero() {
             {headingLines.map((line, lineIndex) => (
               <h1
                 key={lineIndex}
-                className="text-display-title-bold font-display-title-bold text-white text-center uppercase -tracking-[3px] mobile:text-[48px] mobile:leading-[48px]"
+                className="text-display-title-bold font-display-title-bold text-white text-center uppercase -tracking-[3px] mobile:text-[60px] mobile:leading-[60px]"
               >
                 {line.words.map((word, wi) => {
                   const globalIndex = line.startIndex + wi;
@@ -127,7 +128,7 @@ export default function Hero() {
                       variants={wordAnimation}
                       initial="initial"
                       animate="animate"
-                      style={{ display: "inline-block", marginRight: wi < line.words.length - 1 ? "0.25em" : 0 }}
+                      style={{ display: "inline-block", marginRight: wi < line.words.length - 1 ? "0.125em" : 0 }}
                     >
                       {word}
                     </motion.span>
