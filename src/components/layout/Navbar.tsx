@@ -39,12 +39,21 @@ export default function Navbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
+  const [isMobileNav, setIsMobileNav] = useState(false);
   const cartItemCount = useCart((s) => s.getItemCount());
   const toggleCart = useCart((s) => s.toggleCart);
   const isCartOpen = useCart((s) => s.isOpen);
 
   useEffect(() => {
     setHasMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const sync = () => setIsMobileNav(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
   }, []);
 
   useEffect(() => {
@@ -115,9 +124,10 @@ export default function Navbar() {
           >
             <div className="flex w-full max-w-[1280px] grow shrink-0 basis-0 flex-col items-center justify-between">
               {/* Top: Close button */}
-              <div className="flex w-full flex-col items-start">
+              <div className="flex w-full flex-col items-start pb-4">
                 <Button
                   variant="white"
+                  size={isMobileNav ? "small" : "medium"}
                   icon={<FeatherX />}
                   onClick={() => setIsOpen(false)}
                 >
@@ -127,7 +137,7 @@ export default function Navbar() {
 
               {/* Middle: Nav links + secondary */}
               <div className="flex w-full items-start gap-32 mobile:flex-col mobile:gap-12">
-                <div className="flex flex-col items-start gap-2">
+                <div className="mb-[12px] mt-[12px] flex flex-col items-start gap-2">
                   {navLinks.map((link, i) => (
                     <motion.div
                       key={link.label}
@@ -155,14 +165,14 @@ export default function Navbar() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.3, duration: 0.4 }}
-                  className="flex flex-col items-start gap-4 pt-8 mobile:px-0 mobile:py-0"
+                  className="flex flex-col items-start gap-1 pt-8 mobile:px-0 mobile:py-0"
                 >
                   {secondaryLinks.map((link) => (
                     <Link
                       key={link.label}
                       href={link.href}
                       onClick={() => setIsOpen(false)}
-                      className="text-heading-medium-default font-heading-medium-default text-black-800 no-underline"
+                      className="text-[16px] leading-[24px] font-heading-medium-default text-black-800 no-underline"
                       style={{ textDecoration: "none" }}
                     >
                       {link.label}
