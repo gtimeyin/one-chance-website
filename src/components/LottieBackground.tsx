@@ -2,8 +2,13 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Lottie from "@lottielab/lottie-player/react";
+import dynamic from "next/dynamic";
+
 import bgData from "../../public/lottie/bg-base.json";
+
+const Lottie = dynamic(() => import("@lottielab/lottie-player/react"), {
+  ssr: false,
+});
 
 const MOBILE_MAX_WIDTH = 767;
 
