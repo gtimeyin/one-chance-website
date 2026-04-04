@@ -171,7 +171,7 @@ export default function Navbar() {
                       <Link
                         href={link.href}
                         onClick={() => setIsOpen(false)}
-                        className={`text-[48px] leading-[48px] font-extrabold font-display-title-bold tracking-[-0.03125em] text-black-950 uppercase no-underline ${
+                        className={`text-[48px] leading-[48px] md:text-[72px] md:leading-[72px] font-extrabold font-display-title-bold tracking-[-0.03125em] text-black-950 uppercase no-underline ${
                           (link.href === "/" && pathname === "/") ||
                           (link.href !== "/" && pathname.startsWith(link.href.split("#")[0]))
                             ? "opacity-30"

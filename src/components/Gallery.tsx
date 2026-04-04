@@ -46,10 +46,8 @@ export default function Gallery() {
               className="flex flex-col items-start gap-4 pb-9"
             >
               <span className="text-large-body-default font-large-body-default text-default-font">
-                With One Chance, every moment is an opportunity for connection.
-                Whether it&apos;s game night, a road trip, or a cozy evening at
-                home, ignite laughter and share your Nigerian experience with
-                your people.
+                One Chance was made for those nights — the ones that end with
+                everyone arguing about who cheated, and nobody wanting to stop.
               </span>
               <Button
                 onClick={() => { window.location.href = "/shop"; }}

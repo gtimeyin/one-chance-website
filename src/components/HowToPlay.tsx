@@ -93,7 +93,7 @@ export default function HowToPlay() {
               className="text-display-title-bold font-display-title-bold uppercase -tracking-[3px] mobile:text-[60px] mobile:leading-[54px]"
               style={{ color: "#121B19", wordWrap: "break-word", overflowWrap: "break-word" }}
             >
-              A quick start guide on how to play the game.
+              Survive Lagos in 5 steps
             </h1>
           </div>
 
@@ -118,7 +118,7 @@ export default function HowToPlay() {
                       background: "none",
                       border: "none",
                       borderBottom: isActive
-                        ? `3px solid rgba(114, 191, 253, 1)`
+                        ? `3px solid ${step.color}`
                         : "none",
                       width: "100%",
                       overflow: "visible",

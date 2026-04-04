@@ -177,12 +177,18 @@ export default function LottieBackground() {
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  const handlePointerMove = (
+  const handlePointerEnter = (
     e: React.PointerEvent<SVGImageElement>,
     label: string,
     description: string,
   ) => {
-    setTooltip({ label, description, x: e.clientX, y: e.clientY });
+    const rect = (e.currentTarget as SVGImageElement).getBoundingClientRect();
+    setTooltip({
+      label,
+      description,
+      x: rect.left + rect.width / 2,
+      y: rect.top,
+    });
   };
 
   const handlePointerLeave = () => setTooltip(null);
@@ -212,8 +218,9 @@ export default function LottieBackground() {
             transition={{ duration: 0.15, ease: "easeOut" }}
             style={{
               position: "fixed",
-              left: Math.min(tooltip.x, viewportWidth - 300),
-              top: tooltip.y - 120,
+              left: Math.min(Math.max(tooltip.x - 140, 10), viewportWidth - 290),
+              top: tooltip.y - 100,
+              transform: "translateY(-100%)",
               pointerEvents: "none",
               backgroundColor: "#ffffff",
               color: "#111111",
@@ -294,8 +301,8 @@ export default function LottieBackground() {
               }}
               style={{ transformOrigin: "center" }}
               {...(isInteractive(lm) && {
-                onPointerMove: (e: React.PointerEvent<SVGImageElement>) =>
-                  handlePointerMove(e, lm.label!, lm.description!),
+                onPointerEnter: (e: React.PointerEvent<SVGImageElement>) =>
+                  handlePointerEnter(e, lm.label!, lm.description!),
                 onPointerLeave: handlePointerLeave,
               })}
             />

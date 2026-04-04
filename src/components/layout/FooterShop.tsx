@@ -5,6 +5,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { TextField } from "@/ui/components/TextField";
 
 const discoverLinks = [
   { label: "About Us", href: "/about" },
@@ -247,6 +248,18 @@ export default function FooterShop() {
                 </svg>
               </button>
             </form>
+
+            {/* Subframe variant */}
+            <div style={{ marginTop: 12, maxWidth: 400 }}>
+              <TextField variant="outline">
+                <TextField.Input
+                  type="email"
+                  placeholder="ENTER YOUR EMAIL ADDRESS..."
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </TextField>
+            </div>
 
             {/* Social Links with Separators */}
             <div className="flex flex-col" style={{ marginTop: 40 }}>
