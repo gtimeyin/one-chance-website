@@ -113,7 +113,7 @@ export default function Hero() {
             {headingLines.map((line, lineIndex) => (
               <h1
                 key={lineIndex}
-                className="text-display-title-bold font-display-title-bold text-white text-center uppercase -tracking-[3px]"
+                className="text-display-title-bold font-display-title-bold text-white text-center uppercase -tracking-[3px] mobile:text-[48px] mobile:leading-[48px]"
               >
                 {line.words.map((word, wi) => {
                   const globalIndex = line.startIndex + wi;
@@ -127,10 +127,9 @@ export default function Hero() {
                       variants={wordAnimation}
                       initial="initial"
                       animate="animate"
-                      style={{ display: "inline-block" }}
+                      style={{ display: "inline-block", marginRight: wi < line.words.length - 1 ? "0.25em" : 0 }}
                     >
                       {word}
-                      {wi < line.words.length - 1 ? " " : ""}
                     </motion.span>
                   );
                 })}
@@ -141,7 +140,7 @@ export default function Hero() {
             variants={fadeUp}
             initial="initial"
             animate="animate"
-            className="text-button-large font-button-large text-default-font text-center"
+            className="text-button-large font-button-large text-default-font text-center mobile:text-[16px] mobile:leading-[16px]"
           >
             so we made a game out of it
           </motion.span>
