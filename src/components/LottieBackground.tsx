@@ -277,8 +277,8 @@ export default function LottieBackground() {
               href={lm.href}
               width={lm.width}
               height={lm.height}
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              initial={mounted && mobile ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0 }}
+              whileInView={mounted && mobile ? undefined : { opacity: 1, scale: 1 }}
               whileHover={{
                 scale: 1.08,
                 filter: "brightness(1.1)",
