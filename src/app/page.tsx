@@ -2,7 +2,9 @@ import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/Hero";
 import HowToPlay from "@/components/HowToPlay";
 import Characters from "@/components/Characters";
+import VideoSection from "@/components/VideoSection";
 import Gallery from "@/components/Gallery";
+import NewsSection from "@/components/NewsSection";
 import ReadySection from "@/components/ReadySection";
 import FAQs from "@/components/FAQs";
 import Footer from "@/components/Footer";
@@ -16,12 +18,12 @@ export default function Home() {
     >
       <SmoothScroll />
       <Navbar />
-      <div style={{ paddingTop: 56 }}>
-        <Hero />
-      </div>
+      <Hero />
       <HowToPlay />
       <Characters />
+      <VideoSection />
       <Gallery />
+      <NewsSection />
       <ReadySection />
       <FAQs />
       <Footer />

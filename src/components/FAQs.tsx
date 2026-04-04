@@ -1,44 +1,44 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { motion, useInView } from "framer-motion";
+import { Accordion } from "@/ui/components/Accordion";
 
 const defaultFaqs = [
   {
-    question: "What is the recommended age range for players of the game?",
+    question: "What is One Chance?",
     answer:
-      "One Chance is recommended for players aged 12 and above. The game includes references to Lagos culture and daily life that are best enjoyed by teens and adults.",
+      "One Chance is a Lagos-themed board game that captures the chaotic, fun, and unpredictable nature of life in Lagos, Nigeria. Navigate through traffic, avoid scams, and build your fortune!",
   },
   {
-    question: "Are there multiple modes of playing the game?",
+    question: "How many players can play?",
     answer:
-      "Yes! One Chance can be played in multiple ways depending on your group size and time. There are quick-play and full-game modes to suit different occasions.",
+      "One Chance can be played with 2-6 players, making it perfect for family game nights or gatherings with friends.",
   },
   {
-    question: "How many players can play the game at once?",
+    question: "How long does a typical game last?",
     answer:
-      "One Chance supports 2 to 6 players per game session, making it perfect for intimate gatherings or larger game nights with friends and family.",
+      "A typical game of One Chance lasts between 45 minutes to 1.5 hours, depending on the number of players and how the dice roll!",
   },
   {
-    question: "How does the game end?",
+    question: "What age group is this game suitable for?",
     answer:
-      "The game ends when a player successfully navigates all challenges of Lagos life and accumulates the most wealth. The richest Lagosian wins!",
+      "One Chance is suitable for ages 12 and above. The game contains themes and references that are best appreciated by teens and adults.",
   },
   {
-    question: "Where can one find the game to play?",
+    question: "Do you ship internationally?",
     answer:
-      "One Chance is available for purchase through our website and select retail partners. Check our social media for the latest availability updates.",
+      "Yes! We ship to most countries worldwide. Shipping costs and delivery times vary based on your location.",
   },
   {
-    question: "Can the game be customized or personalized in any way?",
+    question: "Can I buy the game as a gift?",
     answer:
-      "We offer customization options for bulk orders, including personalized cards and branding. Contact us for more details on custom orders.",
+      "Absolutely! One Chance makes a great gift. We offer gift wrapping options at checkout and can include a personalized message.",
   },
   {
-    question: "Is the game available for bulk purchases?",
+    question: "What comes in the box?",
     answer:
-      "Absolutely! We offer special pricing for bulk purchases. Whether it's for events, corporate team building, or retail, reach out to us for wholesale options.",
+      "The game includes a game board, 6 character pieces, 2 dice, money cards, action cards, property cards, and a comprehensive rule book.",
   },
 ];
 
@@ -48,7 +48,11 @@ interface FAQsProps {
   subheading?: string;
 }
 
-export default function FAQs({ faqs = defaultFaqs, heading = "HAVE A QUESTION?", subheading = "WE HAVE ANSWERS" }: FAQsProps) {
+export default function FAQs({
+  faqs = defaultFaqs,
+  heading = "HAVE A QUESTION?",
+  subheading = "WE HAVE ANSWERS",
+}: FAQsProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -57,149 +61,103 @@ export default function FAQs({ faqs = defaultFaqs, heading = "HAVE A QUESTION?",
     <section
       id="faq"
       ref={ref}
-      className="flex flex-col items-center justify-center w-full"
+      className="flex w-full flex-col items-center justify-center bg-[#121b19]"
       style={{
-        padding: "clamp(60px, 6vw, 96px) clamp(20px, 4vw, 96px) clamp(60px, 8vw, 120px)",
-        backgroundColor: "#121B19",
-        scrollMarginTop: 80,
-        gap: 60,
+        padding: "clamp(60px, 6vw, 128px) 24px",
+        gap: 48,
       }}
     >
       <div
-        className="flex flex-col items-center justify-center w-full"
-        style={{ maxWidth: 1280, overflow: "hidden", gap: 60 }}
+        className="flex w-full max-w-[1024px] flex-col items-start"
+        style={{ gap: 32 }}
       >
         {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="flex flex-col items-center justify-center text-center"
-          style={{ maxWidth: 840, gap: 10, width: "100%" }}
+          className="flex flex-col items-start"
+          style={{ gap: 24 }}
         >
-          <p
-            className="font-barlow uppercase"
+          <span
+            className="font-['Barlow'] uppercase"
             style={{
               fontSize: 12,
-              lineHeight: "130%",
+              fontWeight: 500,
+              lineHeight: "16px",
               letterSpacing: "0.15em",
-              color: "rgb(163, 163, 163)",
-              marginBottom: 8
+              color: "#a3a3a3",
             }}
           >
             {heading}
-          </p>
-          <h2
-            className="font-barlow-condensed font-extrabold uppercase"
-            style={{
-              fontSize: "clamp(32px, 5vw, 64px)",
-              lineHeight: "100%",
-              letterSpacing: "-0.02em",
-              color: "white",
-            }}
-          >
+          </span>
+          <span className="text-display-title-bold font-display-title-bold text-white uppercase -tracking-[2px]">
             {subheading}
-          </h2>
+          </span>
         </motion.div>
 
         {/* FAQ items */}
-        <div className="w-full flex flex-col" style={{ maxWidth: 840, gap: 0 }}>
+        <div className="flex w-full flex-col items-start">
           {faqs.map((faq, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 10 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.4, delay: 0.1 + i * 0.05 }}
+              className="w-full"
             >
-              {/* Question row */}
-              <button
-                onClick={() => setOpenIndex(openIndex === i ? null : i)}
-                className="w-full flex items-center justify-between cursor-pointer text-left"
-                style={{
-                  padding: "24px 0",
-                  background: "none",
-                  border: "none",
-                  borderBottom: "1px solid rgba(255, 255, 255, 0.2)",
-                }}
-              >
-                <span
-                  className="font-barlow"
-                  style={{
-                    fontSize: "clamp(18px, 1.5vw, 20px)",
-                    lineHeight: "130%",
-                    letterSpacing: "-0.01em",
-                    fontWeight: 600,
-                    color: "white",
-                    paddingRight: 16,
-                  }}
-                >
-                  {faq.question}
-                </span>
-
-                {/* Plus icon that rotates to X */}
-                <motion.div
-                  animate={{ rotate: openIndex === i ? 45 : 0 }}
-                  transition={{ duration: 0.3, ease: [0.44, 0, 0.56, 1] }}
-                  className="shrink-0"
-                  style={{ width: 24, height: 24 }}
-                >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <line x1="12" y1="4" x2="12" y2="20" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                    <line x1="4" y1="12" x2="20" y2="12" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                  </svg>
-                </motion.div>
-              </button>
-
-              {/* Answer */}
-              <AnimatePresence>
-                {openIndex === i && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: [0.44, 0, 0.56, 1] }}
-                    style={{ overflow: "hidden" }}
-                  >
-                    <p
-                      className="font-barlow"
-                      style={{
-                        fontSize: 18,
-                        lineHeight: "140%",
-                        letterSpacing: "-0.01em",
-                        color: "rgb(163, 163, 163)",
-                        padding: "0 0 20px",
-                      }}
+              <Accordion
+                trigger={
+                  <div className="flex w-full items-center gap-4 py-6">
+                    <span className="grow shrink-0 basis-0 text-large-body-bold font-large-body-bold text-white">
+                      {faq.question}
+                    </span>
+                    <motion.div
+                      animate={{ rotate: openIndex === i ? 45 : 0 }}
+                      transition={{ duration: 0.3, ease: [0.44, 0, 0.56, 1] }}
+                      className="shrink-0"
+                      style={{ width: 24, height: 24 }}
                     >
-                      {faq.answer}
-                    </p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <line x1="12" y1="4" x2="12" y2="20" stroke="white" strokeWidth="2" strokeLinecap="round" />
+                        <line x1="4" y1="12" x2="20" y2="12" stroke="white" strokeWidth="2" strokeLinecap="round" />
+                      </svg>
+                    </motion.div>
+                  </div>
+                }
+                open={openIndex === i}
+                onOpenChange={(open) => setOpenIndex(open ? i : null)}
+              >
+                <div className="flex w-full flex-col items-start gap-2 py-4">
+                  <span className="w-full font-['Barlow'] text-[18px] font-[400] leading-[26px] text-[#a3a3a3]">
+                    {faq.answer}
+                  </span>
+                </div>
+              </Accordion>
+              {i < faqs.length - 1 && (
+                <div className="flex h-px w-full flex-none flex-col items-center gap-2 bg-neutral-700" />
+              )}
             </motion.div>
           ))}
         </div>
 
         {/* Still have questions */}
-        <motion.p
+        <motion.div
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ delay: 0.8, duration: 0.5 }}
-          className="font-barlow text-center"
-          style={{
-            fontSize: 18,
-            lineHeight: "140%",
-            letterSpacing: "-0.01em",
-            color: "rgb(163, 163, 163)",
-          }}
+          className="flex items-center gap-2 pt-8"
         >
-          Still have more questions? Send a message{" "}
+          <span className="font-['Barlow'] text-[18px] font-[400] leading-[26px] text-[#ffffff99]">
+            Still have more questions?
+          </span>
           <a
             href="#contact"
-            style={{ color: "rgb(252, 205, 33)", textDecoration: "underline" }}
+            className="font-['Barlow'] text-[18px] font-[600] leading-[26px] text-[#fccd21] underline"
           >
-            here
+            Send a message here
           </a>
-        </motion.p>
+        </motion.div>
       </div>
     </section>
   );

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { Button } from "@/ui/components/Button";
 
 const galleryImages = [
   { src: "/images/gallery-playing.png", alt: "Friends playing One Chance" },
@@ -22,63 +23,47 @@ export default function Gallery() {
       className="flex flex-col items-center justify-center w-full"
       style={{
         backgroundColor: "white",
-        padding: "clamp(60px, 10vw, 200px) clamp(18px, 3vw, 0px)",
-        overflow: "visible",
+        padding: "clamp(60px, 8vw, 128px) 24px",
       }}
     >
-      <div className="flex flex-col" style={{ gap: 71, maxWidth: 1300, width: "100%" }}>
-        {/* Left column: title + description */}
-        <div className="flex flex-col md:flex-row" style={{ gap: 20, width: "100%" }}>
-          {/* Left: Title and text */}
-          <div className="flex flex-col flex-1" style={{ gap: 39 }}>
-            <div className="flex flex-col" style={{ gap: 24 }}>
-              <div className="flex flex-col" style={{ gap: 64 }}>
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.6 }}
-                  className="font-barlow-condensed uppercase"
-                  style={{
-                    fontSize: "clamp(40px, 6vw, 96px)",
-                    lineHeight: "82px",
-                    letterSpacing: "-3px",
-                    fontWeight: 800,
-                    color: "rgb(39, 48, 46)",
-                  }}
-                >
-                  Gallery
-                </motion.p>
+      <div className="flex w-full max-w-[1280px] flex-col items-start" style={{ gap: 48 }}>
+        <motion.span
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="text-display-title-bold font-display-title-bold text-default-font uppercase -tracking-[3px]"
+        >
+          Gallery
+        </motion.span>
 
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.6, delay: 0.2 }}
-                  className="font-barlow"
-                  style={{
-                    fontSize: 24,
-                    lineHeight: "34px",
-                    maxWidth: 640,
-                    color: "rgb(39, 48, 46)",
-                  }}
-                >
-                  With One Chance, every moment is an opportunity for connection.
-                  Whether it&apos;s game night, a road trip, or a cozy evening at
-                  home, ignite laughter and share your Nigerian experience with
-                  your people.
-                </motion.p>
-              </div>
-            </div>
+        <div className="flex w-full flex-wrap items-start gap-6 mobile:flex-col mobile:gap-6">
+          {/* Left column: text + large image */}
+          <div className="flex min-w-[320px] grow shrink-0 basis-0 flex-col items-start gap-2 self-stretch">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="flex flex-col items-start gap-4 pb-9"
+            >
+              <span className="text-large-body-default font-large-body-default text-default-font">
+                With One Chance, every moment is an opportunity for connection.
+                Whether it&apos;s game night, a road trip, or a cozy evening at
+                home, ignite laughter and share your Nigerian experience with
+                your people.
+              </span>
+              <Button
+                onClick={() => { window.location.href = "/shop"; }}
+              >
+                Grab your copy
+              </Button>
+            </motion.div>
 
-            {/* First large image */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.7, delay: 0.3 }}
-              className="relative w-full overflow-hidden"
-              style={{
-                height: "clamp(387px, 50vw, 722px)",
-                borderRadius: 0,
-              }}
+              className="relative w-full min-w-[320px] grow shrink-0 basis-0 overflow-hidden"
+              style={{ minHeight: 400 }}
             >
               <Image
                 src={galleryImages[0].src}
@@ -91,17 +76,12 @@ export default function Gallery() {
           </div>
 
           {/* Right column: stacked images */}
-          <div className="flex flex-col flex-1" style={{ gap: 20 }}>
-            {/* Top right - bordered image */}
+          <div className="flex min-w-[320px] grow shrink-0 basis-0 flex-col items-start gap-6">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.7, delay: 0.4 }}
-              className="relative w-full overflow-hidden"
-              style={{
-                height: "clamp(296px, 40vw, 640px)",
-                border: "1px solid white",
-              }}
+              className="relative h-96 w-full overflow-hidden"
             >
               <Image
                 src={galleryImages[1].src}
@@ -112,13 +92,12 @@ export default function Gallery() {
               />
             </motion.div>
 
-            {/* Bottom right - two images side by side */}
-            <div className="flex" style={{ gap: 20, height: "clamp(98px, 20vw, 400px)" }}>
+            <div className="flex w-full items-start gap-6">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.7, delay: 0.5 }}
-                className="relative flex-1 overflow-hidden"
+                className="relative h-64 min-w-0 grow shrink-0 basis-0 overflow-hidden"
               >
                 <Image
                   src={galleryImages[2].src}
@@ -132,7 +111,7 @@ export default function Gallery() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.7, delay: 0.6 }}
-                className="relative flex-1 overflow-hidden"
+                className="relative h-64 min-w-0 grow shrink-0 basis-0 overflow-hidden"
               >
                 <Image
                   src={galleryImages[3].src}

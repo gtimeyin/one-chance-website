@@ -15,196 +15,171 @@ export default function Footer() {
       ref={ref}
       className="flex flex-col items-center w-full"
       style={{
-        padding: "clamp(60px, 8vw, 120px) clamp(20px, 4vw, 60px)",
-        gap: 60,
+        backgroundColor: "#fccd21",
+        padding: "clamp(60px, 8vw, 96px) 24px",
       }}
     >
-      {/* Top: CTA */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={isInView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.6 }}
-        className="flex flex-col items-center text-center"
-        style={{ gap: 24 }}
+      <div
+        className="flex w-full flex-wrap items-start"
+        style={{ maxWidth: 1280, gap: 48 }}
       >
-        <p
-          className="font-barlow"
-          style={{
-            fontSize: 18,
-            lineHeight: "24px",
-            fontWeight: 500,
-            color: "rgba(255, 255, 255, 0.6)",
-          }}
+        {/* Left: Thanks for exploring */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col items-start"
+          style={{ minWidth: 320, gap: 16 }}
         >
-          Thanks for exploring
-        </p>
-
-        <p
-          className="font-barlow"
-          style={{
-            fontSize: 18,
-            lineHeight: "24px",
-            fontWeight: 500,
-            color: "rgba(255, 255, 255, 0.8)",
-          }}
-        >
-          Now, it&apos;s time to begin your One Chance experience.
-        </p>
-
-        <motion.a
-          href="#buy"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="font-barlow text-center cursor-pointer inline-block"
-          style={{
-            fontSize: 24,
-            lineHeight: "100%",
-            letterSpacing: "0.02em",
-            padding: "16px 32px",
-            background: "white",
-            color: "rgb(18, 27, 25)",
-            borderRadius: 0,
-            textDecoration: "none",
-          }}
-        >
-          Buy a GAME
-        </motion.a>
-      </motion.div>
-
-      {/* Newsletter form */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={isInView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="flex flex-col items-center text-center w-full"
-        style={{ maxWidth: 480, gap: 16 }}
-      >
-        <p
-          className="font-barlow"
-          style={{
-            fontSize: 14,
-            lineHeight: "160%",
-            color: "rgba(255, 255, 255, 0.6)",
-          }}
-        >
-          Sign up for our newsletter to&nbsp;receive updates and&nbsp;content
-        </p>
-
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            setEmail("");
-          }}
-          className="flex w-full"
-          style={{ gap: 8 }}
-        >
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
-            className="flex-1 font-barlow"
+          <h2
+            className="font-barlow-condensed uppercase"
             style={{
-              background: "rgba(255,255,255,0.1)",
-              border: "1px solid rgba(255,255,255,0.2)",
-              borderRadius: 0,
-              padding: "12px 20px",
-              fontSize: 14,
-              color: "white",
-              outline: "none",
+              fontSize: "clamp(48px, 6vw, 80px)",
+              fontWeight: 800,
+              lineHeight: "90%",
+              letterSpacing: "-2px",
+              color: "#121B19",
+              whiteSpace: "pre-wrap",
             }}
-            required
-          />
-          <button
-            type="submit"
-            className="font-barlow cursor-pointer"
+          >
+            {"Thanks for\nexploring"}
+          </h2>
+          <p
+            className="font-barlow"
             style={{
+              fontSize: 16,
+              lineHeight: "24px",
+              color: "rgba(18, 27, 25, 0.6)",
+            }}
+          >
+            Now it&apos;s time to begin your One Chance experience
+          </p>
+          <a
+            href="/shop"
+            className="font-barlow font-semibold inline-block"
+            style={{
+              fontSize: 16,
+              padding: "16px 32px",
               background: "white",
               color: "rgb(18, 27, 25)",
-              borderRadius: 0,
-              padding: "12px 24px",
-              fontSize: 14,
-              fontWeight: 600,
-              border: "none",
+              textDecoration: "none",
             }}
           >
-            Sign Up
-          </button>
-        </form>
-
-        <p
-          className="font-barlow"
-          style={{
-            fontSize: 14,
-            lineHeight: "160%",
-            color: "rgba(255, 255, 255, 0.4)",
-          }}
-        >
-          By signing up to receive emails from One Chance, you agree to our{" "}
-          <a
-            href="#"
-            style={{
-              color: "rgba(255, 255, 255, 0.6)",
-              textDecoration: "underline",
-            }}
-          >
-            Privacy&nbsp;Policy
+            Buy a GAME
           </a>
-        </p>
-      </motion.div>
+        </motion.div>
 
-      {/* Bottom links */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={isInView ? { opacity: 1 } : {}}
-        transition={{ duration: 0.5, delay: 0.4 }}
-        className="flex flex-col md:flex-row items-center justify-between w-full"
-        style={{
-          maxWidth: 1280,
-          borderTop: "1px solid rgba(255,255,255,0.1)",
-          paddingTop: 32,
-          gap: 16,
-        }}
-      >
-        <div className="flex items-center" style={{ gap: 24 }}>
-          {["TikTok", "Instagram", "x.com"].map((social) => (
-            <a
-              key={social}
-              href="#"
+        {/* Right: Newsletter + Social */}
+        <div
+          className="flex flex-1 flex-wrap items-start"
+          style={{ gap: 48, minWidth: 288 }}
+        >
+          {/* Newsletter */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="flex flex-col items-start"
+            style={{ maxWidth: 448, flex: 1, minWidth: 280, gap: 16 }}
+          >
+            <p
               className="font-barlow"
               style={{
-                fontSize: 24,
-                lineHeight: "31px",
-                fontWeight: 600,
-                color: "rgb(255, 255, 255)",
-                textDecoration: "none",
-                transition: "color 0.3s",
+                fontSize: 18,
+                lineHeight: "26px",
+                color: "rgb(18, 27, 25)",
               }}
-              onMouseEnter={(e) =>
-                ((e.target as HTMLElement).style.color = "#fccd21")
-              }
-              onMouseLeave={(e) =>
-                ((e.target as HTMLElement).style.color = "rgb(255, 255, 255)")
-              }
             >
-              {social}
-            </a>
-          ))}
-        </div>
+              Subscribe to our newsletter
+            </p>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                setEmail("");
+              }}
+              className="flex w-full items-center"
+              style={{ gap: 8 }}
+            >
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                className="flex-1 font-barlow"
+                style={{
+                  height: 48,
+                  border: "1px solid rgba(18, 27, 25, 0.2)",
+                  background: "transparent",
+                  padding: "0 16px",
+                  fontSize: 16,
+                  color: "rgb(18, 27, 25)",
+                  outline: "none",
+                }}
+                required
+              />
+              <button
+                type="submit"
+                className="font-barlow font-semibold cursor-pointer"
+                style={{
+                  height: 48,
+                  background: "white",
+                  color: "rgb(18, 27, 25)",
+                  padding: "0 24px",
+                  fontSize: 16,
+                  border: "none",
+                }}
+              >
+                Sign Up
+              </button>
+            </form>
+          </motion.div>
 
-        <p
-          className="font-barlow"
-          style={{
-            fontSize: 14,
-            lineHeight: "22px",
-            letterSpacing: "-0.02em",
-            fontWeight: 600,
-            color: "rgba(255, 255, 255, 0.4)",
-          }}
-        >
-          @ 2025 All rights reserved
-        </p>
-      </motion.div>
+          {/* Social links */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="flex items-center justify-center"
+            style={{ gap: 32 }}
+          >
+            {["TikTok", "Instagram", "x.com"].map((social) => (
+              <a
+                key={social}
+                href="#"
+                className="font-barlow font-bold"
+                style={{
+                  fontSize: 20,
+                  color: "rgb(18, 27, 25)",
+                  textDecoration: "none",
+                  transition: "opacity 0.3s",
+                }}
+                onMouseEnter={(e) =>
+                  ((e.target as HTMLElement).style.opacity = "0.6")
+                }
+                onMouseLeave={(e) =>
+                  ((e.target as HTMLElement).style.opacity = "1")
+                }
+              >
+                {social}
+              </a>
+            ))}
+          </motion.div>
+
+          {/* Copyright */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="font-barlow"
+            style={{
+              fontSize: 14,
+              color: "rgba(18, 27, 25, 0.5)",
+            }}
+          >
+            @ 2025 All rights reserved
+          </motion.p>
+        </div>
+      </div>
     </footer>
   );
 }

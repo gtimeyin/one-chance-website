@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import { Button } from "@/ui/components/Button";
 
 const steps = [
   {
@@ -9,39 +10,49 @@ const steps = [
     title: "How to pass jamb",
     body: "Score a 4 or more to pass JAMB and start game",
     color: "#99CAF1",
+    rotation: 90,
   },
   {
     number: "02",
     title: "What is One Chance",
     body: "To get into the game Score a 4 or more to pass JAMB and start game.",
     color: "#FCD958",
+    rotation: 135,
   },
   {
     number: "03",
     title: "Traffic & Prison",
     body: "Navigate the streets of Lagos, avoid traffic jams and stay out of prison.",
     color: "#DF6961",
+    rotation: 200,
   },
   {
     number: "04",
     title: "Ajo Contribution",
     body: "Join an ajo group and contribute your way to financial success.",
     color: "#A75ACD",
+    rotation: 270,
   },
   {
     number: "05",
     title: "Getting Rich",
     body: "Stack your naira, make smart moves, and become the richest Lagosian.",
     color: "#5AD46F",
+    rotation: 330,
   },
 ];
 
 export default function HowToPlay() {
   const [activeStep, setActiveStep] = useState("01");
+  const [isIdle, setIsIdle] = useState(true);
+  const active = steps.find((s) => s.number === activeStep) || steps[0];
+
+  const handleStepClick = (stepNumber: string) => {
+    setActiveStep(stepNumber);
+    setIsIdle(false);
+  };
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-  const active = steps.find((s) => s.number === activeStep) || steps[0];
 
   return (
     <section
@@ -98,7 +109,7 @@ export default function HowToPlay() {
                 return (
                   <button
                     key={step.number}
-                    onClick={() => setActiveStep(step.number)}
+                    onClick={() => handleStepClick(step.number)}
                     className="flex items-start cursor-pointer text-left"
                     style={{
                       height: isActive ? 160 : undefined,
@@ -167,33 +178,68 @@ export default function HowToPlay() {
               })}
             </div>
 
-            {/* Right description panel */}
+            {/* Right panel - 3D board game with text overlay */}
             <div
-              className="flex-1 relative overflow-hidden"
+              className="flex-1 relative overflow-hidden flex items-center justify-center"
               style={{
-                padding: "57px 49px",
-                borderRadius: 0,
-                background:
-                  "linear-gradient(180deg, #263435 0%, #1a2b2c 100%)",
+                backgroundColor: "#232323",
+                perspective: "9999px",
+                minHeight: 400,
               }}
             >
-              <motion.p
-                key={activeStep}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-                className="font-barlow"
+              {/* Spinning board */}
+              <motion.img
+                className="origin-center"
                 style={{
-                  fontSize: 32,
-                  lineHeight: "37px",
-                  color: "rgb(255, 255, 255)",
-                  maxWidth: 486,
-                  position: "relative",
-                  zIndex: 1,
+                  rotateX: 60,
+                  maxWidth: "80%",
+                  scale: 1.5,
                 }}
+                animate={
+                  isIdle
+                    ? { rotateZ: [0, 360] }
+                    : { rotateZ: active.rotation }
+                }
+                transition={
+                  isIdle
+                    ? {
+                        rotateZ: {
+                          duration: 60,
+                          repeat: Infinity,
+                          ease: "linear",
+                        },
+                      }
+                    : {
+                        rotateZ: {
+                          duration: 1,
+                          ease: [0.16, 1, 0.3, 1],
+                        },
+                      }
+                }
+                src="https://res.cloudinary.com/subframe/image/upload/v1775248795/uploads/12376/nyafpurqelrgtlokjkkq.svg"
+                alt="One Chance board game"
+              />
+              {/* Text overlay */}
+              <div
+                className="absolute inset-0 flex flex-col justify-end"
+                style={{ padding: "57px 49px", zIndex: 2 }}
               >
-                To get into the game {active.body}
-              </motion.p>
+                <motion.p
+                  key={activeStep}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="font-barlow font-bold"
+                  style={{
+                    fontSize: 32,
+                    lineHeight: "37px",
+                    color: "white",
+                    maxWidth: 486,
+                  }}
+                >
+                  {active.body}
+                </motion.p>
+              </div>
             </div>
           </div>
 
@@ -204,7 +250,7 @@ export default function HowToPlay() {
               return (
                 <button
                   key={step.number}
-                  onClick={() => setActiveStep(step.number)}
+                  onClick={() => handleStepClick(step.number)}
                   className="flex items-start cursor-pointer text-left"
                   style={{
                     padding: "16px 0",
@@ -268,27 +314,56 @@ export default function HowToPlay() {
             <div
               style={{
                 padding: 24,
-                borderRadius: 16,
-                background:
-                  "linear-gradient(180deg, #263435 0%, #1a2b2c 100%)",
+                background: "#99CAF1",
               }}
             >
               <motion.p
                 key={activeStep + "-mobile"}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="font-barlow"
+                className="font-barlow font-bold"
                 style={{
                   fontSize: 24,
                   lineHeight: "28px",
-                  color: "rgb(255, 255, 255)",
+                  color: "rgb(18, 27, 25)",
                 }}
               >
                 {active.body}
               </motion.p>
             </div>
           </div>
+
+
         </div>
+      </motion.div>
+
+      {/* Ready CTA within yellow section */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.7, delay: 0.3 }}
+        className="flex flex-col items-center text-center"
+        style={{ gap: 48, padding: "64px 24px 80px" }}
+      >
+        <h2
+          className="font-barlow-condensed uppercase text-center"
+          style={{
+            fontSize: "clamp(48px, 8vw, 96px)",
+            fontWeight: 800,
+            letterSpacing: "-3px",
+            lineHeight: "90%",
+            color: "#121B19",
+            whiteSpace: "pre-wrap",
+          }}
+        >
+          {"Ready to experience\none chance?"}
+        </h2>
+        <Button
+          variant="white"
+          onClick={() => { window.location.href = "/shop"; }}
+        >
+          Begin your adventure
+        </Button>
       </motion.div>
     </section>
   );

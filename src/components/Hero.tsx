@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import LottieBackground from "./LottieBackground";
+import { Button } from "@/ui/components/Button";
+import { FeatherShoppingBag, FeatherChevronDown } from "@subframe/core";
 
 const rotatingWords = ["A CHAOTIC", "AN AWESOME", "A FUN"];
 
@@ -38,13 +40,6 @@ const fadeUp = {
     },
   },
 };
-
-const headingStyle = {
-  lineHeight: "82px",
-  letterSpacing: "-3px",
-  fontWeight: 800,
-  color: "white",
-} as const;
 
 function RotatingWord() {
   const [index, setIndex] = useState(0);
@@ -93,43 +88,12 @@ export default function Hero() {
         background:
           "linear-gradient(180deg, #37bbf0 8.37%, #66d8ea 27.3%, rgba(255,222,156,0.49) 66.67%)",
         zIndex: 1,
-        minHeight: "100vh",
       }}
     >
+      {/* Lottie drives the section height */}
       <LottieBackground />
 
-      <a
-        href="#howtoplay"
-        className="absolute overflow-hidden"
-        style={{
-          top: 423,
-          left: "calc(50% - 50%)",
-          height: "100vh",
-          width: "100%",
-          zIndex: 1,
-          textDecoration: "none",
-        }}
-      >
-        <motion.div
-          className="absolute left-1/2 flex items-center justify-center"
-          style={{
-            bottom: 40,
-            transform: "translateX(-50%)",
-            width: 56,
-            height: 56,
-            background: "white",
-            borderRadius: "50%",
-            zIndex: 10,
-          }}
-          animate={{ y: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M12 5v14M5 12l7 7 7-7" stroke="rgb(38,52,53)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </motion.div>
-      </a>
-
+      {/* Text content overlaid on top */}
       <motion.div
         initial={{ opacity: 1 }}
         animate={{ opacity: 1 }}
@@ -141,75 +105,70 @@ export default function Hero() {
           left: "50%",
           transform: "translateX(-50%)",
           padding: "200px 0",
-          gap: 24,
+          gap: 32,
         }}
       >
-        <div className="flex flex-col items-center justify-center overflow-hidden" style={{ gap: 13, width: "100%" }}>
-          {headingLines.map((line, lineIndex) => (
-            <h1
-              key={lineIndex}
-              className="font-barlow-condensed uppercase hero-heading text-center"
-              style={headingStyle}
-            >
-              {line.words.map((word, wi) => {
-                const globalIndex = line.startIndex + wi;
-                if (word === "__ROTATING__") {
-                  return <RotatingWord key="rotating" />;
-                }
-                return (
-                  <motion.span
-                    key={globalIndex}
-                    custom={globalIndex}
-                    variants={wordAnimation}
-                    initial="initial"
-                    animate="animate"
-                    style={{ display: "inline-block" }}
-                  >
-                    {word}
-                    {wi < line.words.length - 1 ? " " : ""}
-                  </motion.span>
-                );
-              })}
-            </h1>
-          ))}
+        <div className="flex flex-col items-center justify-center gap-6">
+          <div className="flex flex-col items-center justify-center gap-2">
+            {headingLines.map((line, lineIndex) => (
+              <h1
+                key={lineIndex}
+                className="text-display-title-bold font-display-title-bold text-white text-center uppercase -tracking-[3px]"
+              >
+                {line.words.map((word, wi) => {
+                  const globalIndex = line.startIndex + wi;
+                  if (word === "__ROTATING__") {
+                    return <RotatingWord key="rotating" />;
+                  }
+                  return (
+                    <motion.span
+                      key={globalIndex}
+                      custom={globalIndex}
+                      variants={wordAnimation}
+                      initial="initial"
+                      animate="animate"
+                      style={{ display: "inline-block" }}
+                    >
+                      {word}
+                      {wi < line.words.length - 1 ? " " : ""}
+                    </motion.span>
+                  );
+                })}
+              </h1>
+            ))}
+          </div>
+          <motion.span
+            variants={fadeUp}
+            initial="initial"
+            animate="animate"
+            className="text-button-large font-button-large text-default-font text-center"
+          >
+            so we made a game out of it
+          </motion.span>
         </div>
 
-        <motion.p
+        <motion.div
           variants={fadeUp}
           initial="initial"
           animate="animate"
-          className="font-barlow text-center"
-          style={{
-            fontSize: 28,
-            lineHeight: "0.8em",
-            letterSpacing: "0px",
-            color: "rgb(71, 71, 71)",
-          }}
         >
-          so we made a game out of it
-        </motion.p>
+          <Button
+            variant="brand-primary"
+            size="medium"
+            iconRight={<FeatherShoppingBag />}
+            onClick={() => { window.location.href = "/shop"; }}
+          >
+            Buy Now!
+          </Button>
+        </motion.div>
 
-        <motion.a
-          href="#buy"
-          variants={fadeUp}
-          initial="initial"
-          animate="animate"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="font-barlow text-center cursor-pointer inline-block"
-          style={{
-            fontSize: 24,
-            lineHeight: "100%",
-            letterSpacing: "0.02em",
-            padding: "16px 32px",
-            background: "white",
-            color: "rgb(18, 27, 25)",
-            borderRadius: 0,
-            textDecoration: "none",
-          }}
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+          className="flex h-14 w-14 flex-none items-center justify-center bg-white"
         >
-          Buy NOW !
-        </motion.a>
+          <FeatherChevronDown className="font-['Barlow'] text-[24px] font-[400] leading-[36px] text-default-font" />
+        </motion.div>
       </motion.div>
     </section>
   );
