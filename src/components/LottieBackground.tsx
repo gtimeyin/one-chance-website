@@ -198,6 +198,7 @@ export default function LottieBackground() {
         position: mounted && mobile ? "absolute" : "relative",
         inset: mounted && mobile ? 0 : "auto",
         width: "100%",
+        minHeight: "100vh",
         height: mounted && mobile ? "100%" : "auto",
         aspectRatio: mounted && mobile ? "auto" : "1920 / 3000",
       }}
@@ -257,6 +258,7 @@ export default function LottieBackground() {
           lottie={bgData as any}
           autoplay
           loop
+          preserveAspectRatio="xMidYMid slice"
           className="absolute inset-0 w-full h-full pointer-events-none"
           style={{ width: "100%", height: "100%" }}
         />
@@ -264,9 +266,7 @@ export default function LottieBackground() {
 
       <svg
         viewBox="0 0 1920 3000"
-        preserveAspectRatio={
-          mounted && mobile ? "xMidYMid slice" : "xMidYMid meet"
-        }
+        preserveAspectRatio="xMidYMid slice"
         className="absolute inset-0 z-10 w-full h-full pointer-events-none"
         style={{ width: "100%", height: "100%", display: "block" }}
       >
@@ -277,7 +277,8 @@ export default function LottieBackground() {
               href={lm.href}
               width={lm.width}
               height={lm.height}
-              initial={mounted && mobile ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0 }}
+              initial={{ opacity: 0, scale: 0 }}
+              animate={mounted && mobile ? { opacity: 1, scale: 1 } : undefined}
               whileInView={mounted && mobile ? undefined : { opacity: 1, scale: 1 }}
               whileHover={{
                 scale: 1.08,
