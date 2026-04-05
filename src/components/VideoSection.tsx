@@ -17,34 +17,21 @@ export default function VideoSection() {
         initial={{ opacity: 0, y: 30 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.7 }}
-        className="flex w-full items-center justify-center cursor-pointer group"
-        style={{
-          minHeight: 576,
-          background: "#99CAF1",
-          padding: "48px",
-          maxWidth: 1280,
-        }}
+        className="w-full"
+        style={{ maxWidth: 1280 }}
       >
-        <div className="flex items-center justify-center gap-6">
-          <svg
-            width="48"
-            height="48"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="rgb(18, 27, 25)"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="transition-transform duration-300 group-hover:scale-110"
-          >
-            <polygon points="5 3 19 12 5 21 5 3" />
-          </svg>
-          <span
-            className="text-heading-xlarge-bold font-heading-xlarge-bold uppercase -tracking-[1px] mobile:text-[24px] mobile:leading-[28px]"
-            style={{ color: "rgb(18, 27, 25)" }}
-          >
-            Watch game play
-          </span>
+        <div
+          className="relative w-full"
+          style={{ paddingBottom: "56.25%" }}
+        >
+          <iframe
+            className="absolute inset-0 w-full h-full"
+            src="https://www.youtube.com/embed/TVMIKgn9cy8"
+            title="One Chance Gameplay"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            style={{ border: "none" }}
+          />
         </div>
       </motion.div>
     </section>
