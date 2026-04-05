@@ -8,7 +8,7 @@ import BlogCard from "@/components/ui/BlogCard";
 import ComicCard from "@/components/ui/ComicCard";
 import AnnouncementCard from "@/components/ui/AnnouncementCard";
 import NewsletterForm from "@/components/ui/NewsletterForm";
-import FooterDark from "@/components/layout/FooterDark";
+import FooterShop from "@/components/layout/FooterShop";
 import SmoothScroll from "@/components/SmoothScroll";
 import { blogPosts, comics, announcements } from "@/lib/blog";
 import Link from "next/link";
@@ -215,7 +215,7 @@ export default function UpdatesPage() {
           </div>
         </section>
       </div>
-      <FooterDark />
+      <FooterShop />
     </div>
   );
 }

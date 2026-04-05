@@ -23,8 +23,7 @@ import {
 const navLinks = [
   { label: "HOME", href: "/" },
   { label: "SHOP", href: "/shop" },
-  { label: "RULES", href: "/#howtoplay" },
-  { label: "CHARACTERS", href: "/#meetthelagosians" },
+  { label: "RULES", href: "/rules" },
   { label: "UPDATES", href: "/updates" },
   { label: "CONTACT US", href: "/contact" },
 ];
@@ -86,7 +85,7 @@ export default function Navbar() {
   return (
     <>
       <div
-        className="flex w-full max-w-[1280px] items-start justify-between px-6 fixed left-1/2 z-50 transition-all duration-300"
+        className="flex w-full max-w-[1280px] items-start justify-between px-0 fixed left-1/2 z-50 transition-all duration-300"
         style={{
           top: hidden && !isOpen ? -100 : 24,
           transform: "translateX(-50%)",
@@ -171,11 +170,11 @@ export default function Navbar() {
                       <Link
                         href={link.href}
                         onClick={() => setIsOpen(false)}
-                        className={`text-[48px] leading-[48px] md:text-[72px] md:leading-[72px] font-extrabold font-display-title-bold tracking-[-0.03125em] text-black-950 uppercase no-underline ${
+                        className={`text-[48px] leading-[48px] md:text-[72px] md:leading-[72px] font-extrabold font-display-title-bold tracking-[-0.03125em] uppercase no-underline transition-all duration-200 ${
                           (link.href === "/" && pathname === "/") ||
                           (link.href !== "/" && pathname.startsWith(link.href.split("#")[0]))
-                            ? "opacity-30"
-                            : ""
+                            ? "text-black-950 opacity-100"
+                            : "text-black-950 opacity-30 hover:opacity-100"
                         }`}
                         style={{ textDecoration: "none" }}
                       >

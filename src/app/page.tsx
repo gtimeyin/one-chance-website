@@ -7,7 +7,7 @@ import Gallery from "@/components/Gallery";
 import NewsSection from "@/components/NewsSection";
 import ReadySection from "@/components/ReadySection";
 import FAQs from "@/components/FAQs";
-import Footer from "@/components/Footer";
+import Footer from "@/components/layout/FooterShop";
 import SmoothScroll from "@/components/SmoothScroll";
 
 export default function Home() {

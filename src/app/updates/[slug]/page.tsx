@@ -10,7 +10,7 @@ import Breadcrumb from "@/components/layout/Breadcrumb";
 import BlogCard from "@/components/ui/BlogCard";
 import CommentForm from "@/components/blog/CommentForm";
 import NewsletterForm from "@/components/ui/NewsletterForm";
-import FooterDark from "@/components/layout/FooterDark";
+import FooterShop from "@/components/layout/FooterShop";
 import SmoothScroll from "@/components/SmoothScroll";
 import { getBlogPost, getRelatedPosts, blogPosts } from "@/lib/blog";
 
@@ -275,7 +275,7 @@ function BlogContent({
           </div>
         </section>
       </div>
-      <FooterDark />
+      <FooterShop />
     </div>
   );
 }
