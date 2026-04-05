@@ -84,7 +84,7 @@ function RotatingWord() {
 export default function Hero() {
   return (
     <section
-      className="relative flex flex-col items-center justify-start w-full overflow-hidden max-md:min-h-[100vh]"
+      className="relative flex flex-col items-center justify-start w-full overflow-hidden max-md:min-h-[175vh]"
       style={{
         background:
           "linear-gradient(180deg, #37bbf0 8.37%, #66d8ea 27.3%, rgba(255,222,156,0.49) 66.67%)",
