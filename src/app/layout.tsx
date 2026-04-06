@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Barlow, Barlow_Condensed } from "next/font/google";
 import AgentationProvider from "@/components/AgentationProvider";
+import PageLoader from "@/components/PageLoader";
 import "./globals.css";
 
 const barlow = Barlow({
@@ -36,6 +37,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body>
+        <PageLoader />
         {children}
         <AgentationProvider />
       </body>

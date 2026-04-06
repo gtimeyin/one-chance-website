@@ -42,7 +42,7 @@ export default function FooterShop() {
                 {"The streets are waiting. See if you can make it in Lagos."}
               </span>
               <Button
-                variant="brand-primary"
+                variant="white"
                 size="medium"
                 onClick={() => { window.location.href = "/shop"; }}
               >
@@ -68,7 +68,7 @@ export default function FooterShop() {
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="text-large-body-default font-large-body-default text-neutral-800 uppercase no-underline hover:text-neutral-950 transition-colors duration-200"
+                    className="font-['Barlow_Condensed'] text-large-body-default font-large-body-default text-neutral-800 uppercase no-underline hover:text-neutral-950 transition-colors duration-200"
                     style={{ textDecoration: "none" }}
                   >
                     {link.label}
@@ -87,7 +87,7 @@ export default function FooterShop() {
                   <a
                     key={link.label}
                     href={link.href}
-                    className="text-large-body-default font-large-body-default text-neutral-800 uppercase no-underline hover:text-neutral-950 transition-colors duration-200"
+                    className="font-['Barlow_Condensed'] text-large-body-default font-large-body-default text-neutral-800 uppercase no-underline hover:text-neutral-950 transition-colors duration-200"
                     style={{ textDecoration: "none" }}
                   >
                     {link.label}

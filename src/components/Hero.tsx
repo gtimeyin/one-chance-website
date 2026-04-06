@@ -13,32 +13,41 @@ const headingLines = [
   { words: ["__ROTATING__", "PLACE"], startIndex: 3 },
 ];
 
-const wordAnimation = {
-  initial: { opacity: 0.001, y: 60, scale: 1, rotate: 0, skewX: 0, skewY: 0 },
-  animate: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      type: "spring" as const,
-      damping: 30,
-      stiffness: 400,
-      delay: 0.2 + i * 0.1,
-    },
-  }),
-};
+const LOADER_DELAY = 2.5;
 
-const fadeUp = {
-  initial: { opacity: 0.001, y: 20 },
+const flip3d = (delay: number) => ({
+  initial: {
+    opacity: 0,
+    rotateX: 60,
+    y: 40,
+    scale: 0.9,
+  },
   animate: {
     opacity: 1,
+    rotateX: 0,
     y: 0,
+    scale: 1,
     transition: {
-      type: "spring" as const,
-      damping: 30,
-      stiffness: 400,
-      delay: 1.2,
+      duration: 0.8,
+      delay,
+      ease: [0.16, 1, 0.3, 1],
     },
   },
+});
+
+const wordAnimation = {
+  initial: { opacity: 0.001, rotateX: 60, y: 40, scale: 0.9 },
+  animate: (i: number) => ({
+    opacity: 1,
+    rotateX: 0,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.8,
+      delay: LOADER_DELAY + 0.15 * i,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  }),
 };
 
 function RotatingWord() {
@@ -63,6 +72,7 @@ function RotatingWord() {
         background: "black",
         padding: "4px 12px",
         marginRight: "0.125em",
+        transformStyle: "preserve-3d",
       }}
     >
       <AnimatePresence mode="wait">
@@ -89,24 +99,22 @@ export default function Hero() {
         background:
           "linear-gradient(180deg, #37bbf0 8.37%, #66d8ea 27.3%, rgba(255,222,156,0.49) 66.67%)",
         zIndex: 1,
+        perspective: 1200,
       }}
     >
       {/* Lottie drives the section height */}
       <LottieBackground />
 
-      {/* Text content overlaid on top */}
-      <motion.div
-        initial={{ opacity: 1 }}
-        animate={{ opacity: 1 }}
-        className="absolute top-0 flex flex-col items-center justify-center overflow-hidden z-[2]"
+      {/* Text content overlaid on top — centered via inset+margin instead of transform to avoid conflict with Framer Motion */}
+      <div
+        className="absolute top-0 left-0 right-0 mx-auto flex flex-col items-center justify-center overflow-hidden z-[2] pointer-events-none"
         style={{
           height: "80vh",
           width: 1027,
           maxWidth: "100%",
-          left: "50%",
-          transform: "translateX(-50%)",
           padding: "200px 0",
           gap: 32,
+          perspective: 1200,
         }}
       >
         <div className="flex flex-col items-center justify-center gap-6">
@@ -128,7 +136,7 @@ export default function Hero() {
                       variants={wordAnimation}
                       initial="initial"
                       animate="animate"
-                      style={{ display: "inline-block", marginRight: wi < line.words.length - 1 ? "0.125em" : 0 }}
+                      style={{ display: "inline-block", marginRight: wi < line.words.length - 1 ? "0.125em" : 0, transformStyle: "preserve-3d" }}
                     >
                       {word}
                     </motion.span>
@@ -138,19 +146,18 @@ export default function Hero() {
             ))}
           </div>
           <motion.span
-            variants={fadeUp}
-            initial="initial"
-            animate="animate"
+            {...flip3d(LOADER_DELAY + 0.8)}
             className="text-button-large font-button-large text-default-font text-center mobile:text-[16px] mobile:leading-[16px]"
+            style={{ transformStyle: "preserve-3d" }}
           >
             so we made a board game out of it
           </motion.span>
         </div>
 
         <motion.div
-          variants={fadeUp}
-          initial="initial"
-          animate="animate"
+          {...flip3d(LOADER_DELAY + 1.0)}
+          style={{ transformStyle: "preserve-3d" }}
+          className="pointer-events-auto"
         >
           <Button
             variant="brand-primary"
@@ -163,13 +170,25 @@ export default function Hero() {
         </motion.div>
 
         <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="flex h-14 w-14 flex-none items-center justify-center bg-white"
+          {...flip3d(LOADER_DELAY + 1.2)}
+          animate={{
+            opacity: 1,
+            rotateX: 0,
+            y: [0, 8, 0],
+            scale: 1,
+          }}
+          transition={{
+            opacity: { duration: 0.8, delay: LOADER_DELAY + 1.2, ease: [0.16, 1, 0.3, 1] },
+            rotateX: { duration: 0.8, delay: LOADER_DELAY + 1.2, ease: [0.16, 1, 0.3, 1] },
+            scale: { duration: 0.8, delay: LOADER_DELAY + 1.2, ease: [0.16, 1, 0.3, 1] },
+            y: { repeat: Infinity, duration: 2, ease: "easeInOut", delay: LOADER_DELAY + 2 },
+          }}
+          className="flex h-14 w-14 flex-none items-center justify-center bg-white pointer-events-auto"
+          style={{ transformStyle: "preserve-3d" }}
         >
           <FeatherChevronDown className="font-['Barlow'] text-[24px] font-[400] leading-[36px] text-default-font" />
         </motion.div>
-      </motion.div>
+      </div>
     </section>
   );
 }

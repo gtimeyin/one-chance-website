@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
 
@@ -165,6 +166,30 @@ export default function LottieBackground() {
     x: number;
     y: number;
   } | null>(null);
+  const tooltipTargetRef = useRef<SVGImageElement | null>(null);
+  const rafRef = useRef<number | null>(null);
+
+  // Keep tooltip position in sync with the element on scroll/resize
+  useEffect(() => {
+    if (!tooltip || !tooltipTargetRef.current) return;
+
+    const update = () => {
+      const el = tooltipTargetRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      setTooltip((prev) =>
+        prev
+          ? { ...prev, x: rect.left + rect.width / 2, y: rect.top }
+          : null
+      );
+      rafRef.current = requestAnimationFrame(update);
+    };
+
+    rafRef.current = requestAnimationFrame(update);
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, [tooltip?.label]);
 
   useEffect(() => {
     setMounted(true);
@@ -182,6 +207,7 @@ export default function LottieBackground() {
     label: string,
     description: string,
   ) => {
+    tooltipTargetRef.current = e.currentTarget as SVGImageElement;
     const rect = (e.currentTarget as SVGImageElement).getBoundingClientRect();
     setTooltip({
       label,
@@ -191,7 +217,10 @@ export default function LottieBackground() {
     });
   };
 
-  const handlePointerLeave = () => setTooltip(null);
+  const handlePointerLeave = () => {
+    tooltipTargetRef.current = null;
+    setTooltip(null);
+  };
 
   const isInteractive = (lm: Landmark) => !!lm.label;
 
@@ -209,55 +238,58 @@ export default function LottieBackground() {
         aspectRatio: mounted && mobile ? "auto" : "1920 / 3000",
       }}
     >
-      <AnimatePresence>
-        {tooltip && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 10 }}
-            transition={{ duration: 0.15, ease: "easeOut" }}
-            style={{
-              position: "fixed",
-              left: Math.min(Math.max(tooltip.x - 140, 10), viewportWidth - 290),
-              top: tooltip.y - 100,
-              transform: "translateY(-100%)",
-              pointerEvents: "none",
-              backgroundColor: "#ffffff",
-              color: "#111111",
-              padding: "16px 20px",
-              borderRadius: "4px",
-              maxWidth: "280px",
-              zIndex: 9999,
-              boxShadow:
-                "0px 8px 30px rgba(0,0,0,0.12), 0px 2px 10px rgba(0,0,0,0.05)",
-              fontFamily: "Inter, sans-serif",
-            }}
-          >
-            <h4
+      {mounted && createPortal(
+        <AnimatePresence>
+          {tooltip && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              transition={{ duration: 0.15, ease: "easeOut" }}
               style={{
-                margin: 0,
-                fontSize: "18px",
-                fontWeight: 700,
-                letterSpacing: "-0.01em",
-                paddingBottom: "6px",
+                position: "fixed",
+                left: Math.min(Math.max(tooltip.x - 140, 10), viewportWidth - 290),
+                top: tooltip.y - 12,
+                transform: "translateY(-100%)",
+                pointerEvents: "none",
+                backgroundColor: "#ffffff",
+                color: "#111111",
+                padding: "16px 20px",
+                borderRadius: "4px",
+                maxWidth: "280px",
+                zIndex: 9999,
+                boxShadow:
+                  "0px 8px 30px rgba(0,0,0,0.12), 0px 2px 10px rgba(0,0,0,0.05)",
+                fontFamily: "Inter, sans-serif",
               }}
             >
-              {tooltip.label}
-            </h4>
-            <p
-              style={{
-                margin: 0,
-                fontSize: "14px",
-                fontWeight: 400,
-                color: "#333333",
-                lineHeight: "1.4",
-              }}
-            >
-              {tooltip.description}
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              <h4
+                style={{
+                  margin: 0,
+                  fontSize: "18px",
+                  fontWeight: 700,
+                  letterSpacing: "-0.01em",
+                  paddingBottom: "6px",
+                }}
+              >
+                {tooltip.label}
+              </h4>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "14px",
+                  fontWeight: 400,
+                  color: "#333333",
+                  lineHeight: "1.4",
+                }}
+              >
+                {tooltip.description}
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
 
       {mounted && (
         <Lottie
