@@ -15,6 +15,8 @@ const headingLines = [
 
 const LOADER_DELAY = 2.5;
 
+const EASE_CURVE: [number, number, number, number] = [0.16, 1, 0.3, 1];
+
 const flip3d = (delay: number) => ({
   initial: {
     opacity: 0,
@@ -30,7 +32,7 @@ const flip3d = (delay: number) => ({
     transition: {
       duration: 0.8,
       delay,
-      ease: [0.16, 1, 0.3, 1],
+      ease: EASE_CURVE,
     },
   },
 });
@@ -45,7 +47,7 @@ const wordAnimation = {
     transition: {
       duration: 0.8,
       delay: LOADER_DELAY + 0.15 * i,
-      ease: [0.16, 1, 0.3, 1],
+      ease: EASE_CURVE,
     },
   }),
 };
