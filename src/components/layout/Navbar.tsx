@@ -30,8 +30,8 @@ const navLinks = [
 
 const secondaryLinks = [
   { label: "Explore Olopa", href: "#" },
-  { label: "Terms & Condition", href: "#" },
-  { label: "Legal", href: "#" },
+  { label: "Terms & Condition", href: "/terms" },
+  { label: "Privacy Policy", href: "/privacy" },
 ];
 
 export default function Navbar() {

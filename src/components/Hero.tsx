@@ -13,7 +13,7 @@ const headingLines = [
   { words: ["__ROTATING__", "PLACE"], startIndex: 3 },
 ];
 
-const LOADER_DELAY = 2.5;
+const LOADER_DELAY = 2.7;
 
 const EASE_CURVE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 

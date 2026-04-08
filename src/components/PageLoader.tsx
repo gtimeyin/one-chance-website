@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 
 const allCharacters = [
@@ -25,53 +25,37 @@ function shuffle<T>(arr: T[]): T[] {
 
 function SlotColumn({
   finalCharacter,
-  settleDelay,
+  settled,
 }: {
   finalCharacter: string;
-  settleDelay: number;
+  settled: boolean;
 }) {
   const [currentImg, setCurrentImg] = useState(allCharacters[0]);
-  const [settled, setSettled] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    const baseSpeed = 80;
-    const startTime = Date.now();
-    const settleAt = startTime + settleDelay;
-    const easeStart = settleAt - 600;
+    if (settled) {
+      setCurrentImg(finalCharacter);
+      if (intervalRef.current) clearTimeout(intervalRef.current);
+      return;
+    }
 
-    // Set a random initial image
     setCurrentImg(allCharacters[Math.floor(Math.random() * allCharacters.length)]);
 
     const tick = () => {
-      const now = Date.now();
-
-      if (now >= settleAt) {
-        setCurrentImg(finalCharacter);
-        setSettled(true);
-        return;
-      }
-
       setCurrentImg((prev) => {
         const others = allCharacters.filter((c) => c !== prev);
         return others[Math.floor(Math.random() * others.length)];
       });
-
-      let nextDelay = baseSpeed;
-      if (now >= easeStart) {
-        const progress = (now - easeStart) / (settleAt - easeStart);
-        nextDelay = baseSpeed + progress * progress * progress * 320;
-      }
-
-      intervalRef.current = setTimeout(tick, nextDelay);
+      intervalRef.current = setTimeout(tick, 80 + Math.random() * 40);
     };
 
-    intervalRef.current = setTimeout(tick, baseSpeed);
+    intervalRef.current = setTimeout(tick, 80);
 
     return () => {
       if (intervalRef.current) clearTimeout(intervalRef.current);
     };
-  }, [finalCharacter, settleDelay]);
+  }, [settled, finalCharacter]);
 
   return (
     <div className="flex flex-col items-center justify-center w-24 h-24 sm:w-32 sm:h-32 overflow-hidden">
@@ -88,43 +72,116 @@ function SlotColumn({
   );
 }
 
+async function runHealthCheck(): Promise<boolean> {
+  try {
+    const res = await fetch("/api/health", { cache: "no-store" });
+    const data = await res.json();
+    return data.ok === true;
+  } catch {
+    return false;
+  }
+}
+
+const MIN_DISPLAY_MS = 1600;
+const MAX_WAIT_MS = 8000;
+
 export default function PageLoader() {
   const [progress, setProgress] = useState(0);
   const [dismissed, setDismissed] = useState(false);
   const [slideUp, setSlideUp] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [ready, setReady] = useState(false);
+  const [settledSlots, setSettledSlots] = useState([false, false, false]);
   const slotsRef = useRef<string[]>([]);
+  const mountTimeRef = useRef(0);
 
-  // Defer all randomization to after mount to avoid hydration mismatch
+  // Defer randomization to after mount
   useEffect(() => {
     slotsRef.current = shuffle(allCharacters).slice(0, 3);
+    mountTimeRef.current = Date.now();
     setMounted(true);
   }, []);
 
+  // Run health check + enforce minimum display time
+  useEffect(() => {
+    if (!mounted) return;
+
+    let cancelled = false;
+
+    const check = async () => {
+      const healthPromise = runHealthCheck();
+      const minWait = new Promise((r) => setTimeout(r, MIN_DISPLAY_MS));
+
+      // Wait for both: health check AND minimum display time
+      const [healthy] = await Promise.all([healthPromise, minWait]);
+
+      if (cancelled) return;
+
+      // Even if health check fails, don't block forever
+      setReady(true);
+    };
+
+    check();
+
+    // Timeout fallback — proceed after MAX_WAIT_MS regardless
+    const timeout = setTimeout(() => {
+      if (!cancelled) setReady(true);
+    }, MAX_WAIT_MS);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timeout);
+    };
+  }, [mounted]);
+
+  // Animate progress bar — goes to 80% quickly, then waits for ready to hit 100%
   useEffect(() => {
     if (!mounted) return;
     const start = Date.now();
-    const duration = 2200;
+
     const frame = () => {
       const elapsed = Date.now() - start;
-      const p = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      setProgress(eased * 100);
-      if (p < 1) requestAnimationFrame(frame);
+
+      if (ready) {
+        setProgress(100);
+        return;
+      }
+
+      // Ease to 80% over 2s, then slow crawl
+      const fastPhase = Math.min(elapsed / 2000, 1);
+      const eased = (1 - Math.pow(1 - fastPhase, 3)) * 80;
+      const slowExtra = fastPhase >= 1 ? Math.min((elapsed - 2000) / 30000, 1) * 15 : 0;
+
+      setProgress(eased + slowExtra);
+      requestAnimationFrame(frame);
     };
+
     requestAnimationFrame(frame);
-  }, [mounted]);
+  }, [mounted, ready]);
+
+  // Settle slots one by one when ready, then slide up
+  const settleSlot = useCallback((index: number) => {
+    setSettledSlots((prev) => {
+      const next = [...prev];
+      next[index] = true;
+      return next;
+    });
+  }, []);
 
   useEffect(() => {
-    if (!mounted) return;
-    const lastSettleDelay = 800 + 2 * 400;
-    const slideTimer = setTimeout(() => setSlideUp(true), lastSettleDelay + 500);
-    const dismissTimer = setTimeout(() => setDismissed(true), lastSettleDelay + 1300);
-    return () => {
-      clearTimeout(slideTimer);
-      clearTimeout(dismissTimer);
-    };
-  }, [mounted]);
+    if (!ready) return;
+
+    // Ease-settle each slot with staggered delays
+    const timers = [
+      setTimeout(() => settleSlot(0), 100),
+      setTimeout(() => settleSlot(1), 350),
+      setTimeout(() => settleSlot(2), 600),
+      setTimeout(() => setSlideUp(true), 1100),
+      setTimeout(() => setDismissed(true), 1800),
+    ];
+
+    return () => timers.forEach(clearTimeout);
+  }, [ready, settleSlot]);
 
   if (dismissed) return null;
 
@@ -144,7 +201,7 @@ export default function PageLoader() {
               <SlotColumn
                 key={i}
                 finalCharacter={char}
-                settleDelay={800 + i * 400}
+                settled={settledSlots[i]}
               />
             ))}
           </div>
@@ -152,7 +209,7 @@ export default function PageLoader() {
           {/* Progress bar */}
           <div className="w-64 sm:w-80 h-4 bg-neutral-100 overflow-hidden">
             <div
-              className="h-full bg-neutral-800 transition-[width] duration-100 ease-out"
+              className="h-full bg-neutral-800 transition-[width] duration-300 ease-out"
               style={{ width: `${progress}%` }}
             />
           </div>
