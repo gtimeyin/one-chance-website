@@ -6,6 +6,7 @@ import { Button } from "@/ui/components/Button";
 import { TextField } from "@/ui/components/TextField";
 import Link from "next/link";
 import type { FormState } from "@/lib/auth-definitions";
+import ReferralCodeInput from "@/components/referral/ReferralCodeInput";
 
 const initialState: FormState = {};
 
@@ -79,6 +80,8 @@ export default function RegisterForm() {
       {state.errors?.confirmPassword && (
         <span className="text-red-600 text-[13px] font-['Barlow'] -mt-3">{state.errors.confirmPassword[0]}</span>
       )}
+
+      <ReferralCodeInput />
 
       <Button
         variant="brand-primary"

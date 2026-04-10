@@ -12,6 +12,12 @@ import {
   type FormState,
 } from "@/lib/auth-definitions";
 import { redirect } from "next/navigation";
+import {
+  getReferralCodeByCode,
+  createReferral,
+  generateReferralCode,
+} from "@/lib/referral";
+import { cookies } from "next/headers";
 
 export async function login(
   _state: FormState,
@@ -54,13 +60,14 @@ export async function register(
     email: formData.get("email"),
     password: formData.get("password"),
     confirmPassword: formData.get("confirmPassword"),
+    referralCode: formData.get("referralCode") || undefined,
   });
 
   if (!parsed.success) {
     return { errors: parsed.error.flatten().fieldErrors };
   }
 
-  const { firstName, lastName, email, password } = parsed.data;
+  const { firstName, lastName, email, password, referralCode } = parsed.data;
 
   // Check if customer already exists
   const existing = await getCustomerByEmail(email);
@@ -75,6 +82,21 @@ export async function register(
       last_name: lastName,
       password,
     });
+
+    // Process referral code if provided
+    if (referralCode) {
+      const code = await getReferralCodeByCode(referralCode);
+      if (code && code.woo_customer_id !== customer.id) {
+        await createReferral(code.woo_customer_id, customer.id, code.id);
+      }
+    }
+
+    // Auto-generate a referral code for the new user
+    await generateReferralCode(customer.id);
+
+    // Clear referral cookie
+    const cookieStore = await cookies();
+    cookieStore.delete("oc_referral_code");
 
     await createSession(customer.id, customer.email, customer.first_name);
   } catch {

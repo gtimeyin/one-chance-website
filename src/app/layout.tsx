@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Barlow, Barlow_Condensed } from "next/font/google";
 import AgentationProvider from "@/components/AgentationProvider";
 import PageLoader from "@/components/PageLoader";
+import ReferralCodeCapture from "@/components/referral/ReferralCodeCapture";
+import { Suspense } from "react";
 import "./globals.css";
 
 const barlow = Barlow({
@@ -38,6 +40,9 @@ export default function RootLayout({
       </head>
       <body>
         <PageLoader />
+        <Suspense>
+          <ReferralCodeCapture />
+        </Suspense>
         {children}
         <AgentationProvider />
       </body>
