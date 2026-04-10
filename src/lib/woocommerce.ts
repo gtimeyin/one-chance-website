@@ -176,3 +176,131 @@ export async function getCategories(): Promise<WooCategory[]> {
 export function isApiConfigured(): boolean {
   return hasApiCredentials();
 }
+
+// ─── Customer CRUD ───────────────────────────────────────────────
+
+import type { WooCustomer, WooOrder, WooAddress } from "./auth-definitions";
+
+export async function getCustomerByEmail(email: string): Promise<WooCustomer | null> {
+  const client = getApiClient();
+  if (!client) return null;
+
+  try {
+    const response = await client.get("customers", { email, per_page: 1 });
+    return response.data[0] || null;
+  } catch (error) {
+    log.error("Error fetching customer by email", error);
+    return null;
+  }
+}
+
+export async function getCustomerById(id: number): Promise<WooCustomer | null> {
+  const client = getApiClient();
+  if (!client) return null;
+
+  try {
+    const response = await client.get(`customers/${id}`);
+    return response.data;
+  } catch (error) {
+    log.error("Error fetching customer by ID", error);
+    return null;
+  }
+}
+
+export async function createCustomer(data: {
+  email: string;
+  first_name: string;
+  last_name: string;
+  password: string;
+}): Promise<WooCustomer> {
+  const client = getApiClient();
+  if (!client) throw new Error("API not configured");
+
+  const response = await client.post("customers", {
+    email: data.email,
+    first_name: data.first_name,
+    last_name: data.last_name,
+    password: data.password,
+    username: data.email,
+  });
+  return response.data;
+}
+
+export async function updateCustomer(
+  id: number,
+  data: Partial<{
+    first_name: string;
+    last_name: string;
+    email: string;
+    billing: Partial<WooAddress>;
+    shipping: Partial<WooAddress>;
+  }>
+): Promise<WooCustomer> {
+  const client = getApiClient();
+  if (!client) throw new Error("API not configured");
+
+  const response = await client.put(`customers/${id}`, data);
+  return response.data;
+}
+
+// ─── Orders ──────────────────────────────────────────────────────
+
+export async function getCustomerOrders(
+  customerId: number,
+  params?: { per_page?: number; page?: number }
+): Promise<WooOrder[]> {
+  const client = getApiClient();
+  if (!client) return [];
+
+  try {
+    const response = await client.get("orders", {
+      customer: customerId,
+      per_page: params?.per_page || 20,
+      page: params?.page || 1,
+      orderby: "date",
+      order: "desc",
+    });
+    return response.data;
+  } catch (error) {
+    log.error("Error fetching customer orders", error);
+    return [];
+  }
+}
+
+export async function getOrderById(orderId: number): Promise<WooOrder | null> {
+  const client = getApiClient();
+  if (!client) return null;
+
+  try {
+    const response = await client.get(`orders/${orderId}`);
+    return response.data;
+  } catch (error) {
+    log.error("Error fetching order by ID", error);
+    return null;
+  }
+}
+
+// ─── WordPress Authentication ────────────────────────────────────
+
+export async function verifyWordPressCredentials(
+  email: string,
+  password: string
+): Promise<{ wpUserId: number; email: string } | null> {
+  const wpUrl = process.env.NEXT_PUBLIC_WOOCOMMERCE_URL || "https://shopapi.yvpgame.com";
+
+  try {
+    const response = await fetch(`${wpUrl}/wp-json/wp/v2/users/me`, {
+      headers: {
+        Authorization: `Basic ${Buffer.from(`${email}:${password}`).toString("base64")}`,
+      },
+    });
+
+    if (!response.ok) return null;
+
+    const user = await response.json();
+    return { wpUserId: user.id, email: user.slug };
+  } catch (error) {
+    log.error("Error verifying WordPress credentials", error);
+    return null;
+  }
+}

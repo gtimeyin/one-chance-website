@@ -11,6 +11,7 @@ import {
   FeatherMenu,
   FeatherSearch,
   FeatherShoppingBag,
+  FeatherUser,
   FeatherX,
   FeatherFacebook,
   FeatherInstagram,
@@ -102,6 +103,14 @@ export default function Navbar() {
           </Button>
         </div>
         <div className="flex items-start gap-2">
+          <Link href="/account">
+            <Button
+              variant="white"
+              size="small"
+              icon={<FeatherUser />}
+              onClick={() => {}}
+            />
+          </Link>
           <Button
             variant="white"
             size="small"
