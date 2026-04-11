@@ -16,7 +16,11 @@ export default async function AccountDashboard() {
   return (
     <div className="flex flex-col gap-8">
       <div className="flex items-center gap-5">
-        <div className="relative w-20 h-20 overflow-hidden rounded-full border-2 border-[#FFD600] shrink-0">
+        <Link
+          href="/account/edit"
+          className="relative w-20 h-20 overflow-hidden rounded-full border-2 border-[#FFD600] shrink-0 group"
+          title="Change avatar"
+        >
           <Image
             src={avatar.src}
             alt={avatar.name}
@@ -24,7 +28,12 @@ export default async function AccountDashboard() {
             className="object-cover"
             sizes="80px"
           />
-        </div>
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+            <span className="font-['Barlow'] text-[11px] font-[600] text-white opacity-0 group-hover:opacity-100 transition-opacity uppercase">
+              Edit
+            </span>
+          </div>
+        </Link>
         <div className="flex flex-col gap-1">
           <h1 className="font-['Barlow_Condensed'] text-[40px] font-[800] leading-[1.1] text-neutral-800 uppercase -tracking-[0.02em]">
             WELCOME{customer ? `, ${customer.first_name.toUpperCase()}` : ""}

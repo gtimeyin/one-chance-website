@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { logout } from "@/app/actions/auth";
 
@@ -12,11 +13,41 @@ const navItems = [
   { label: "Account Details", href: "/account/edit" },
 ];
 
-export default function AccountSidebar() {
+export default function AccountSidebar({
+  avatarSrc,
+  avatarName,
+}: {
+  avatarSrc: string;
+  avatarName: string;
+}) {
   const pathname = usePathname();
 
   return (
     <nav className="flex flex-col gap-1 w-[220px] shrink-0 mobile:hidden">
+      <Link
+        href="/account/edit"
+        className="flex items-center gap-3 px-4 py-4 mb-2 no-underline group"
+        style={{ textDecoration: "none" }}
+        title="Change avatar"
+      >
+        <div className="relative w-12 h-12 overflow-hidden rounded-full border-2 border-[#FFD600] shrink-0">
+          <Image
+            src={avatarSrc}
+            alt={avatarName}
+            fill
+            className="object-cover"
+            sizes="48px"
+          />
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+            <span className="font-['Barlow'] text-[9px] font-[600] text-white opacity-0 group-hover:opacity-100 transition-opacity uppercase">
+              Edit
+            </span>
+          </div>
+        </div>
+        <span className="font-['Barlow_Condensed'] text-[15px] font-[700] text-neutral-700 uppercase">
+          {avatarName}
+        </span>
+      </Link>
       {navItems.map((item) => {
         const isActive =
           item.href === "/account"
