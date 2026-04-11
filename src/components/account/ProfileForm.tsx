@@ -60,7 +60,7 @@ export default function ProfileForm({
       )}
 
       <div className="pt-2">
-        <Button variant="brand-primary" size="medium" disabled={pending} onClick={() => {}}>
+        <Button variant="brand-primary" size="medium" disabled={pending} type="submit">
           {pending ? "Saving..." : "Save Changes"}
         </Button>
       </div>

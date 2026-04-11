@@ -113,7 +113,7 @@ export default function WithdrawalForm({ currentBalance }: Props) {
         </TextField>
       </div>
 
-      <Button variant="brand-primary" size="medium" disabled={pending} onClick={() => {}}>
+      <Button variant="brand-primary" size="medium" disabled={pending} type="submit">
         {pending ? "Submitting..." : "Submit Withdrawal Request"}
       </Button>
     </form>

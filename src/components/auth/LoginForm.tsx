@@ -46,7 +46,7 @@ export default function LoginForm() {
         variant="brand-primary"
         size="medium"
         disabled={pending}
-        onClick={() => {}}
+        type="submit"
       >
         {pending ? "Signing in..." : "Sign In"}
       </Button>

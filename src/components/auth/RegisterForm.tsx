@@ -87,7 +87,7 @@ export default function RegisterForm() {
         variant="brand-primary"
         size="medium"
         disabled={pending}
-        onClick={() => {}}
+        type="submit"
       >
         {pending ? "Creating account..." : "Create Account"}
       </Button>

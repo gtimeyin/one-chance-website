@@ -88,7 +88,7 @@ export default function AddressForm({
       </TextField>
 
       <div className="pt-2">
-        <Button variant="brand-primary" size="medium" disabled={pending} onClick={() => {}}>
+        <Button variant="brand-primary" size="medium" disabled={pending} type="submit">
           {pending ? "Saving..." : "Save Address"}
         </Button>
       </div>
