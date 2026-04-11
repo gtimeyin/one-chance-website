@@ -289,18 +289,34 @@ export async function verifyWordPressCredentials(
   const wpUrl = process.env.NEXT_PUBLIC_WOOCOMMERCE_URL || "https://shopapi.yvpgame.com";
 
   try {
-    const response = await fetch(`${wpUrl}/wp-json/wp/v2/users/me`, {
-      headers: {
-        Authorization: `Basic ${Buffer.from(`${email}:${password}`).toString("base64")}`,
-      },
+    // Use XML-RPC to verify credentials (works without Application Passwords)
+    const xmlBody = `<?xml version="1.0"?><methodCall><methodName>wp.getUsersBlogs</methodName><params><param><value><string>${escapeXml(email)}</string></value></param><param><value><string>${escapeXml(password)}</string></value></param></params></methodCall>`;
+
+    const response = await fetch(`${wpUrl}/xmlrpc.php`, {
+      method: "POST",
+      headers: { "Content-Type": "text/xml" },
+      body: xmlBody,
     });
 
     if (!response.ok) return null;
 
-    const user = await response.json();
-    return { wpUserId: user.id, email: user.slug };
+    const text = await response.text();
+
+    // XML-RPC returns <fault> on auth failure
+    if (text.includes("faultCode")) return null;
+
+    return { wpUserId: 0, email };
   } catch (error) {
     log.error("Error verifying WordPress credentials", error);
     return null;
   }
+}
+
+function escapeXml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
 }
