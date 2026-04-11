@@ -17,6 +17,7 @@ import {
   createReferral,
   generateReferralCode,
 } from "@/lib/referral";
+import { getRandomAvatarId, setUserAvatar } from "@/lib/avatars";
 import { cookies } from "next/headers";
 
 export async function login(
@@ -93,6 +94,9 @@ export async function register(
 
     // Auto-generate a referral code for the new user
     await generateReferralCode(customer.id);
+
+    // Assign a random character avatar
+    await setUserAvatar(customer.id, getRandomAvatarId());
 
     // Clear referral cookie
     const cookieStore = await cookies();

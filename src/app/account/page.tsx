@@ -1,21 +1,38 @@
 import { verifySession } from "@/lib/dal";
 import { getCustomerById, getCustomerOrders } from "@/lib/woocommerce";
+import { getUserAvatar, getAvatarById } from "@/lib/avatars";
+import Image from "next/image";
 import Link from "next/link";
 
 export default async function AccountDashboard() {
   const session = await verifySession();
-  const customer = await getCustomerById(session.customerId);
-  const orders = await getCustomerOrders(session.customerId, { per_page: 3 });
+  const [customer, orders, avatarId] = await Promise.all([
+    getCustomerById(session.customerId),
+    getCustomerOrders(session.customerId, { per_page: 3 }),
+    getUserAvatar(session.customerId),
+  ]);
+  const avatar = getAvatarById(avatarId);
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-2">
-        <h1 className="font-['Barlow_Condensed'] text-[40px] font-[800] leading-[1.1] text-neutral-800 uppercase -tracking-[0.02em]">
-          WELCOME{customer ? `, ${customer.first_name.toUpperCase()}` : ""}
-        </h1>
-        <p className="font-['Barlow'] text-[16px] text-neutral-500">
-          Manage your account, view orders, and update your details.
-        </p>
+      <div className="flex items-center gap-5">
+        <div className="relative w-20 h-20 overflow-hidden rounded-full border-2 border-[#FFD600] shrink-0">
+          <Image
+            src={avatar.src}
+            alt={avatar.name}
+            fill
+            className="object-cover"
+            sizes="80px"
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <h1 className="font-['Barlow_Condensed'] text-[40px] font-[800] leading-[1.1] text-neutral-800 uppercase -tracking-[0.02em]">
+            WELCOME{customer ? `, ${customer.first_name.toUpperCase()}` : ""}
+          </h1>
+          <p className="font-['Barlow'] text-[16px] text-neutral-500">
+            Manage your account, view orders, and update your details.
+          </p>
+        </div>
       </div>
 
       {/* Quick links */}

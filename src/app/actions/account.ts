@@ -8,6 +8,8 @@ import {
   type FormState,
 } from "@/lib/auth-definitions";
 import { revalidatePath } from "next/cache";
+import { setUserAvatar, CHARACTER_AVATARS } from "@/lib/avatars";
+import type { AvatarId } from "@/lib/avatar-options";
 
 export async function updateProfile(
   _state: FormState,
@@ -98,4 +100,21 @@ export async function updateShippingAddress(
   } catch {
     return { message: "Failed to update shipping address." };
   }
+}
+
+export async function updateAvatar(avatarId: string): Promise<FormState> {
+  const session = await verifySession();
+
+  const valid = CHARACTER_AVATARS.some((a) => a.id === avatarId);
+  if (!valid) {
+    return { message: "Invalid avatar selection." };
+  }
+
+  const success = await setUserAvatar(session.customerId, avatarId as AvatarId);
+  if (!success) {
+    return { message: "Failed to update avatar." };
+  }
+
+  revalidatePath("/account");
+  return { success: true, message: "Avatar updated!" };
 }
