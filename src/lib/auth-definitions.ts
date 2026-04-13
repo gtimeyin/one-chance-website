@@ -11,7 +11,7 @@ export const RegisterFormSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   confirmPassword: z.string().min(1, "Please confirm your password"),
-  referralCode: z.string().max(12).optional(),
+  referralCode: z.string().regex(/^OC-[A-F0-9]{8}$/, "Invalid referral code format").optional().or(z.literal("")),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords do not match",
   path: ["confirmPassword"],

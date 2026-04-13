@@ -6,7 +6,7 @@ import type { SessionPayload } from "./auth-definitions";
 export { decrypt } from "./session-crypto";
 
 const COOKIE_NAME = "session";
-const SESSION_DURATION_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+const SESSION_DURATION_MS = 24 * 60 * 60 * 1000; // 1 day
 
 export async function createSession(
   customerId: number,

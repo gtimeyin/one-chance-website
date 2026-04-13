@@ -321,6 +321,39 @@ export async function getCustomerCreditSummary(
   return data as CustomerCreditSummary;
 }
 
+// ─── Atomic Withdrawal (race-condition safe) ─────────────────────
+
+export async function atomicWithdraw(
+  wooCustomerId: number,
+  amount: number,
+  type: string,
+  referenceId: string,
+  description: string
+): Promise<{ success: boolean; balanceAfter?: number; error?: string }> {
+  const supabase = getSupabaseClient();
+  if (!supabase) return { success: false, error: "Service unavailable" };
+
+  const { data, error } = await supabase.rpc("withdraw_credits", {
+    p_customer_id: wooCustomerId,
+    p_amount: amount,
+    p_type: type,
+    p_reference_id: referenceId,
+    p_description: description,
+  });
+
+  if (error) {
+    log.error("Atomic withdrawal failed", error);
+    return { success: false, error: "Withdrawal failed" };
+  }
+
+  const row = data?.[0];
+  if (!row?.success) {
+    return { success: false, error: row?.error_message || "Insufficient balance" };
+  }
+
+  return { success: true, balanceAfter: row.balance_after };
+}
+
 // ─── Withdrawal Operations ───────────────────────────────────────
 
 export async function createWithdrawalRequest(

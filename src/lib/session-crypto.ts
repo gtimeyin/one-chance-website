@@ -8,7 +8,7 @@ export async function encrypt(payload: SessionPayload): Promise<string> {
   return new SignJWT({ ...payload, expiresAt: payload.expiresAt.toISOString() })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime("7d")
+    .setExpirationTime("1d")
     .sign(encodedKey);
 }
 

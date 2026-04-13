@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createHmac } from "crypto";
+import { createHmac, timingSafeEqual } from "crypto";
 import { processReferralForOrder } from "@/lib/referral";
 import { createLogger } from "@/lib/logger";
 
@@ -12,22 +12,36 @@ function verifyWebhookSignature(
 ): boolean {
   if (!signature) return false;
   const expected = createHmac("sha256", secret).update(body).digest("base64");
-  return signature === expected;
+  // Timing-safe comparison to prevent signature oracle attacks
+  try {
+    return timingSafeEqual(
+      Buffer.from(signature, "base64"),
+      Buffer.from(expected, "base64")
+    );
+  } catch {
+    return false;
+  }
 }
 
 export async function POST(request: NextRequest) {
   const webhookSecret = process.env.WOOCOMMERCE_WEBHOOK_SECRET;
 
+  // Signature validation is mandatory — reject if secret not configured
+  if (!webhookSecret) {
+    log.error("WOOCOMMERCE_WEBHOOK_SECRET not configured");
+    return NextResponse.json(
+      { error: "Webhook not configured" },
+      { status: 503 }
+    );
+  }
+
   const body = await request.text();
   const signature = request.headers.get("x-wc-webhook-signature");
   const topic = request.headers.get("x-wc-webhook-topic");
 
-  // Verify signature if secret is configured
-  if (webhookSecret) {
-    if (!verifyWebhookSignature(body, signature, webhookSecret)) {
-      log.warn("Invalid webhook signature");
-      return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
-    }
+  if (!verifyWebhookSignature(body, signature, webhookSecret)) {
+    log.warn("Invalid webhook signature");
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   // Only process order completion events
@@ -39,8 +53,7 @@ export async function POST(request: NextRequest) {
   try {
     order = JSON.parse(body);
   } catch {
-    log.error("Failed to parse webhook body");
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+    return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
   }
 
   // Only process completed orders
@@ -53,12 +66,15 @@ export async function POST(request: NextRequest) {
   const orderTotal = parseFloat(order.total || "0");
 
   if (!customerId || !orderId || orderTotal <= 0) {
-    log.warn("Incomplete order data in webhook", { customerId, orderId, orderTotal });
     return NextResponse.json({ ok: true, skipped: true });
   }
 
   try {
-    const processed = await processReferralForOrder(customerId, orderId, orderTotal);
+    const processed = await processReferralForOrder(
+      customerId,
+      orderId,
+      orderTotal
+    );
     log.info("Webhook processed", { orderId, referralProcessed: processed });
     return NextResponse.json({ ok: true, processed });
   } catch (error) {

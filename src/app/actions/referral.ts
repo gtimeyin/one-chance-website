@@ -9,7 +9,7 @@ import {
   getReferralNetwork,
   getWithdrawalRequests,
   createWithdrawalRequest,
-  addCreditLedgerEntry,
+  atomicWithdraw,
   getReferralsByReferrer,
 } from "@/lib/referral";
 import {
@@ -77,15 +77,15 @@ export async function requestWithdrawal(
 
   const { amount, method, notes } = parsed.data;
 
-  // Validate balance
-  const summary = await getCustomerCreditSummary(session.customerId);
-  const balance = summary?.current_balance ?? 0;
+  const ledgerType = method === "donate" ? "donation" : "withdrawal";
+  const description =
+    method === "donate"
+      ? "Donation"
+      : method === "cash"
+        ? "Cash withdrawal request"
+        : "Store credit withdrawal";
 
-  if (amount > balance) {
-    return { message: "Insufficient balance for this withdrawal." };
-  }
-
-  // Create withdrawal request
+  // Create withdrawal request first (to get reference_id)
   const request = await createWithdrawalRequest(
     session.customerId,
     amount,
@@ -97,18 +97,18 @@ export async function requestWithdrawal(
     return { message: "Failed to create withdrawal request. Please try again." };
   }
 
-  // Debit the ledger
-  await addCreditLedgerEntry(
+  // Atomic balance check + debit (prevents race conditions)
+  const result = await atomicWithdraw(
     session.customerId,
-    -amount,
-    method === "donate" ? "donation" : "withdrawal",
+    amount,
+    ledgerType,
     request.id,
-    method === "donate"
-      ? "Donation"
-      : method === "cash"
-        ? "Cash withdrawal request"
-        : "Store credit withdrawal"
+    description
   );
+
+  if (!result.success) {
+    return { message: result.error || "Insufficient balance for this withdrawal." };
+  }
 
   revalidatePath("/account/referrals");
   return { success: true, message: "Withdrawal request submitted!" };

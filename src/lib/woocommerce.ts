@@ -288,9 +288,17 @@ export async function verifyWordPressCredentials(
 ): Promise<{ wpUserId: number; email: string } | null> {
   const wpUrl = process.env.NEXT_PUBLIC_WOOCOMMERCE_URL || "https://shopapi.yvpgame.com";
 
+  // Reject inputs containing XML control sequences before building payload
+  if (/[<>&]/.test(email) || email.length > 254) return null;
+  if (password.length > 1000 || password.length === 0) return null;
+
   try {
     // Use XML-RPC to verify credentials (works without Application Passwords)
-    const xmlBody = `<?xml version="1.0"?><methodCall><methodName>wp.getUsersBlogs</methodName><params><param><value><string>${escapeXml(email)}</string></value></param><param><value><string>${escapeXml(password)}</string></value></param></params></methodCall>`;
+    // Base64-encode credentials to avoid any XML injection regardless of input content
+    const emailB64 = Buffer.from(email, "utf-8").toString("base64");
+    const passB64 = Buffer.from(password, "utf-8").toString("base64");
+
+    const xmlBody = `<?xml version="1.0"?><methodCall><methodName>wp.getUsersBlogs</methodName><params><param><value><base64>${emailB64}</base64></value></param><param><value><base64>${passB64}</base64></value></param></params></methodCall>`;
 
     const response = await fetch(`${wpUrl}/xmlrpc.php`, {
       method: "POST",
@@ -310,13 +318,4 @@ export async function verifyWordPressCredentials(
     log.error("Error verifying WordPress credentials", error);
     return null;
   }
-}
-
-function escapeXml(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&apos;");
 }

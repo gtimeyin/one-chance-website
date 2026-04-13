@@ -18,7 +18,8 @@ import {
   generateReferralCode,
 } from "@/lib/referral";
 import { getRandomAvatarId, setUserAvatar } from "@/lib/avatars";
-import { cookies } from "next/headers";
+import { rateLimit } from "@/lib/rate-limit";
+import { cookies, headers } from "next/headers";
 
 export async function login(
   _state: FormState,
@@ -35,6 +36,13 @@ export async function login(
 
   const { email, password } = parsed.data;
 
+  // Rate limit: 5 login attempts per email per 15 minutes
+  const rl = rateLimit(`login:${email.toLowerCase()}`, 5, 15 * 60 * 1000);
+  if (!rl.allowed) {
+    const minutes = Math.ceil(rl.retryAfterMs / 60000);
+    return { message: `Too many login attempts. Try again in ${minutes} minute${minutes > 1 ? "s" : ""}.` };
+  }
+
   // Verify credentials against WordPress
   const wpUser = await verifyWordPressCredentials(email, password);
   if (!wpUser) {
@@ -44,7 +52,8 @@ export async function login(
   // Look up the WooCommerce customer by email
   const customer = await getCustomerByEmail(email);
   if (!customer) {
-    return { message: "No account found for this email" };
+    // Generic message to prevent email enumeration
+    return { message: "Invalid email or password" };
   }
 
   await createSession(customer.id, customer.email, customer.first_name);
@@ -61,7 +70,7 @@ export async function register(
     email: formData.get("email"),
     password: formData.get("password"),
     confirmPassword: formData.get("confirmPassword"),
-    referralCode: formData.get("referralCode") || undefined,
+    referralCode: (formData.get("referralCode") as string)?.trim() || undefined,
   });
 
   if (!parsed.success) {
@@ -69,6 +78,15 @@ export async function register(
   }
 
   const { firstName, lastName, email, password, referralCode } = parsed.data;
+
+  // Rate limit: 3 registration attempts per IP per 15 minutes
+  const hdrs = await headers();
+  const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  const rl = rateLimit(`register:${ip}`, 3, 15 * 60 * 1000);
+  if (!rl.allowed) {
+    const minutes = Math.ceil(rl.retryAfterMs / 60000);
+    return { message: `Too many attempts. Try again in ${minutes} minute${minutes > 1 ? "s" : ""}.` };
+  }
 
   // Check if customer already exists
   const existing = await getCustomerByEmail(email);
