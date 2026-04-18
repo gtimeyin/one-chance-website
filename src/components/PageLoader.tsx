@@ -82,8 +82,8 @@ async function runHealthCheck(): Promise<boolean> {
   }
 }
 
-const MIN_DISPLAY_MS = 1600;
-const MAX_WAIT_MS = 8000;
+const MIN_DISPLAY_MS = 600;
+const MAX_WAIT_MS = 4000;
 
 export default function PageLoader() {
   const [progress, setProgress] = useState(0);

@@ -43,15 +43,13 @@ export async function login(
     return { message: `Too many login attempts. Try again in ${minutes} minute${minutes > 1 ? "s" : ""}.` };
   }
 
-  // Verify credentials against WordPress
-  const wpUser = await verifyWordPressCredentials(email, password);
-  if (!wpUser) {
-    return { message: "Invalid email or password" };
-  }
-
-  // Look up the WooCommerce customer by email
-  const customer = await getCustomerByEmail(email);
-  if (!customer) {
+  // Run WP credential verification and Woo customer lookup in parallel —
+  // both are required for success, neither depends on the other.
+  const [wpUser, customer] = await Promise.all([
+    verifyWordPressCredentials(email, password),
+    getCustomerByEmail(email),
+  ]);
+  if (!wpUser || !customer) {
     // Generic message to prevent email enumeration
     return { message: "Invalid email or password" };
   }

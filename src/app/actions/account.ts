@@ -7,7 +7,7 @@ import {
   AddressSchema,
   type FormState,
 } from "@/lib/auth-definitions";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { setUserAvatar, CHARACTER_AVATARS } from "@/lib/avatars";
 import type { AvatarId } from "@/lib/avatar-options";
 
@@ -33,6 +33,7 @@ export async function updateProfile(
       last_name: parsed.data.lastName,
       email: parsed.data.email,
     });
+    updateTag(`customer:${session.customerId}`);
     revalidatePath("/account");
     return { success: true, message: "Profile updated successfully" };
   } catch {
@@ -64,6 +65,7 @@ export async function updateBillingAddress(
 
   try {
     await updateCustomer(session.customerId, { billing: parsed.data });
+    updateTag(`customer:${session.customerId}`);
     revalidatePath("/account/addresses");
     return { success: true, message: "Billing address updated" };
   } catch {
@@ -95,6 +97,7 @@ export async function updateShippingAddress(
 
   try {
     await updateCustomer(session.customerId, { shipping: parsed.data });
+    updateTag(`customer:${session.customerId}`);
     revalidatePath("/account/addresses");
     return { success: true, message: "Shipping address updated" };
   } catch {

@@ -1,7 +1,17 @@
 import WooCommerceRestApi from "@woocommerce/woocommerce-rest-api";
+import { unstable_cache } from "next/cache";
 import { createLogger } from "./logger";
 
 const log = createLogger("woocommerce");
+
+async function timed<T>(label: string, fn: () => Promise<T>): Promise<T> {
+  const start = Date.now();
+  try {
+    return await fn();
+  } finally {
+    log.info(`${label} took ${Date.now() - start}ms`);
+  }
+}
 
 export interface WooProduct {
   id: number;
@@ -186,7 +196,9 @@ export async function getCustomerByEmail(email: string): Promise<WooCustomer | n
   if (!client) return null;
 
   try {
-    const response = await client.get("customers", { email, per_page: 1 });
+    const response = await timed("GET customers?email=", () =>
+      client.get("customers", { email, per_page: 1 })
+    );
     return response.data[0] || null;
   } catch (error) {
     log.error("Error fetching customer by email", error);
@@ -194,17 +206,27 @@ export async function getCustomerByEmail(email: string): Promise<WooCustomer | n
   }
 }
 
-export async function getCustomerById(id: number): Promise<WooCustomer | null> {
+async function fetchCustomerById(id: number): Promise<WooCustomer | null> {
   const client = getApiClient();
   if (!client) return null;
 
   try {
-    const response = await client.get(`customers/${id}`);
+    const response = await timed(`GET customers/${id}`, () =>
+      client.get(`customers/${id}`)
+    );
     return response.data;
   } catch (error) {
     log.error("Error fetching customer by ID", error);
     return null;
   }
+}
+
+export async function getCustomerById(id: number): Promise<WooCustomer | null> {
+  return unstable_cache(
+    () => fetchCustomerById(id),
+    ["wc-customer-by-id", String(id)],
+    { tags: [`customer:${id}`], revalidate: 30 }
+  )();
 }
 
 export async function createCustomer(data: {
@@ -245,26 +267,44 @@ export async function updateCustomer(
 
 // ─── Orders ──────────────────────────────────────────────────────
 
-export async function getCustomerOrders(
+async function fetchCustomerOrders(
   customerId: number,
-  params?: { per_page?: number; page?: number }
+  perPage: number,
+  page: number
 ): Promise<WooOrder[]> {
   const client = getApiClient();
   if (!client) return [];
 
   try {
-    const response = await client.get("orders", {
-      customer: customerId,
-      per_page: params?.per_page || 20,
-      page: params?.page || 1,
-      orderby: "date",
-      order: "desc",
-    });
+    const response = await timed(
+      `GET orders?customer=${customerId}&per_page=${perPage}&page=${page}`,
+      () =>
+        client.get("orders", {
+          customer: customerId,
+          per_page: perPage,
+          page,
+          orderby: "date",
+          order: "desc",
+        })
+    );
     return response.data;
   } catch (error) {
     log.error("Error fetching customer orders", error);
     return [];
   }
+}
+
+export async function getCustomerOrders(
+  customerId: number,
+  params?: { per_page?: number; page?: number }
+): Promise<WooOrder[]> {
+  const perPage = params?.per_page || 20;
+  const page = params?.page || 1;
+  return unstable_cache(
+    () => fetchCustomerOrders(customerId, perPage, page),
+    ["wc-orders-by-customer", String(customerId), String(perPage), String(page)],
+    { tags: [`orders:${customerId}`], revalidate: 30 }
+  )();
 }
 
 export async function getOrderById(orderId: number): Promise<WooOrder | null> {
@@ -300,11 +340,13 @@ export async function verifyWordPressCredentials(
 
     const xmlBody = `<?xml version="1.0"?><methodCall><methodName>wp.getUsersBlogs</methodName><params><param><value><base64>${emailB64}</base64></value></param><param><value><base64>${passB64}</base64></value></param></params></methodCall>`;
 
-    const response = await fetch(`${wpUrl}/xmlrpc.php`, {
-      method: "POST",
-      headers: { "Content-Type": "text/xml" },
-      body: xmlBody,
-    });
+    const response = await timed("POST xmlrpc.php (wp.getUsersBlogs)", () =>
+      fetch(`${wpUrl}/xmlrpc.php`, {
+        method: "POST",
+        headers: { "Content-Type": "text/xml" },
+        body: xmlBody,
+      })
+    );
 
     if (!response.ok) return null;
 

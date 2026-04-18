@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { getSupabaseClient } from "./supabase";
 import { createLogger } from "./logger";
 import { CHARACTER_AVATARS, type AvatarId } from "./avatar-options";
@@ -13,7 +14,7 @@ export function getRandomAvatarId(): AvatarId {
   return CHARACTER_AVATARS[index].id;
 }
 
-export async function getUserAvatar(wooCustomerId: number): Promise<AvatarId> {
+export const getUserAvatar = cache(async (wooCustomerId: number): Promise<AvatarId> => {
   const supabase = getSupabaseClient();
   if (!supabase) return CHARACTER_AVATARS[0].id;
 
@@ -28,7 +29,7 @@ export async function getUserAvatar(wooCustomerId: number): Promise<AvatarId> {
   }
 
   return data.avatar as AvatarId;
-}
+});
 
 export async function setUserAvatar(
   wooCustomerId: number,
