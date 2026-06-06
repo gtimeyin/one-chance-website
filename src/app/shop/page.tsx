@@ -1,4 +1,5 @@
 import Navbar from "@/components/layout/Navbar";
+import Breadcrumb from "@/components/layout/Breadcrumb";
 import ShopHeroBanner from "@/components/shop/ShopHeroBanner";
 import ShopProductGrid from "@/components/shop/ShopProductGrid";
 import FooterShop from "@/components/layout/FooterShop";
@@ -19,6 +20,14 @@ export default async function ShopPage() {
       <SmoothScroll />
       <Navbar />
       <div style={{ paddingTop: 56 }}>
+        <div style={{ padding: "0 clamp(20px, 4vw, 40px)" }}>
+          <Breadcrumb
+            items={[
+              { label: "Home", href: "/" },
+              { label: "Shop" },
+            ]}
+          />
+        </div>
         <ShopHeroBanner />
         <ShopProductGrid products={products} />
       </div>

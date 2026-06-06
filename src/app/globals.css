@@ -77,6 +77,13 @@ body {
   box-sizing: border-box;
 }
 
+/* Sharp corners: remove all border-radius across every component.
+   Uses !important to override Tailwind rounded-* utilities (including
+   rounded-full, which Tailwind hardcodes rather than using a token). */
+*, *::before, *::after {
+  border-radius: 0 !important;
+}
+
 h1, h2, h3, h4, h5, h6, p, figure {
   margin: 0;
 }
@@ -89,7 +96,6 @@ h1, h2, h3, h4, h5, h6, p, figure {
 }
 ::-webkit-scrollbar-thumb {
   background: var(--color-gray-dark);
-  border-radius: 4px;
 }
 
 

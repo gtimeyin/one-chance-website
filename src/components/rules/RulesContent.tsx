@@ -200,6 +200,48 @@ function buildSearchIndex(): SearchItem[] {
   return items;
 }
 
+/* ─── Search scoring + highlighting ─── */
+
+type ScoredItem = { item: SearchItem; score: number };
+
+// Rank an item against the query terms. Returns null if not every term is
+// present (AND match), so unrelated rows are dropped instead of padding the list.
+function scoreItem(item: SearchItem, terms: string[]): ScoredItem | null {
+  const title = item.title.toLowerCase();
+  const text = item.text.toLowerCase();
+  let score = 0;
+  for (const term of terms) {
+    const inTitle = title.includes(term);
+    const inText = text.includes(term);
+    if (!inTitle && !inText) return null; // every term must match somewhere
+    if (title === term) score += 100;
+    else if (title.startsWith(term)) score += 50;
+    else if (inTitle) score += 25;
+    if (text.startsWith(term)) score += 8;
+    else if (inText) score += 4;
+  }
+  return { item, score };
+}
+
+// Wrap matched terms in <mark> so the user can see why a row matched.
+function highlight(value: string, terms: string[]) {
+  if (terms.length === 0) return value;
+  const escaped = terms.map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  const parts = value.split(new RegExp(`(${escaped.join("|")})`, "gi"));
+  return parts.map((part, i) =>
+    terms.includes(part.toLowerCase()) ? (
+      <mark
+        key={i}
+        style={{ background: "var(--color-yellow)", color: "var(--color-dark)", padding: "0 2px" }}
+      >
+        {part}
+      </mark>
+    ) : (
+      part
+    )
+  );
+}
+
 /* ─── Tab definitions ─── */
 
 const TABS = [
@@ -222,15 +264,19 @@ export default function RulesContent() {
 
   const searchIndex = useMemo(() => buildSearchIndex(), []);
 
+  const queryTerms = useMemo(
+    () => search.trim().toLowerCase().split(/\s+/).filter(Boolean),
+    [search]
+  );
+
   const searchResults = useMemo(() => {
-    if (!search.trim()) return null;
-    const q = search.toLowerCase();
-    return searchIndex.filter(
-      (item) =>
-        item.title.toLowerCase().includes(q) ||
-        item.text.toLowerCase().includes(q)
-    );
-  }, [search, searchIndex]);
+    if (queryTerms.length === 0) return null;
+    return searchIndex
+      .map((item) => scoreItem(item, queryTerms))
+      .filter((r): r is ScoredItem => r !== null)
+      .sort((a, b) => b.score - a.score)
+      .map((r) => r.item);
+  }, [queryTerms, searchIndex]);
 
   const isSearching = searchResults !== null;
 
@@ -270,7 +316,7 @@ export default function RulesContent() {
 
       {/* Sticky tab bar + search */}
       <div
-        className="w-full sticky top-[56px] z-40"
+        className="w-full sticky top-0 z-40"
         style={{ background: "var(--color-yellow)", borderBottom: "1px solid rgba(0,0,0,0.08)" }}
       >
         <div className="max-w-[1024px] mx-auto px-4 py-3">
@@ -367,11 +413,11 @@ export default function RulesContent() {
                         {item.section}
                       </span>
                       <span style={{ fontSize: 15, fontWeight: 700, color: "var(--color-dark)" }}>
-                        {item.title}
+                        {highlight(item.title, queryTerms)}
                       </span>
                     </div>
                     <p style={{ fontSize: 14, lineHeight: 1.6, color: "rgba(18,27,25,0.7)" }}>
-                      {item.text}
+                      {highlight(item.text, queryTerms)}
                     </p>
                   </motion.div>
                 ))}

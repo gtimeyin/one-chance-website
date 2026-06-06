@@ -103,7 +103,7 @@ export default function Hero() {
   const scrollToNext = () => {
     const next = sectionRef.current?.nextElementSibling as HTMLElement | null;
     if (!next) return;
-    const lenis = (window as Window & { lenis?: { scrollTo: (t: HTMLElement) => void } }).lenis;
+    const lenis = (window as unknown as { lenis?: { scrollTo: (t: HTMLElement) => void } }).lenis;
     if (lenis) {
       lenis.scrollTo(next);
     } else {

@@ -1,4 +1,4 @@
-@theme {
+@theme static {
   /* Default Colors */
   --color-brand-primary: var(--color-brand-yellow);
   --color-default-font: var(--color-neutral-900);

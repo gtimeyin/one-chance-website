@@ -1,4 +1,5 @@
 import Navbar from "@/components/layout/Navbar";
+import Breadcrumb from "@/components/layout/Breadcrumb";
 import RulesContent from "@/components/rules/RulesContent";
 import FooterShop from "@/components/layout/FooterShop";
 import SmoothScroll from "@/components/SmoothScroll";
@@ -15,6 +16,14 @@ export default function RulesPage() {
       <SmoothScroll />
       <Navbar />
       <div style={{ paddingTop: 56 }}>
+        <div style={{ padding: "0 clamp(20px, 4vw, 40px)" }}>
+          <Breadcrumb
+            items={[
+              { label: "Home", href: "/" },
+              { label: "Rules" },
+            ]}
+          />
+        </div>
         <RulesContent />
       </div>
       <FooterShop />

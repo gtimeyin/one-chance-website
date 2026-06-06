@@ -3,6 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import Navbar from "@/components/layout/Navbar";
+import Breadcrumb from "@/components/layout/Breadcrumb";
 import BlogCard from "@/components/ui/BlogCard";
 import ComicCard from "@/components/ui/ComicCard";
 import AnnouncementCard from "@/components/ui/AnnouncementCard";
@@ -86,6 +87,14 @@ export default function UpdatesPage() {
       <SmoothScroll />
       <Navbar />
       <div style={{ paddingTop: 56 }}>
+        <div style={{ padding: "0 clamp(20px, 4vw, 60px)" }}>
+          <Breadcrumb
+            items={[
+              { label: "Home", href: "/" },
+              { label: "Update" },
+            ]}
+          />
+        </div>
 
         {/* Blog Section */}
         <section
