@@ -18,7 +18,11 @@ export default function SmoothScroll() {
 
     requestAnimationFrame(raf);
 
+    // Expose so other components (e.g. Hero's scroll-down chevron) can drive smooth scrolling
+    (window as Window & { lenis?: Lenis }).lenis = lenis;
+
     return () => {
+      delete (window as Window & { lenis?: Lenis }).lenis;
       lenis.destroy();
     };
   }, []);

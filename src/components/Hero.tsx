@@ -1,12 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import LottieBackground from "./LottieBackground";
 import { Button } from "@/ui/components/Button";
 import { FeatherShoppingBag, FeatherChevronDown } from "@subframe/core";
 
 const rotatingWords = ["A CHAOTIC", "AN AWESOME", "A FUN"];
+
+// One colour per rotating word: chaotic → red, awesome → purple, fun → blue
+const rotatingColors = ["#FF3B30", "#8B5CF6", "#2D7FF9"];
 
 const headingLines = [
   { words: ["LAGOS", "CAN", "BE"], startIndex: 0 },
@@ -71,10 +74,11 @@ function RotatingWord() {
       className="leading-[82px] mobile:leading-[60px]"
       style={{
         display: "inline-block",
-        background: "black",
+        background: rotatingColors[index],
         padding: "4px 12px",
         marginRight: "0.125em",
         transformStyle: "preserve-3d",
+        transition: "background-color 0.3s ease",
       }}
     >
       <AnimatePresence mode="wait">
@@ -94,8 +98,22 @@ function RotatingWord() {
 }
 
 export default function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const scrollToNext = () => {
+    const next = sectionRef.current?.nextElementSibling as HTMLElement | null;
+    if (!next) return;
+    const lenis = (window as Window & { lenis?: { scrollTo: (t: HTMLElement) => void } }).lenis;
+    if (lenis) {
+      lenis.scrollTo(next);
+    } else {
+      next.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <section
+      ref={sectionRef}
       className="relative flex flex-col items-center justify-start w-full overflow-hidden max-md:min-h-[175vh]"
       style={{
         background:
@@ -185,8 +203,18 @@ export default function Hero() {
             scale: { duration: 0.8, delay: LOADER_DELAY + 1.2, ease: [0.16, 1, 0.3, 1] },
             y: { repeat: Infinity, duration: 2, ease: "easeInOut", delay: LOADER_DELAY + 2 },
           }}
-          className="flex h-14 w-14 flex-none items-center justify-center bg-white pointer-events-auto"
+          className="flex h-14 w-14 flex-none cursor-pointer items-center justify-center bg-white pointer-events-auto"
           style={{ transformStyle: "preserve-3d" }}
+          onClick={scrollToNext}
+          role="button"
+          tabIndex={0}
+          aria-label="Scroll to next section"
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              scrollToNext();
+            }
+          }}
         >
           <FeatherChevronDown className="font-['Barlow'] text-[24px] font-[400] leading-[36px] text-default-font" />
         </motion.div>

@@ -15,10 +15,10 @@ const discoverLinks = [
 ];
 
 const socialLinks = [
-  { label: "Twitter (X)", href: "https://x.com/onechancegame" },
-  { label: "Instagram", href: "https://instagram.com/onechancegame" },
-  { label: "Facebook", href: "https://facebook.com/onechancegame" },
-  { label: "Tiktok", href: "https://tiktok.com/@onechancegame" },
+  { label: "Twitter (X)", href: "#" },
+  { label: "Instagram", href: "#" },
+  { label: "Facebook", href: "#" },
+  { label: "Tiktok", href: "#" },
 ];
 
 export default function FooterShop() {
@@ -68,7 +68,7 @@ export default function FooterShop() {
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="font-['Barlow_Condensed'] text-large-body-default font-large-body-default text-neutral-800 uppercase no-underline hover:text-neutral-950 transition-colors duration-200"
+                    className="text-large-body-default font-large-body-default text-neutral-800 uppercase no-underline hover:text-neutral-950 transition-colors duration-200"
                     style={{ textDecoration: "none" }}
                   >
                     {link.label}
@@ -87,7 +87,7 @@ export default function FooterShop() {
                   <a
                     key={link.label}
                     href={link.href}
-                    className="font-['Barlow_Condensed'] text-large-body-default font-large-body-default text-neutral-800 uppercase no-underline hover:text-neutral-950 transition-colors duration-200"
+                    className="text-large-body-default font-large-body-default text-neutral-800 uppercase no-underline hover:text-neutral-950 transition-colors duration-200"
                     style={{ textDecoration: "none" }}
                   >
                     {link.label}
@@ -139,29 +139,10 @@ export default function FooterShop() {
             </div>
           </motion.div>
 
-          {/* Bottom links + Copyright */}
-          <div className="flex w-full flex-col items-start gap-4 border-t border-solid border-neutral-500 pt-6 sm:flex-row sm:items-center sm:justify-between">
-            <span className="text-body font-body text-default-font">
-              2026 © DIVISIONS AFRICA. ALL RIGHTS RESERVED
-            </span>
-            <div className="flex items-center gap-4">
-              {[
-                { label: "Privacy Policy", href: "/privacy" },
-                { label: "Terms & Conditions", href: "/terms" },
-                { label: "Shipping & Returns", href: "/shipping" },
-                { label: "FAQ", href: "/faq" },
-              ].map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="font-['Barlow'] text-[13px] font-[500] text-neutral-700 uppercase no-underline hover:text-neutral-950 transition-colors duration-200"
-                  style={{ textDecoration: "none" }}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          </div>
+          {/* Copyright */}
+          <span className="text-body font-body text-default-font">
+            2026 © DIVISIONS AFRICA. ALL RIGHTS RESERVED
+          </span>
         </div>
       </div>
     </footer>

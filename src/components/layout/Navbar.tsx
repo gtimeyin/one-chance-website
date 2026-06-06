@@ -11,7 +11,6 @@ import {
   FeatherMenu,
   FeatherSearch,
   FeatherShoppingBag,
-  FeatherUser,
   FeatherX,
   FeatherFacebook,
   FeatherInstagram,
@@ -31,8 +30,8 @@ const navLinks = [
 
 const secondaryLinks = [
   { label: "Explore Olopa", href: "#" },
-  { label: "Terms & Condition", href: "/terms" },
-  { label: "Privacy Policy", href: "/privacy" },
+  { label: "Terms & Condition", href: "#" },
+  { label: "Legal", href: "#" },
 ];
 
 export default function Navbar() {
@@ -41,6 +40,7 @@ export default function Navbar() {
   const [hasMounted, setHasMounted] = useState(false);
   const [isMobileNav, setIsMobileNav] = useState(false);
   const [hidden, setHidden] = useState(false);
+  const breadcrumbLabel = pathname === "/" ? null : pathname.split("/").filter(Boolean)[0]?.replace(/-/g, " ");
   const cartItemCount = useCart((s) => s.getItemCount());
   const toggleCart = useCart((s) => s.toggleCart);
   const isCartOpen = useCart((s) => s.isOpen);
@@ -86,14 +86,24 @@ export default function Navbar() {
   return (
     <>
       <div
-        className="flex w-full max-w-[1280px] items-start justify-between px-0 fixed left-1/2 z-50 transition-all duration-300"
+        className={`flex w-full max-w-[1280px] items-start justify-between px-0 z-50 transition-all duration-300 ${
+          pathname === "/" ? "fixed left-1/2" : "sticky"
+        }`}
         style={{
-          top: hidden && !isOpen ? -100 : 24,
-          transform: "translateX(-50%)",
-          opacity: hidden && !isOpen ? 0 : 1,
+          top: pathname === "/"
+            ? (hidden && !isOpen ? -100 : 24)
+            : 0,
+          transform: pathname === "/" ? "translateX(-50%)" : "none",
+          opacity: pathname === "/" ? (hidden && !isOpen ? 0 : 1) : 1,
+          ...(pathname !== "/" && {
+            left: 0,
+            right: 0,
+            margin: "0 auto",
+            padding: "24px 0",
+          }),
         }}
       >
-        <div className="flex items-start">
+        <div className="flex items-center gap-3">
           <Button
             size="small"
             icon={<FeatherMenu />}
@@ -101,16 +111,26 @@ export default function Navbar() {
           >
             Menu
           </Button>
+          {breadcrumbLabel && (
+            <div className="flex items-center gap-2 font-barlow">
+              <Link
+                href="/"
+                className="text-[12px] font-[500] uppercase tracking-[0.04em] no-underline opacity-50 hover:opacity-100 transition-opacity duration-200"
+                style={{ color: "var(--color-dark)", textDecoration: "none" }}
+              >
+                Home
+              </Link>
+              <span className="text-[12px] opacity-30" style={{ color: "var(--color-dark)" }}>/</span>
+              <span
+                className="text-[12px] font-[600] uppercase tracking-[0.04em]"
+                style={{ color: "var(--color-dark)" }}
+              >
+                {breadcrumbLabel}
+              </span>
+            </div>
+          )}
         </div>
         <div className="flex items-start gap-2">
-          <Link href="/account">
-            <Button
-              variant="white"
-              size="small"
-              icon={<FeatherUser />}
-              onClick={() => {}}
-            />
-          </Link>
           <Button
             variant="white"
             size="small"

@@ -8,37 +8,44 @@ const steps = [
   {
     number: "01",
     title: "How to pass jamb",
-    body: "Score a 4 or more to pass JAMB and start game",
+    body: "Roll a 4, 5, or 6 to pass JAMB and enter the game. Once you scale through, collect your salary and begin your hustle!",
     color: "#99CAF1",
     rotation: 90,
   },
   {
     number: "02",
     title: "What is One Chance",
-    body: "To get into the game Score a 4 or more to pass JAMB and start game.",
+    body: "You don enter one chance! Pick a card and face your fate — it could be a blessing or serious wahala!",
     color: "#FCD958",
     rotation: 135,
   },
   {
     number: "03",
     title: "Traffic & Prison",
-    body: "Navigate the streets of Lagos, avoid traffic jams and stay out of prison.",
+    body: "Land on Traffic and skip one turn. Land on Prison and skip two. Avoid them by all means — Lagos no dey show mercy!",
     color: "#DF6961",
     rotation: 200,
   },
   {
     number: "04",
     title: "Ajo Contribution",
-    body: "Join an ajo group and contribute your way to financial success.",
+    body: "Land on Ajo, drop ₦100,000 into the pot — no dodging! Land on Bonus and you carry everything go house!",
     color: "#A75ACD",
     rotation: 270,
   },
   {
     number: "05",
     title: "Getting Rich",
-    body: "Stack your naira, make smart moves, and become the richest Lagosian.",
+    body: "Every time you pass Salary, collect ₦500,000. Invest wisely in the Bank and Market — because in this economy, you can't afford to play anyhow!",
     color: "#5AD46F",
     rotation: 330,
+  },
+  {
+    number: "06",
+    title: "Winning 🏆",
+    body: "Be the richest player when all the One Chance cards finish. Strategise, invest, and make sure na you laugh last!",
+    color: "#F5A623",
+    rotation: 30,
   },
 ];
 
@@ -93,7 +100,7 @@ export default function HowToPlay() {
               className="text-display-title-bold font-display-title-bold uppercase -tracking-[3px] mobile:text-[60px] mobile:leading-[54px]"
               style={{ color: "#121B19", wordWrap: "break-word", overflowWrap: "break-word" }}
             >
-              Survive Lagos in 5 steps
+              Survive Lagos in 6 steps
             </h1>
           </div>
 
