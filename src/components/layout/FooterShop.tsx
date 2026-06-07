@@ -21,13 +21,19 @@ const socialLinks = [
   { label: "Tiktok", href: "#" },
 ];
 
-export default function FooterShop() {
+export default function FooterShop({ reveal = false }: { reveal?: boolean }) {
   const [email, setEmail] = useState("");
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
 
   return (
-    <footer ref={ref} className="flex w-full flex-col items-center bg-yellow-500 px-6 py-16 mobile:px-4 mobile:py-12">
+    <footer
+      ref={ref}
+      className={`flex w-full flex-col items-center bg-yellow-500 px-6 py-16 mobile:px-4 mobile:py-12 ${
+        reveal ? "sticky bottom-0" : ""
+      }`}
+      style={reveal ? { zIndex: 0 } : undefined}
+    >
       <div className="flex w-full max-w-[1280px] flex-col items-start gap-12 relative">
         <div className="flex w-full flex-col items-start gap-8">
           {/* Hero CTA */}

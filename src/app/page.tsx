@@ -13,20 +13,26 @@ import SmoothScroll from "@/components/SmoothScroll";
 export default function Home() {
   return (
     <div
-      className="flex flex-col items-center w-full overflow-hidden"
-      style={{ position: "relative" }}
+      className="flex flex-col items-center w-full"
+      style={{ position: "relative", overflowX: "clip" }}
     >
       <SmoothScroll />
       <Navbar />
-      <Hero />
-      <HowToPlay />
-      <Characters />
-      <VideoSection />
-      <Gallery />
-      <NewsSection />
-      <ReadySection />
-      <FAQs />
-      <Footer />
+      {/* Content layer sits above the footer so it scrolls up to reveal it */}
+      <div
+        className="relative z-[1] flex w-full flex-col items-center"
+        style={{ background: "#fff" }}
+      >
+        <Hero />
+        <HowToPlay />
+        <Characters />
+        <VideoSection />
+        <Gallery />
+        <NewsSection />
+        <ReadySection />
+        <FAQs />
+      </div>
+      <Footer reveal />
     </div>
   );
 }

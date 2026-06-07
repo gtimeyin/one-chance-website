@@ -13,7 +13,7 @@ export default function AboutPage() {
     <div className="flex flex-col w-full" style={{ background: "white" }}>
       <SmoothScroll />
       <Navbar />
-      <div style={{ paddingTop: 56 }}>
+      <div className="relative z-[1]" style={{ paddingTop: 56, background: "white" }}>
         <div style={{ padding: "0 clamp(20px, 4vw, 40px)" }}>
           <Breadcrumb
             items={[
@@ -76,7 +76,7 @@ export default function AboutPage() {
           </div>
         </section>
       </div>
-      <FooterShop />
+      <FooterShop reveal />
     </div>
   );
 }

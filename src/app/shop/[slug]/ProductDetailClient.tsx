@@ -59,7 +59,7 @@ export default function ProductDetailClient({
     <div className="flex flex-col w-full" style={{ background: "white" }}>
       <SmoothScroll />
       <Navbar />
-      <div style={{ paddingTop: 56 }}>
+      <div className="relative z-[1]" style={{ paddingTop: 56, background: "white" }}>
         {/* Breadcrumb */}
         <div style={{ padding: "0 clamp(20px, 4vw, 60px)" }}>
           <Breadcrumb
@@ -101,7 +101,7 @@ export default function ProductDetailClient({
           faqs={productFaqs}
         />
       </div>
-      <FooterShop />
+      <FooterShop reveal />
     </div>
   );
 }
