@@ -5,6 +5,8 @@ import PageLoader from "@/components/PageLoader";
 import ReferralCodeCapture from "@/components/referral/ReferralCodeCapture";
 import AnalyticsLoader from "@/components/analytics/AnalyticsLoader";
 import CookieConsent from "@/components/analytics/CookieConsent";
+import { CurrencyProvider } from "@/components/CurrencyProvider";
+import { getActiveCurrency } from "@/lib/currency";
 import { siteUrl } from "@/lib/site";
 import { Suspense } from "react";
 import "./globals.css";
@@ -71,11 +73,12 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const currency = await getActiveCurrency();
   return (
     <html lang="en" className={barlowCondensed.variable}>
       <head>
@@ -87,7 +90,7 @@ export default function RootLayout({
         <Suspense>
           <ReferralCodeCapture />
         </Suspense>
-        {children}
+        <CurrencyProvider currency={currency}>{children}</CurrencyProvider>
         <AgentationProvider />
         <CookieConsent />
       </body>

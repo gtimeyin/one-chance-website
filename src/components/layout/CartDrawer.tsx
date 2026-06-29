@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useCart } from "@/store/cart";
+import { useCurrency } from "@/components/CurrencyProvider";
 import { trackBeginCheckout } from "@/lib/analytics";
 import { formatPrice } from "@/lib/utils";
 
@@ -22,6 +23,7 @@ export default function CartDrawer({ isOpen }: CartDrawerProps) {
   const updateQuantity = useCart((s) => s.updateQuantity);
   const getTotal = useCart((s) => s.getTotal);
   const clearCart = useCart((s) => s.clearCart);
+  const currency = useCurrency();
   const [redirecting, setRedirecting] = useState(false);
 
   function handleCheckout() {
@@ -170,7 +172,7 @@ export default function CartDrawer({ isOpen }: CartDrawerProps) {
                             className="font-barlow-condensed font-bold"
                             style={{ fontSize: 14, color: "var(--color-dark)", marginTop: 4 }}
                           >
-                            {formatPrice(item.price)}
+                            {formatPrice(item.price, currency)}
                           </p>
                         </div>
                         <div className="flex items-center justify-between">
@@ -235,7 +237,7 @@ export default function CartDrawer({ isOpen }: CartDrawerProps) {
                     Subtotal
                   </span>
                   <span className="font-barlow-condensed font-bold" style={{ fontSize: 18, color: "var(--color-dark)" }}>
-                    {formatPrice(getTotal())}
+                    {formatPrice(getTotal(), currency)}
                   </span>
                 </div>
                 <button

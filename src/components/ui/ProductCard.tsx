@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { formatPrice, getImageSrc } from "@/lib/utils";
 import { useCart } from "@/store/cart";
+import { useCurrency } from "@/components/CurrencyProvider";
 import { trackAddToCart } from "@/lib/analytics";
 import type { WooProduct } from "@/lib/woocommerce";
 
@@ -14,6 +15,7 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const imageSrc = getImageSrc(product.images);
   const addItem = useCart((s) => s.addItem);
+  const currency = useCurrency();
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -104,7 +106,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             fontWeight: 400
           }}
         >
-          {formatPrice(product.price)}
+          {formatPrice(product.price, currency)}
         </span>
 
         {/* Cart/bag icon - positioned at bottom right of the card info area */}

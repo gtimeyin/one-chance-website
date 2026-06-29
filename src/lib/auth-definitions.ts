@@ -77,6 +77,7 @@ export interface WooAddress {
 export interface WooOrder {
   id: number;
   status: string;
+  order_key: string;
   currency: string;
   total: string;
   date_created: string;

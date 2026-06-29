@@ -20,30 +20,43 @@ export default function WriteReviewDialog({
   open,
   onOpenChange,
 }: WriteReviewDialogProps) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <Dialog.Content className="w-full max-w-[480px]">
+        {open && (
+          <ReviewForm
+            productId={productId}
+            productName={productName}
+            onClose={() => onOpenChange(false)}
+          />
+        )}
+      </Dialog.Content>
+    </Dialog>
+  );
+}
+
+interface ReviewFormProps {
+  productId: number;
+  productName: string;
+  onClose: () => void;
+}
+
+function ReviewForm({ productId, productName, onClose }: ReviewFormProps) {
   const [state, formAction, pending] = useActionState(submitProductReview, initialState);
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
 
   useEffect(() => {
-    if (!open) {
-      setRating(0);
-      setHoverRating(0);
-    }
-  }, [open]);
-
-  useEffect(() => {
     if (state.success) {
-      const t = setTimeout(() => onOpenChange(false), 1800);
+      const t = setTimeout(onClose, 1800);
       return () => clearTimeout(t);
     }
-  }, [state.success, onOpenChange]);
+  }, [state.success, onClose]);
 
   const display = hoverRating || rating;
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <Dialog.Content className="w-full max-w-[480px]">
-        <div className="flex flex-col w-full" style={{ padding: 28, gap: 20 }}>
+    <div className="flex flex-col w-full" style={{ padding: 28, gap: 20 }}>
           <div className="flex items-start justify-between" style={{ gap: 16 }}>
             <div>
               <h2
@@ -61,7 +74,7 @@ export default function WriteReviewDialog({
             </div>
             <button
               type="button"
-              onClick={() => onOpenChange(false)}
+              onClick={onClose}
               aria-label="Close"
               className="bg-transparent border-none cursor-pointer"
               style={{ color: "var(--color-text-muted)", padding: 4 }}
@@ -198,9 +211,7 @@ export default function WriteReviewDialog({
               </button>
             </form>
           )}
-        </div>
-      </Dialog.Content>
-    </Dialog>
+    </div>
   );
 }
 

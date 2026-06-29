@@ -4,6 +4,7 @@ import { useState } from "react";
 import StarRating from "@/components/ui/StarRating";
 import QuantitySelector from "@/components/ui/QuantitySelector";
 import { useCart } from "@/store/cart";
+import { useCurrency } from "@/components/CurrencyProvider";
 import { trackAddToCart } from "@/lib/analytics";
 import { formatPrice, getImageSrc } from "@/lib/utils";
 import { getAttribute, getMetaValue, type WooProduct } from "@/lib/woocommerce";
@@ -15,6 +16,7 @@ interface ProductInfoProps {
 export default function ProductInfo({ product }: ProductInfoProps) {
   const [quantity, setQuantity] = useState(1);
   const addItem = useCart((s) => s.addItem);
+  const currency = useCurrency();
 
   const handleAddToCart = () => {
     const price = parseFloat(product.price);
@@ -103,7 +105,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
           className="font-barlow-condensed font-extrabold"
           style={{ fontSize: 64, color: "#1A202C", lineHeight: 1 }}
         >
-          {formatPrice(product.price)}
+          {formatPrice(product.price, currency)}
         </span>
       </div>
 
@@ -111,7 +113,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
       <div className="flex items-center gap-6" style={{ marginTop: 10 }}>
         <QuantitySelector quantity={quantity} onChange={setQuantity} />
         <span className="font-barlow-condensed font-bold" style={{ fontSize: 28, color: "var(--color-dark)" }}>
-          {formatPrice(parseFloat(product.price) * quantity)}
+          {formatPrice(parseFloat(product.price) * quantity, currency)}
         </span>
       </div>
 
