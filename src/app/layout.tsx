@@ -1,13 +1,13 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Barlow_Condensed } from "next/font/google";
-import { GoogleAnalytics } from "@next/third-parties/google";
 import AgentationProvider from "@/components/AgentationProvider";
 import PageLoader from "@/components/PageLoader";
 import ReferralCodeCapture from "@/components/referral/ReferralCodeCapture";
+import AnalyticsLoader from "@/components/analytics/AnalyticsLoader";
+import CookieConsent from "@/components/analytics/CookieConsent";
+import { siteUrl } from "@/lib/site";
 import { Suspense } from "react";
 import "./globals.css";
-
-const gaId = process.env.NEXT_PUBLIC_GA_ID;
 
 const barlowCondensed = Barlow_Condensed({
   subsets: ["latin"],
@@ -16,10 +16,59 @@ const barlowCondensed = Barlow_Condensed({
   display: "swap",
 });
 
+const title = "One Chance - The Lagos Board Game";
+const description =
+  "Lagos can be a chaotic place, so we made a game out of it. Experience the One Chance board game.";
+
 export const metadata: Metadata = {
-  title: "One Chance - The Lagos Board Game",
-  description:
-    "Lagos can be a chaotic place, so we made a game out of it. Experience the One Chance board game.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: title,
+    template: "%s | One Chance",
+  },
+  description,
+  applicationName: "One Chance",
+  keywords: [
+    "One Chance",
+    "Lagos board game",
+    "Nigerian board game",
+    "African tabletop game",
+    "One Chance game",
+  ],
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: "One Chance",
+    title,
+    description,
+    url: "/",
+    locale: "en_NG",
+    images: [
+      {
+        url: "/images/characters-group.png",
+        width: 1200,
+        height: 630,
+        alt: "One Chance — The Lagos Board Game",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+    images: ["/images/characters-group.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#FFD600",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -40,8 +89,9 @@ export default function RootLayout({
         </Suspense>
         {children}
         <AgentationProvider />
+        <CookieConsent />
       </body>
-      {gaId ? <GoogleAnalytics gaId={gaId} /> : null}
+      <AnalyticsLoader />
     </html>
   );
 }

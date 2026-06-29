@@ -92,6 +92,7 @@ export async function register(
     return { message: "An account with this email already exists" };
   }
 
+  let referralApplied = false;
   try {
     const customer = await createCustomer({
       email,
@@ -105,6 +106,7 @@ export async function register(
       const code = await getReferralCodeByCode(referralCode);
       if (code && code.woo_customer_id !== customer.id) {
         await createReferral(code.woo_customer_id, customer.id, code.id);
+        referralApplied = true;
       }
     }
 
@@ -123,7 +125,7 @@ export async function register(
     return { message: "Failed to create account. Please try again." };
   }
 
-  redirect("/account");
+  redirect(`/account?welcome=1${referralApplied ? "&ref=1" : ""}`);
 }
 
 export async function logout(): Promise<void> {

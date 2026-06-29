@@ -3,8 +3,13 @@
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { useCart } from "@/store/cart";
+import { trackBeginCheckout } from "@/lib/analytics";
 import { formatPrice } from "@/lib/utils";
+
+const WOO_BASE_URL =
+  process.env.NEXT_PUBLIC_WOOCOMMERCE_URL || "https://shopapi.yvpgame.com";
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -16,6 +21,36 @@ export default function CartDrawer({ isOpen }: CartDrawerProps) {
   const removeItem = useCart((s) => s.removeItem);
   const updateQuantity = useCart((s) => s.updateQuantity);
   const getTotal = useCart((s) => s.getTotal);
+  const clearCart = useCart((s) => s.clearCart);
+  const [redirecting, setRedirecting] = useState(false);
+
+  function handleCheckout() {
+    if (items.length === 0 || redirecting) return;
+
+    trackBeginCheckout(
+      items.map((i) => ({
+        productId: i.productId,
+        name: i.name,
+        price: i.price,
+        quantity: i.quantity,
+      })),
+      getTotal(),
+    );
+
+    // Build a WooCommerce add-to-cart URL that lands on the hosted checkout
+    // with all cart items pre-populated. Woo 3.5+ accepts comma-separated
+    // IDs and quantities in the URL.
+    const ids = items.map((i) => i.productId).join(",");
+    const qtys = items.map((i) => i.quantity).join(",");
+    const url = `${WOO_BASE_URL}/checkout/?add-to-cart=${ids}&quantity=${qtys}`;
+
+    setRedirecting(true);
+    // Cart is now Woo's responsibility — clear locally so users returning
+    // mid-checkout don't see stale items. /order-complete also clears as a
+    // belt-and-braces measure for the successful-purchase case.
+    clearCart();
+    window.location.href = url;
+  }
 
   return (
     <AnimatePresence>
@@ -204,15 +239,18 @@ export default function CartDrawer({ isOpen }: CartDrawerProps) {
                   </span>
                 </div>
                 <button
+                  onClick={handleCheckout}
+                  disabled={redirecting}
                   className="w-full font-barlow-condensed font-bold cursor-pointer border-none"
                   style={{
                     padding: "14px",
-                    background: "var(--color-yellow)",
+                    background: redirecting ? "#E5E7EB" : "var(--color-yellow)",
                     color: "var(--color-dark)",
                     fontSize: 16,
+                    cursor: redirecting ? "default" : "pointer",
                   }}
                 >
-                  CHECKOUT
+                  {redirecting ? "REDIRECTING…" : "CHECKOUT"}
                 </button>
               </div>
             )}

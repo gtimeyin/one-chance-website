@@ -67,10 +67,10 @@ export default function PrivacyPage() {
 
               <div className="flex flex-col gap-3">
                 <h2 className="font-['Barlow_Condensed'] text-[24px] font-[700] text-neutral-800 uppercase">
-                  4. Cookies
+                  4. Cookies &amp; Analytics
                 </h2>
                 <p className="font-['Barlow_Condensed'] text-[16px] leading-[26px] text-neutral-600">
-                  We use essential cookies to keep our site functioning and analytics cookies to understand how visitors use our site. You can control cookie preferences through your browser settings.
+                  We use essential cookies to keep the site functioning (for example, your shopping cart and login session). With your consent, we also load Google Analytics 4, which sets cookies to measure pageviews and user journeys so we can improve the site. Analytics cookies are only set after you click &quot;Accept&quot; on our cookie banner; choose &quot;Decline&quot; and they are never loaded. You can change your choice at any time by clearing your site data in your browser, which will re-show the banner.
                 </p>
               </div>
 

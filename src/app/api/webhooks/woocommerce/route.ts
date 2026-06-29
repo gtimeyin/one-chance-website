@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createHmac, timingSafeEqual } from "crypto";
 import { processReferralForOrder } from "@/lib/referral";
+import { sendGAPurchase } from "@/lib/analytics-server";
 import { createLogger } from "@/lib/logger";
 
 const log = createLogger("webhook");
@@ -70,11 +71,10 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const processed = await processReferralForOrder(
-      customerId,
-      orderId,
-      orderTotal
-    );
+    const [processed] = await Promise.all([
+      processReferralForOrder(customerId, orderId, orderTotal),
+      sendGAPurchase(order),
+    ]);
     log.info("Webhook processed", { orderId, referralProcessed: processed });
     return NextResponse.json({ ok: true, processed });
   } catch (error) {

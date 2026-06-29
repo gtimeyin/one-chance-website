@@ -4,6 +4,7 @@ import { useState } from "react";
 import StarRating from "@/components/ui/StarRating";
 import QuantitySelector from "@/components/ui/QuantitySelector";
 import { useCart } from "@/store/cart";
+import { trackAddToCart } from "@/lib/analytics";
 import { formatPrice, getImageSrc } from "@/lib/utils";
 import { getAttribute, getMetaValue, type WooProduct } from "@/lib/woocommerce";
 
@@ -16,13 +17,21 @@ export default function ProductInfo({ product }: ProductInfoProps) {
   const addItem = useCart((s) => s.addItem);
 
   const handleAddToCart = () => {
+    const price = parseFloat(product.price);
     addItem({
       productId: product.id,
       name: product.name,
-      price: parseFloat(product.price),
+      price,
       quantity,
       image: getImageSrc(product.images),
       slug: product.slug,
+    });
+    trackAddToCart({
+      productId: product.id,
+      name: product.name,
+      price,
+      quantity,
+      category: product.categories?.[0]?.name,
     });
   };
 

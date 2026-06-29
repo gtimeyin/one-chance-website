@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { formatPrice, getImageSrc } from "@/lib/utils";
 import { useCart } from "@/store/cart";
+import { trackAddToCart } from "@/lib/analytics";
 import type { WooProduct } from "@/lib/woocommerce";
 
 interface ProductCardProps {
@@ -16,13 +17,21 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
+    const price = parseFloat(product.price);
     addItem({
       productId: product.id,
       name: product.name,
-      price: parseFloat(product.price),
+      price,
       quantity: 1,
       image: imageSrc,
       slug: product.slug,
+    });
+    trackAddToCart({
+      productId: product.id,
+      name: product.name,
+      price,
+      quantity: 1,
+      category: product.categories?.[0]?.name,
     });
   };
 

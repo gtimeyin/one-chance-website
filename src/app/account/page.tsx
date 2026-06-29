@@ -1,8 +1,10 @@
 import { verifySession } from "@/lib/dal";
 import { getCustomerById, getCustomerOrders } from "@/lib/woocommerce";
 import { getUserAvatar, getAvatarById } from "@/lib/avatars";
+import SignupTracker from "@/components/analytics/SignupTracker";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export default async function AccountDashboard() {
   const session = await verifySession();
@@ -15,6 +17,9 @@ export default async function AccountDashboard() {
 
   return (
     <div className="flex flex-col gap-8">
+      <Suspense>
+        <SignupTracker />
+      </Suspense>
       <div className="flex items-center gap-5">
         <Link
           href="/account/edit"
