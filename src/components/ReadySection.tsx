@@ -27,7 +27,7 @@ export default function ReadySection() {
         style={{ gap: 0 }}
       >
         <p
-          className="font-barlow"
+          className="font-barlow-condensed"
           style={{
             fontSize: 24,
             lineHeight: "100%",
@@ -61,7 +61,7 @@ export default function ReadySection() {
         initial={{ opacity: 0 }}
         animate={isInView ? { opacity: 1 } : {}}
         transition={{ delay: 0.5, duration: 0.5 }}
-        className="font-barlow text-center"
+        className="font-barlow-condensed text-center"
         style={{
           fontSize: 24,
           lineHeight: "100%",
@@ -79,7 +79,7 @@ export default function ReadySection() {
         transition={{ delay: 0.6, duration: 0.4 }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="font-barlow text-center cursor-pointer inline-block"
+        className="font-barlow-condensed text-center cursor-pointer inline-block"
         style={{
           fontSize: 24,
           lineHeight: "100%",

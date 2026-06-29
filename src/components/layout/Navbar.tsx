@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCart } from "@/store/cart";
 import CartDrawer from "./CartDrawer";
+import SearchOverlay from "./SearchOverlay";
 import { Button } from "@/ui/components/Button";
 import {
   FeatherMenu,
@@ -37,6 +38,7 @@ const secondaryLinks = [
 export default function Navbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
   const [isMobileNav, setIsMobileNav] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -114,31 +116,35 @@ export default function Navbar() {
             variant="white"
             size="small"
             icon={<FeatherSearch />}
-            onClick={() => {}}
+            onClick={() => setIsSearchOpen(true)}
+            aria-label="Open search"
           />
-          <Button
-            variant="white"
-            size="small"
-            icon={<FeatherShoppingBag />}
-            onClick={() => toggleCart()}
-          />
-          {hasMounted && cartItemCount > 0 && (
-            <span
-              className="absolute font-barlow font-bold flex items-center justify-center"
-              style={{
-                top: -2,
-                right: -4,
-                width: 16,
-                height: 16,
-                borderRadius: "50%",
-                background: "var(--color-yellow)",
-                color: "var(--color-dark)",
-                fontSize: 10,
-              }}
-            >
-              {cartItemCount}
-            </span>
-          )}
+          <div className="relative isolate">
+            <Button
+              variant="white"
+              size="small"
+              icon={<FeatherShoppingBag />}
+              onClick={() => toggleCart()}
+            />
+            {hasMounted && cartItemCount > 0 && (
+              <span
+                className="absolute font-barlow-condensed font-bold flex items-center justify-center pointer-events-none"
+                style={{
+                  top: -2,
+                  right: -4,
+                  width: 16,
+                  height: 16,
+                  borderRadius: "50%",
+                  background: "var(--color-yellow)",
+                  color: "var(--color-dark)",
+                  fontSize: 10,
+                  zIndex: 50,
+                }}
+              >
+                {cartItemCount}
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
@@ -228,12 +234,12 @@ export default function Navbar() {
                 </div>
                 <div className="flex flex-col items-end gap-8 mobile:w-full mobile:items-start">
                   <div className="flex items-center gap-4">
-                    <FeatherFacebook className="font-['Barlow'] text-[20px] font-[400] leading-[30px] text-default-font" />
-                    <FeatherInstagram className="font-['Barlow'] text-[20px] font-[400] leading-[30px] text-default-font" />
-                    <FeatherTwitter className="font-['Barlow'] text-[20px] font-[400] leading-[30px] text-default-font" />
-                    <FeatherLinkedin className="font-['Barlow'] text-[20px] font-[400] leading-[30px] text-default-font" />
-                    <FeatherMusic className="font-['Barlow'] text-[20px] font-[400] leading-[30px] text-default-font" />
-                    <FeatherYoutube className="font-['Barlow'] text-[20px] font-[400] leading-[30px] text-default-font" />
+                    <FeatherFacebook className="font-['Barlow_Condensed'] text-[20px] font-[400] leading-[30px] text-default-font" />
+                    <FeatherInstagram className="font-['Barlow_Condensed'] text-[20px] font-[400] leading-[30px] text-default-font" />
+                    <FeatherTwitter className="font-['Barlow_Condensed'] text-[20px] font-[400] leading-[30px] text-default-font" />
+                    <FeatherLinkedin className="font-['Barlow_Condensed'] text-[20px] font-[400] leading-[30px] text-default-font" />
+                    <FeatherMusic className="font-['Barlow_Condensed'] text-[20px] font-[400] leading-[30px] text-default-font" />
+                    <FeatherYoutube className="font-['Barlow_Condensed'] text-[20px] font-[400] leading-[30px] text-default-font" />
                   </div>
                   <span className="text-caption-bold font-caption-bold text-black-800">
                     DESIGNED BY N6
@@ -247,6 +253,12 @@ export default function Navbar() {
 
       {/* Cart Drawer */}
       <CartDrawer isOpen={isCartOpen} />
+
+      {/* Search Overlay */}
+      <SearchOverlay
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+      />
     </>
   );
 }

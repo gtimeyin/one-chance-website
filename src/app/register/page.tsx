@@ -33,7 +33,7 @@ export default function RegisterPage() {
               <h1 className="font-['Barlow_Condensed'] text-[48px] font-[800] leading-[1.1] text-neutral-800 uppercase -tracking-[0.02em]">
                 CREATE ACCOUNT
               </h1>
-              <p className="font-['Barlow'] text-[16px] text-neutral-500 text-center">
+              <p className="font-['Barlow_Condensed'] text-[16px] text-neutral-500 text-center">
                 Join the One Chance community
               </p>
             </div>

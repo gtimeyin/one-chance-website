@@ -216,7 +216,7 @@ export default function Hero() {
             }
           }}
         >
-          <FeatherChevronDown className="font-['Barlow'] text-[24px] font-[400] leading-[36px] text-default-font" />
+          <FeatherChevronDown className="font-['Barlow_Condensed'] text-[24px] font-[400] leading-[36px] text-default-font" />
         </motion.div>
       </div>
     </section>

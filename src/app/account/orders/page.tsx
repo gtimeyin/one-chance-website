@@ -13,7 +13,7 @@ export default async function OrdersPage() {
       </h1>
 
       {orders.length === 0 ? (
-        <p className="font-['Barlow'] text-[15px] text-neutral-500">
+        <p className="font-['Barlow_Condensed'] text-[15px] text-neutral-500">
           You haven&apos;t placed any orders yet.{" "}
           <Link href="/shop" className="text-[#fccd21] font-[600] underline">
             Browse the shop
@@ -23,10 +23,10 @@ export default async function OrdersPage() {
         <div className="flex flex-col border border-neutral-200">
           {/* Header */}
           <div className="flex items-center px-5 py-3 bg-neutral-50 border-b border-neutral-200">
-            <span className="flex-1 font-['Barlow'] text-[12px] font-[600] uppercase tracking-[0.1em] text-neutral-500">Order</span>
-            <span className="w-[120px] font-['Barlow'] text-[12px] font-[600] uppercase tracking-[0.1em] text-neutral-500">Date</span>
-            <span className="w-[100px] font-['Barlow'] text-[12px] font-[600] uppercase tracking-[0.1em] text-neutral-500">Status</span>
-            <span className="w-[100px] text-right font-['Barlow'] text-[12px] font-[600] uppercase tracking-[0.1em] text-neutral-500">Total</span>
+            <span className="flex-1 font-['Barlow_Condensed'] text-[12px] font-[600] uppercase tracking-[0.1em] text-neutral-500">Order</span>
+            <span className="w-[120px] font-['Barlow_Condensed'] text-[12px] font-[600] uppercase tracking-[0.1em] text-neutral-500">Date</span>
+            <span className="w-[100px] font-['Barlow_Condensed'] text-[12px] font-[600] uppercase tracking-[0.1em] text-neutral-500">Status</span>
+            <span className="w-[100px] text-right font-['Barlow_Condensed'] text-[12px] font-[600] uppercase tracking-[0.1em] text-neutral-500">Total</span>
           </div>
           {orders.map((order) => (
             <Link
@@ -35,10 +35,10 @@ export default async function OrdersPage() {
               className="flex items-center px-5 py-4 border-b border-neutral-100 last:border-b-0 hover:bg-neutral-50 transition-colors no-underline"
               style={{ textDecoration: "none" }}
             >
-              <span className="flex-1 font-['Barlow'] text-[15px] font-[600] text-neutral-800">
+              <span className="flex-1 font-['Barlow_Condensed'] text-[15px] font-[600] text-neutral-800">
                 #{order.id}
               </span>
-              <span className="w-[120px] font-['Barlow'] text-[14px] text-neutral-500">
+              <span className="w-[120px] font-['Barlow_Condensed'] text-[14px] text-neutral-500">
                 {new Date(order.date_created).toLocaleDateString("en-GB", {
                   day: "numeric",
                   month: "short",
@@ -47,7 +47,7 @@ export default async function OrdersPage() {
               </span>
               <span className="w-[100px]">
                 <span
-                  className={`font-['Barlow'] text-[12px] font-[600] uppercase px-2 py-1 ${
+                  className={`font-['Barlow_Condensed'] text-[12px] font-[600] uppercase px-2 py-1 ${
                     order.status === "completed"
                       ? "bg-green-100 text-green-700"
                       : order.status === "processing"
@@ -58,7 +58,7 @@ export default async function OrdersPage() {
                   {order.status}
                 </span>
               </span>
-              <span className="w-[100px] text-right font-['Barlow'] text-[14px] font-[600] text-neutral-800">
+              <span className="w-[100px] text-right font-['Barlow_Condensed'] text-[14px] font-[600] text-neutral-800">
                 {order.currency} {order.total}
               </span>
             </Link>

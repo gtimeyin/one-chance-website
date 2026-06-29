@@ -67,7 +67,7 @@ export default function FooterDark() {
             >
               ONE CHANCE
             </Link>
-            <p className="font-barlow" style={{ fontSize: 13, color: "rgba(255,255,255,0.5)", marginTop: 12, lineHeight: 1.6 }}>
+            <p className="font-barlow-condensed" style={{ fontSize: 13, color: "rgba(255,255,255,0.5)", marginTop: 12, lineHeight: 1.6 }}>
               Lorem ipsum dolor sit amet consectetur.<br />
               Tristique ac quis turpis nulla sagittis<br />
               scelerisque.
@@ -82,7 +82,7 @@ export default function FooterDark() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email address"
-                className="flex-1 font-barlow"
+                className="flex-1 font-barlow-condensed"
                 style={{
                   background: "rgba(255,255,255,0.08)",
                   border: "1px solid rgba(255,255,255,0.15)",
@@ -96,7 +96,7 @@ export default function FooterDark() {
               />
               <button
                 type="submit"
-                className="font-barlow font-semibold cursor-pointer border-none flex items-center gap-1"
+                className="font-barlow-condensed font-semibold cursor-pointer border-none flex items-center gap-1"
                 style={{
                   padding: "10px 14px",
                   background: "white",
@@ -117,7 +117,7 @@ export default function FooterDark() {
           {columns.map((col) => (
             <div key={col.title}>
               <p
-                className="font-barlow font-semibold uppercase"
+                className="font-barlow-condensed font-semibold uppercase"
                 style={{ fontSize: 13, letterSpacing: "0.05em", color: "rgba(255,255,255,0.8)", marginBottom: 16 }}
               >
                 {col.title}
@@ -127,7 +127,7 @@ export default function FooterDark() {
                   <Link
                     key={i}
                     href={link.href}
-                    className="font-barlow no-underline uppercase"
+                    className="font-barlow-condensed no-underline uppercase"
                     style={{
                       fontSize: 12,
                       color: "var(--color-yellow)",
@@ -155,17 +155,17 @@ export default function FooterDark() {
         >
           <Link
             href="/privacy"
-            className="font-barlow no-underline"
+            className="font-barlow-condensed no-underline"
             style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", textDecoration: "none" }}
           >
             Privacy policy
           </Link>
-          <p className="font-barlow" style={{ fontSize: 12, color: "rgba(255,255,255,0.4)" }}>
+          <p className="font-barlow-condensed" style={{ fontSize: 12, color: "rgba(255,255,255,0.4)" }}>
             All rights reserved 2024&copy;one chance
           </p>
           <Link
             href="/terms"
-            className="font-barlow no-underline"
+            className="font-barlow-condensed no-underline"
             style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", textDecoration: "none" }}
           >
             Terms of service

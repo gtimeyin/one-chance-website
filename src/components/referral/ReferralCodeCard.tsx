@@ -55,7 +55,7 @@ export default function ReferralCodeCard({ code, totalReferrals, totalEarned }: 
         <span className="font-['Barlow_Condensed'] text-[20px] font-[700] text-neutral-800 uppercase">
           Your Referral Code
         </span>
-        <span className="font-['Barlow'] text-[14px] text-neutral-500">
+        <span className="font-['Barlow_Condensed'] text-[14px] text-neutral-500">
           Share this code with friends. They get a discount, you earn credits.
         </span>
       </div>
@@ -75,14 +75,14 @@ export default function ReferralCodeCard({ code, totalReferrals, totalEarned }: 
 
       {/* Referral link */}
       <div className="flex flex-col gap-2">
-        <span className="font-['Barlow'] text-[13px] font-[600] text-neutral-600 uppercase">
+        <span className="font-['Barlow_Condensed'] text-[13px] font-[600] text-neutral-600 uppercase">
           Your Link
         </span>
         <div className="flex gap-2">
           <input
             readOnly
             value={referralLink}
-            className="flex-1 px-3 py-2 border border-neutral-200 font-['Barlow'] text-[14px] text-neutral-700 bg-neutral-50 outline-none"
+            className="flex-1 px-3 py-2 border border-neutral-200 font-['Barlow_Condensed'] text-[14px] text-neutral-700 bg-neutral-50 outline-none"
           />
           <Button
             variant="brand-primary"
@@ -100,7 +100,7 @@ export default function ReferralCodeCard({ code, totalReferrals, totalEarned }: 
           <span className="font-['Barlow_Condensed'] text-[24px] font-[700] text-neutral-800">
             {totalReferrals}
           </span>
-          <span className="font-['Barlow'] text-[13px] text-neutral-500">
+          <span className="font-['Barlow_Condensed'] text-[13px] text-neutral-500">
             Referrals
           </span>
         </div>
@@ -108,7 +108,7 @@ export default function ReferralCodeCard({ code, totalReferrals, totalEarned }: 
           <span className="font-['Barlow_Condensed'] text-[24px] font-[700] text-neutral-800">
             ${totalEarned.toFixed(2)}
           </span>
-          <span className="font-['Barlow'] text-[13px] text-neutral-500">
+          <span className="font-['Barlow_Condensed'] text-[13px] text-neutral-500">
             Total Earned
           </span>
         </div>

@@ -3,20 +3,15 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
-const boxItems = [
-  "One Chance Board",
-  "Dice",
-  "Tokens",
-  "One Chance Cards",
-  "Market Cards",
-  "Naira Cash",
-  "One Chance Naira Money",
-  "Rule Book",
-];
+interface WhatsInTheBoxProps {
+  items: string[];
+}
 
-export default function WhatsInTheBox() {
+export default function WhatsInTheBox({ items }: WhatsInTheBoxProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  if (items.length === 0) return null;
 
   return (
     <section
@@ -87,16 +82,16 @@ export default function WhatsInTheBox() {
             className="flex flex-col justify-center"
           >
             <h3
-              className="font-barlow font-bold"
+              className="font-barlow-condensed font-bold"
               style={{ fontSize: 20, color: "var(--color-dark)", marginBottom: 24 }}
             >
               What&apos;s in the Box
             </h3>
             <div className="flex flex-col" style={{ gap: 12 }}>
-              {boxItems.map((item, i) => (
+              {items.map((item, i) => (
                 <div
                   key={i}
-                  className="flex items-center gap-3 font-barlow"
+                  className="flex items-center gap-3 font-barlow-condensed"
                   style={{
                     fontSize: 15,
                     color: "var(--color-dark)",

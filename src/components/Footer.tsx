@@ -42,7 +42,7 @@ export default function Footer() {
             {"Thanks for\nexploring"}
           </h2>
           <p
-            className="font-barlow"
+            className="font-barlow-condensed"
             style={{
               fontSize: 16,
               lineHeight: "24px",
@@ -53,7 +53,7 @@ export default function Footer() {
           </p>
           <a
             href="/shop"
-            className="font-barlow font-semibold inline-block"
+            className="font-barlow-condensed font-semibold inline-block"
             style={{
               fontSize: 16,
               padding: "16px 32px",
@@ -80,7 +80,7 @@ export default function Footer() {
             style={{ maxWidth: 448, flex: 1, minWidth: 280, gap: 16 }}
           >
             <p
-              className="font-barlow"
+              className="font-barlow-condensed"
               style={{
                 fontSize: 18,
                 lineHeight: "26px",
@@ -102,7 +102,7 @@ export default function Footer() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="flex-1 font-barlow"
+                className="flex-1 font-barlow-condensed"
                 style={{
                   height: 48,
                   border: "1px solid rgba(18, 27, 25, 0.2)",
@@ -136,7 +136,7 @@ export default function Footer() {
               <a
                 key={social}
                 href="#"
-                className="font-barlow font-bold"
+                className="font-barlow-condensed font-bold"
                 style={{
                   fontSize: 20,
                   color: "rgb(18, 27, 25)",
@@ -160,7 +160,7 @@ export default function Footer() {
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="font-barlow"
+            className="font-barlow-condensed"
             style={{
               fontSize: 14,
               color: "rgba(18, 27, 25, 0.5)",

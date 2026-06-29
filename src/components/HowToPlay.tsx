@@ -152,7 +152,7 @@ export default function HowToPlay() {
                       style={{ flex: 1, minWidth: 160, gap: 4 }}
                     >
                       <span
-                        className="font-barlow uppercase"
+                        className="font-barlow-condensed uppercase"
                         style={{
                           fontSize: 20,
                           lineHeight: "100%",
@@ -169,7 +169,7 @@ export default function HowToPlay() {
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ duration: 0.3 }}
-                          className="font-barlow"
+                          className="font-barlow-condensed"
                           style={{
                             fontSize: 14,
                             lineHeight: "20px",
@@ -236,7 +236,7 @@ export default function HowToPlay() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4 }}
-                  className="font-barlow font-bold"
+                  className="font-barlow-condensed font-bold"
                   style={{
                     fontSize: 32,
                     lineHeight: "37px",
@@ -288,7 +288,7 @@ export default function HowToPlay() {
                     style={{ flex: 1, gap: 4 }}
                   >
                     <span
-                      className="font-barlow uppercase"
+                      className="font-barlow-condensed uppercase"
                       style={{
                         fontSize: 18,
                         fontWeight: isActive ? 700 : 500,
@@ -302,7 +302,7 @@ export default function HowToPlay() {
                       <motion.p
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="font-barlow"
+                        className="font-barlow-condensed"
                         style={{
                           fontSize: 14,
                           lineHeight: "20px",
@@ -328,7 +328,7 @@ export default function HowToPlay() {
                 key={activeStep + "-mobile"}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="font-barlow font-bold"
+                className="font-barlow-condensed font-bold"
                 style={{
                   fontSize: 24,
                   lineHeight: "28px",

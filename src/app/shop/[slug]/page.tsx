@@ -1,4 +1,10 @@
-import { getProduct, getProducts } from "@/lib/woocommerce";
+import {
+  getProduct,
+  getProducts,
+  getProductReviews,
+  getProductsByIds,
+  type WooProduct,
+} from "@/lib/woocommerce";
 import { stripHtml, truncate } from "@/lib/utils";
 import ProductDetailClient from "./ProductDetailClient";
 import { notFound } from "next/navigation";
@@ -30,9 +36,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
     notFound();
   }
 
-  // Fetch related products
-  const allProducts = await getProducts({ per_page: 8 });
+  // Fetch related products + reviews in parallel
+  const [allProducts, reviews] = await Promise.all([
+    getProducts({ per_page: 8 }),
+    getProductReviews(product.id),
+  ]);
   const relatedProducts = allProducts.filter((p) => p.id !== product.id).slice(0, 4);
 
-  return <ProductDetailClient product={product} relatedProducts={relatedProducts} />;
+  return (
+    <ProductDetailClient
+      product={product}
+      relatedProducts={relatedProducts}
+      reviews={reviews}
+    />
+  );
 }

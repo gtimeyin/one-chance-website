@@ -49,7 +49,7 @@ export default function ShopProductGrid({ products }: ShopProductGridProps) {
             SHOP ALL PRODUCTS
           </h2>
           <p
-            className="font-barlow"
+            className="font-barlow-condensed"
             style={{
               fontSize: 14,
               color: "var(--color-dark)",
@@ -108,7 +108,7 @@ export default function ShopProductGrid({ products }: ShopProductGridProps) {
             style={{ padding: "80px 0" }}
           >
             <p
-              className="font-barlow"
+              className="font-barlow-condensed"
               style={{ fontSize: 18, color: "var(--color-text-muted)" }}
             >
               Products coming soon...

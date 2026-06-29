@@ -43,7 +43,7 @@ export default function ShippingPage() {
                   <h3 className="font-['Barlow_Condensed'] text-[20px] font-[700] text-neutral-800 uppercase">
                     Domestic (Nigeria)
                   </h3>
-                  <p className="font-['Barlow'] text-[16px] leading-[26px] text-neutral-600">
+                  <p className="font-['Barlow_Condensed'] text-[16px] leading-[26px] text-neutral-600">
                     We deliver across Nigeria. Standard delivery takes 3-5 business days within Lagos and 5-10 business days to other states. Express delivery is available for Lagos orders with next-day delivery.
                   </p>
                 </div>
@@ -52,7 +52,7 @@ export default function ShippingPage() {
                   <h3 className="font-['Barlow_Condensed'] text-[20px] font-[700] text-neutral-800 uppercase">
                     International
                   </h3>
-                  <p className="font-['Barlow'] text-[16px] leading-[26px] text-neutral-600">
+                  <p className="font-['Barlow_Condensed'] text-[16px] leading-[26px] text-neutral-600">
                     We ship to most countries worldwide. International delivery typically takes 7-21 business days depending on your location and customs processing. Shipping costs are calculated at checkout based on your address.
                   </p>
                 </div>
@@ -61,7 +61,7 @@ export default function ShippingPage() {
                   <h3 className="font-['Barlow_Condensed'] text-[20px] font-[700] text-neutral-800 uppercase">
                     Order Tracking
                   </h3>
-                  <p className="font-['Barlow'] text-[16px] leading-[26px] text-neutral-600">
+                  <p className="font-['Barlow_Condensed'] text-[16px] leading-[26px] text-neutral-600">
                     Once your order ships, you will receive an email with a tracking number. You can use this to track your package through our shipping partner&apos;s website.
                   </p>
                 </div>
@@ -80,7 +80,7 @@ export default function ShippingPage() {
                   <h3 className="font-['Barlow_Condensed'] text-[20px] font-[700] text-neutral-800 uppercase">
                     Return Policy
                   </h3>
-                  <p className="font-['Barlow'] text-[16px] leading-[26px] text-neutral-600">
+                  <p className="font-['Barlow_Condensed'] text-[16px] leading-[26px] text-neutral-600">
                     We accept returns within 14 days of delivery. The product must be unused, in its original packaging, and in the same condition you received it. To initiate a return, contact us at hello@yvpgame.com with your order number.
                   </p>
                 </div>
@@ -89,7 +89,7 @@ export default function ShippingPage() {
                   <h3 className="font-['Barlow_Condensed'] text-[20px] font-[700] text-neutral-800 uppercase">
                     Damaged or Defective Items
                   </h3>
-                  <p className="font-['Barlow'] text-[16px] leading-[26px] text-neutral-600">
+                  <p className="font-['Barlow_Condensed'] text-[16px] leading-[26px] text-neutral-600">
                     If your order arrives damaged or with missing components, contact us within 48 hours of delivery with photos of the damage. We will send a replacement at no extra cost.
                   </p>
                 </div>
@@ -98,7 +98,7 @@ export default function ShippingPage() {
                   <h3 className="font-['Barlow_Condensed'] text-[20px] font-[700] text-neutral-800 uppercase">
                     Refund Process
                   </h3>
-                  <p className="font-['Barlow'] text-[16px] leading-[26px] text-neutral-600">
+                  <p className="font-['Barlow_Condensed'] text-[16px] leading-[26px] text-neutral-600">
                     Once we receive and inspect your return, we will notify you of the approval or rejection. Approved refunds will be processed to your original payment method within 5-10 business days.
                   </p>
                 </div>

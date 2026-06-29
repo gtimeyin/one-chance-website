@@ -21,7 +21,7 @@ export default function Breadcrumb({ items }: BreadcrumbProps) {
         margin: "0 auto",
       }}
     >
-      <ol className="flex items-center gap-2 font-barlow" style={{ listStyle: "none", padding: 0, margin: 0 }}>
+      <ol className="flex items-center gap-2 font-barlow-condensed" style={{ listStyle: "none", padding: 0, margin: 0 }}>
         {items.map((item, i) => (
           <li key={i} className="flex items-center gap-2">
             {i > 0 && (

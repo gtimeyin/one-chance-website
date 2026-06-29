@@ -17,12 +17,12 @@ export default function TestimonialCard({ name, rating, text }: TestimonialCardP
       }}
     >
       <div className="flex items-center justify-between">
-        <p className="font-barlow font-bold" style={{ fontSize: 16, color: "var(--color-dark)" }}>
+        <p className="font-barlow-condensed font-bold" style={{ fontSize: 16, color: "var(--color-dark)" }}>
           {name}
         </p>
         <StarRating rating={rating} size={14} />
       </div>
-      <p className="font-barlow" style={{ fontSize: 14, color: "var(--color-text-muted)", lineHeight: 1.6 }}>
+      <p className="font-barlow-condensed" style={{ fontSize: 14, color: "var(--color-text-muted)", lineHeight: 1.6 }}>
         {text}
       </p>
     </div>

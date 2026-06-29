@@ -6,10 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed:products": "node --env-file=.env.local scripts/seed-product-content.mjs"
   },
   "dependencies": {
     "@lottielab/lottie-player": "^1.1.3",
+    "@next/third-parties": "^16.2.9",
     "@subframe/core": "^1.154.0",
     "@supabase/supabase-js": "^2.103.0",
     "@vercel/analytics": "^2.0.1",

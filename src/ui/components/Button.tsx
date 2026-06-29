@@ -102,7 +102,7 @@ const ButtonRoot = React.forwardRef<HTMLButtonElement, ButtonRootProps>(
           >
             <SubframeCore.Loader
               className={SubframeUtils.twClassNames(
-                "font-['Inter'] text-[12px] font-[400] leading-[20px] text-white group-disabled/3b777358:text-neutral-400",
+                "font-['Barlow_Condensed'] text-[12px] font-[400] leading-[20px] text-white group-disabled/3b777358:text-neutral-400",
                 {
                   "text-caption font-caption": size === "small",
                   "text-error-700": variant === "destructive-secondary",

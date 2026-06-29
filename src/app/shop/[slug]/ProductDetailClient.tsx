@@ -6,55 +6,38 @@ import ProductImageGallery from "@/components/product/ProductImageGallery";
 import ProductInfo from "@/components/product/ProductInfo";
 import WhatsInTheBox from "@/components/product/WhatsInTheBox";
 import VideoSection from "@/components/product/VideoSection";
-import QuickStartGuide from "@/components/product/QuickStartGuide";
+import QuickStartGuide, { type QuickStartStep } from "@/components/product/QuickStartGuide";
 import TestimonialsSection from "@/components/product/TestimonialsSection";
 import RelatedProducts from "@/components/product/RelatedProducts";
 import FAQs from "@/components/FAQs";
 import ProductDescription from "@/components/product/ProductDescription";
 import FooterShop from "@/components/layout/FooterShop";
 import SmoothScroll from "@/components/SmoothScroll";
-import type { WooProduct } from "@/lib/woocommerce";
+import { getMetaJson, getMetaValue, type WooProduct, type WooReview } from "@/lib/woocommerce";
+
+interface FaqItem {
+  question: string;
+  answer: string;
+}
 
 interface ProductDetailClientProps {
   product: WooProduct;
   relatedProducts: WooProduct[];
+  reviews: WooReview[];
 }
-
-const productFaqs = [
-  {
-    question: "What is the recommended age range for players of the game?",
-    answer: "One Chance is recommended for players aged 12 and above.",
-  },
-  {
-    question: "Are there multiple modes of playing the game?",
-    answer: "Yes! One Chance can be played in multiple ways depending on your group size and time.",
-  },
-  {
-    question: "How many players can play the game at once?",
-    answer: "One Chance supports 2 to 6 players per game session.",
-  },
-  {
-    question: "How does the game end?",
-    answer: "The game ends when a player successfully navigates all challenges and accumulates the most wealth.",
-  },
-  {
-    question: "Where can one find the game to play?",
-    answer: "One Chance is available for purchase through our website and select retail partners.",
-  },
-  {
-    question: "Can the game be customized or personalized in any way?",
-    answer: "We offer customization options for bulk orders, including personalized cards and branding.",
-  },
-  {
-    question: "Is the game available for bulk purchases?",
-    answer: "Absolutely! We offer special pricing for bulk purchases.",
-  },
-];
 
 export default function ProductDetailClient({
   product,
   relatedProducts,
+  reviews,
 }: ProductDetailClientProps) {
+  const boxItems = getMetaJson<string[]>(product, "oc_box_items") ?? [];
+  const videoUrl = getMetaValue(product, "oc_video_url");
+  const videoHeadline = getMetaValue(product, "oc_video_headline") ?? undefined;
+  const quickStartSteps = getMetaJson<QuickStartStep[]>(product, "oc_quick_start_steps") ?? [];
+  const quickStartImage = getMetaValue(product, "oc_quick_start_image") ?? undefined;
+  const faqs = getMetaJson<FaqItem[]>(product, "oc_faqs") ?? [];
+
   return (
     <div className="flex flex-col w-full" style={{ background: "white" }}>
       <SmoothScroll />
@@ -86,20 +69,19 @@ export default function ProductDetailClient({
           </div>
         </section>
 
-        {/* New Description Section */}
         <ProductDescription product={product} />
 
-        {/* Sections */}
-        <WhatsInTheBox />
-        <VideoSection />
-        <QuickStartGuide />
-        <TestimonialsSection />
+        <WhatsInTheBox items={boxItems} />
+        {videoUrl && <VideoSection videoUrl={videoUrl} headline={videoHeadline} />}
+        <QuickStartGuide steps={quickStartSteps} boardImage={quickStartImage} />
+        <TestimonialsSection
+          productId={product.id}
+          productName={product.name}
+          reviews={reviews}
+        />
         <RelatedProducts products={relatedProducts} />
 
-        {/* FAQ */}
-        <FAQs
-          faqs={productFaqs}
-        />
+        {faqs.length > 0 && <FAQs faqs={faqs} />}
       </div>
       <FooterShop reveal />
     </div>

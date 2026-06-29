@@ -30,7 +30,7 @@ export default function ReferralDashboard({ data }: Props) {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-5 py-3 font-['Barlow'] text-[14px] font-[600] uppercase border-b-2 cursor-pointer bg-transparent transition-colors ${
+            className={`px-5 py-3 font-['Barlow_Condensed'] text-[14px] font-[600] uppercase border-b-2 cursor-pointer bg-transparent transition-colors ${
               activeTab === tab.id
                 ? "border-[#FFD600] text-neutral-800"
                 : "border-transparent text-neutral-400 hover:text-neutral-600"

@@ -48,7 +48,7 @@ export default function ContactForm() {
           style={{ flex: "0 0 auto", maxWidth: 300, gap: 32 }}
         >
           <p
-            className="font-barlow"
+            className="font-barlow-condensed"
             style={{
               fontSize: 18,
               lineHeight: "28px",
@@ -63,13 +63,13 @@ export default function ContactForm() {
           <div className="flex flex-col" style={{ gap: 24 }}>
             <div>
               <p
-                className="font-barlow font-bold"
+                className="font-barlow-condensed font-bold"
                 style={{ fontSize: 14, color: "#121B19", marginBottom: 4 }}
               >
                 Email Address
               </p>
               <p
-                className="font-barlow"
+                className="font-barlow-condensed"
                 style={{ fontSize: 14, color: "rgba(18, 27, 25, 0.6)" }}
               >
                 info@onechancegame.com
@@ -78,13 +78,13 @@ export default function ContactForm() {
 
             <div>
               <p
-                className="font-barlow font-bold"
+                className="font-barlow-condensed font-bold"
                 style={{ fontSize: 14, color: "#121B19", marginBottom: 4 }}
               >
                 Careers &amp; Internship
               </p>
               <p
-                className="font-barlow"
+                className="font-barlow-condensed"
                 style={{ fontSize: 14, color: "rgba(18, 27, 25, 0.6)" }}
               >
                 careers@onechancegame.com
@@ -93,13 +93,13 @@ export default function ContactForm() {
 
             <div>
               <p
-                className="font-barlow font-bold"
+                className="font-barlow-condensed font-bold"
                 style={{ fontSize: 14, color: "#121B19", marginBottom: 4 }}
               >
                 Phone Number
               </p>
               <p
-                className="font-barlow"
+                className="font-barlow-condensed"
                 style={{ fontSize: 14, color: "rgba(18, 27, 25, 0.6)" }}
               >
                 +234 903 111 4455
@@ -109,7 +109,7 @@ export default function ContactForm() {
 
           <div>
             <p
-              className="font-barlow font-bold"
+              className="font-barlow-condensed font-bold"
               style={{ fontSize: 14, color: "#121B19", marginBottom: 12 }}
             >
               Follow us
@@ -148,7 +148,7 @@ export default function ContactForm() {
             value={formData.fullName}
             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
             placeholder="Full Name"
-            className="w-full font-barlow"
+            className="w-full font-barlow-condensed"
             style={{
               padding: "16px 20px",
               fontSize: 16,
@@ -165,7 +165,7 @@ export default function ContactForm() {
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             placeholder="Email Address"
-            className="w-full font-barlow"
+            className="w-full font-barlow-condensed"
             style={{
               padding: "16px 20px",
               fontSize: 16,
@@ -182,7 +182,7 @@ export default function ContactForm() {
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
             placeholder="Phone Number"
-            className="w-full font-barlow"
+            className="w-full font-barlow-condensed"
             style={{
               padding: "16px 20px",
               fontSize: 16,
@@ -197,7 +197,7 @@ export default function ContactForm() {
             value={formData.message}
             onChange={(e) => setFormData({ ...formData, message: e.target.value })}
             placeholder="Type message..."
-            className="w-full font-barlow"
+            className="w-full font-barlow-condensed"
             rows={6}
             style={{
               padding: "16px 20px",

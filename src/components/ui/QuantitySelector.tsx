@@ -32,7 +32,7 @@ export default function QuantitySelector({
         <span style={{ transform: "translateY(-1px)" }}>−</span>
       </button>
       <span
-        className="font-barlow font-bold flex items-center justify-center underline decoration-2 underline-offset-4"
+        className="font-barlow-condensed font-bold flex items-center justify-center underline decoration-2 underline-offset-4"
         style={{
           fontSize: 20,
           color: "var(--color-dark)",

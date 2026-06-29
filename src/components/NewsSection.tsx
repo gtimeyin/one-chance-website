@@ -51,7 +51,7 @@ export default function NewsSection() {
           >
             <Link
               href="/updates"
-              className="font-barlow font-semibold no-underline flex items-center gap-2"
+              className="font-barlow-condensed font-semibold no-underline flex items-center gap-2"
               style={{
                 fontSize: 14,
                 color: "rgb(18, 27, 25)",

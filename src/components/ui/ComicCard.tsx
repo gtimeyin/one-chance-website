@@ -22,7 +22,7 @@ export default function ComicCard({ comic }: ComicCardProps) {
         />
         {/* Episode tag */}
         <span
-          className="absolute font-barlow font-bold"
+          className="absolute font-barlow-condensed font-bold"
           style={{
             top: 12,
             left: 12,
@@ -51,7 +51,7 @@ export default function ComicCard({ comic }: ComicCardProps) {
           {comic.title}
         </p>
         <p
-          className="font-barlow"
+          className="font-barlow-condensed"
           style={{
             fontSize: 14,
             color: "var(--color-text-muted)",

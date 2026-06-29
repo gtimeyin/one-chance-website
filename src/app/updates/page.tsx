@@ -38,7 +38,7 @@ function SectionHeader({
     >
       <div>
         {subtitle && (
-          <p className="font-barlow" style={{ fontSize: 12, color: "var(--color-text-muted)", marginBottom: 4 }}>
+          <p className="font-barlow-condensed" style={{ fontSize: 12, color: "var(--color-text-muted)", marginBottom: 4 }}>
             {subtitle}
           </p>
         )}
@@ -56,7 +56,7 @@ function SectionHeader({
       </div>
       <Link
         href={linkHref}
-        className="font-barlow font-bold uppercase no-underline flex items-center gap-1 shrink-0"
+        className="font-barlow-condensed font-bold uppercase no-underline flex items-center gap-1 shrink-0"
         style={{
           fontSize: 12,
           color: "var(--color-dark)",
@@ -206,7 +206,7 @@ export default function UpdatesPage() {
               DON&apos;T MISS AN<br />UPDATE
             </h2>
             <div>
-              <p className="font-barlow" style={{ fontSize: 14, color: "var(--color-text-muted)", marginBottom: 12 }}>
+              <p className="font-barlow-condensed" style={{ fontSize: 14, color: "var(--color-text-muted)", marginBottom: 12 }}>
                 Subscribe to our newsletter
               </p>
               <NewsletterForm variant="light" />

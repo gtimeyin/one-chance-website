@@ -1,30 +1,32 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import TestimonialCard from "@/components/ui/TestimonialCard";
+import WriteReviewDialog from "./WriteReviewDialog";
+import { stripHtml } from "@/lib/utils";
+import type { WooReview } from "@/lib/woocommerce";
 
-const testimonials = [
-  {
-    name: "Joke Stack",
-    rating: 5,
-    text: "A combination of old classic family fun. Monopoly and politics make for hilarious moments! 5 star for the team that created this masterpiece.",
-  },
-  {
-    name: "Joke Stack",
-    rating: 5,
-    text: "Tristique ac quis turpis nulla sagittis scelerisque. Et diam faucibus tincidunt varius non. A adipiscing proin lorem morbi feugiat. Imperdiet sit quis justo venenatis congue.",
-  },
-  {
-    name: "Joke Stack",
-    rating: 5,
-    text: "Tristique ac quis turpis nulla sagittis scelerisque. Et diam faucibus tincidunt varius non. A adipiscing proin lorem morbi feugiat. Est vel orci tempor lorem facilisi.",
-  },
-];
+interface TestimonialsSectionProps {
+  productId: number;
+  productName: string;
+  reviews: WooReview[];
+}
 
-export default function TestimonialsSection() {
+export default function TestimonialsSection({
+  productId,
+  productName,
+  reviews,
+}: TestimonialsSectionProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [open, setOpen] = useState(false);
+
+  const testimonials = reviews.slice(0, 3).map((r) => ({
+    name: r.reviewer,
+    rating: r.rating,
+    text: stripHtml(r.review).trim(),
+  }));
 
   return (
     <section
@@ -55,7 +57,9 @@ export default function TestimonialsSection() {
             WORDS ON THE<br />STREET ABOUT US
           </h2>
           <button
-            className="font-barlow font-bold uppercase cursor-pointer flex items-center gap-2"
+            type="button"
+            onClick={() => setOpen(true)}
+            className="font-barlow-condensed font-bold uppercase cursor-pointer flex items-center gap-2"
             style={{
               padding: "10px 20px",
               border: "1px solid var(--color-dark)",
@@ -73,19 +77,43 @@ export default function TestimonialsSection() {
           </button>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 20 }}>
-          {testimonials.map((t, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.4, delay: 0.1 + i * 0.1 }}
-            >
-              <TestimonialCard {...t} />
-            </motion.div>
-          ))}
-        </div>
+        {testimonials.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 20 }}>
+            {testimonials.map((t, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.4, delay: 0.1 + i * 0.1 }}
+              >
+                <TestimonialCard {...t} />
+              </motion.div>
+            ))}
+          </div>
+        ) : (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.4, delay: 0.1 }}
+            className="font-barlow-condensed"
+            style={{
+              fontSize: 16,
+              color: "var(--color-text-muted)",
+              padding: "32px 0",
+              borderTop: "1px solid var(--color-border-light)",
+            }}
+          >
+            No reviews yet — be the first to share what you thought.
+          </motion.p>
+        )}
       </div>
+
+      <WriteReviewDialog
+        productId={productId}
+        productName={productName}
+        open={open}
+        onOpenChange={setOpen}
+      />
     </section>
   );
 }

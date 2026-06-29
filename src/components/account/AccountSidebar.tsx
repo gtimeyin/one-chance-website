@@ -39,7 +39,7 @@ export default function AccountSidebar({
             sizes="48px"
           />
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
-            <span className="font-['Barlow'] text-[9px] font-[600] text-white opacity-0 group-hover:opacity-100 transition-opacity uppercase">
+            <span className="font-['Barlow_Condensed'] text-[9px] font-[600] text-white opacity-0 group-hover:opacity-100 transition-opacity uppercase">
               Edit
             </span>
           </div>
@@ -57,7 +57,7 @@ export default function AccountSidebar({
           <Link
             key={item.href}
             href={item.href}
-            className={`font-['Barlow'] text-[15px] font-[500] px-4 py-3 no-underline transition-colors duration-200 ${
+            className={`font-['Barlow_Condensed'] text-[15px] font-[500] px-4 py-3 no-underline transition-colors duration-200 ${
               isActive
                 ? "text-neutral-900 bg-neutral-100 font-[600]"
                 : "text-neutral-500 hover:text-neutral-800 hover:bg-neutral-50"
@@ -71,7 +71,7 @@ export default function AccountSidebar({
       <form action={logout}>
         <button
           type="submit"
-          className="w-full text-left font-['Barlow'] text-[15px] font-[500] px-4 py-3 text-red-500 hover:text-red-700 hover:bg-red-50 transition-colors duration-200 cursor-pointer bg-transparent border-none"
+          className="w-full text-left font-['Barlow_Condensed'] text-[15px] font-[500] px-4 py-3 text-red-500 hover:text-red-700 hover:bg-red-50 transition-colors duration-200 cursor-pointer bg-transparent border-none"
         >
           Sign Out
         </button>

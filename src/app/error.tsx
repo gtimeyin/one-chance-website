@@ -54,11 +54,11 @@ export default function Error({
               <h2 className="font-['Barlow_Condensed'] text-[24px] sm:text-[28px] font-[700] leading-[1.1] text-neutral-800 uppercase -tracking-[0.02em]">
                 Something Went Wrong
               </h2>
-              <p className="font-['Barlow'] text-[16px] text-neutral-500 max-w-[420px]">
+              <p className="font-['Barlow_Condensed'] text-[16px] text-neutral-500 max-w-[420px]">
                 We hit a bump. Try again, or head back home and we&apos;ll sort it out.
               </p>
               {error?.digest && (
-                <p className="font-['Barlow'] text-[12px] text-neutral-400 mt-2">
+                <p className="font-['Barlow_Condensed'] text-[12px] text-neutral-400 mt-2">
                   Ref: {error.digest}
                 </p>
               )}
@@ -67,13 +67,13 @@ export default function Error({
             <div className="flex items-center gap-3 flex-wrap justify-center">
               <button
                 onClick={reset}
-                className="inline-flex items-center justify-center px-6 h-10 bg-[#fccd21] hover:bg-[#e6b91d] transition-colors font-['Barlow'] text-[14px] font-[700] text-neutral-800 uppercase tracking-[0.05em] border-0 cursor-pointer"
+                className="inline-flex items-center justify-center px-6 h-10 bg-[#fccd21] hover:bg-[#e6b91d] transition-colors font-['Barlow_Condensed'] text-[14px] font-[700] text-neutral-800 uppercase tracking-[0.05em] border-0 cursor-pointer"
               >
                 Try Again
               </button>
               <Link
                 href="/"
-                className="inline-flex items-center justify-center px-6 h-10 bg-white border border-neutral-300 hover:border-neutral-500 transition-colors font-['Barlow'] text-[14px] font-[700] text-neutral-800 uppercase tracking-[0.05em] no-underline"
+                className="inline-flex items-center justify-center px-6 h-10 bg-white border border-neutral-300 hover:border-neutral-500 transition-colors font-['Barlow_Condensed'] text-[14px] font-[700] text-neutral-800 uppercase tracking-[0.05em] no-underline"
                 style={{ textDecoration: "none" }}
               >
                 Go Back Home

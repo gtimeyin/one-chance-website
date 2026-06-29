@@ -22,7 +22,7 @@ export default function AnnouncementCard({ announcement }: AnnouncementCardProps
         />
         {/* Date tag */}
         <span
-          className="absolute font-barlow font-bold"
+          className="absolute font-barlow-condensed font-bold"
           style={{
             top: 12,
             left: 12,

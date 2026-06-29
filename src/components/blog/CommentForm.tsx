@@ -16,14 +16,14 @@ export default function CommentForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col" style={{ gap: 16 }}>
-      <p className="font-barlow font-semibold" style={{ fontSize: 16, color: "var(--color-dark)" }}>
+      <p className="font-barlow-condensed font-semibold" style={{ fontSize: 16, color: "var(--color-dark)" }}>
         Share your comment
       </p>
       <textarea
         value={comment}
         onChange={(e) => setComment(e.target.value)}
         placeholder="Type your Comment..."
-        className="font-barlow"
+        className="font-barlow-condensed"
         style={{
           padding: 16,
           border: "1px solid var(--color-border-light)",
@@ -42,7 +42,7 @@ export default function CommentForm() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="First Name"
-          className="font-barlow"
+          className="font-barlow-condensed"
           style={{
             padding: 14,
             border: "1px solid var(--color-border-light)",
@@ -58,7 +58,7 @@ export default function CommentForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email Address"
-          className="font-barlow"
+          className="font-barlow-condensed"
           style={{
             padding: 14,
             border: "1px solid var(--color-border-light)",

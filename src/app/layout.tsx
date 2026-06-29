@@ -1,17 +1,13 @@
 import type { Metadata } from "next";
-import { Barlow, Barlow_Condensed } from "next/font/google";
+import { Barlow_Condensed } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import AgentationProvider from "@/components/AgentationProvider";
 import PageLoader from "@/components/PageLoader";
 import ReferralCodeCapture from "@/components/referral/ReferralCodeCapture";
 import { Suspense } from "react";
 import "./globals.css";
 
-const barlow = Barlow({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
-  variable: "--font-barlow",
-  display: "swap",
-});
+const gaId = process.env.NEXT_PUBLIC_GA_ID;
 
 const barlowCondensed = Barlow_Condensed({
   subsets: ["latin"],
@@ -32,11 +28,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${barlow.variable} ${barlowCondensed.variable}`}>
+    <html lang="en" className={barlowCondensed.variable}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body>
         <PageLoader />
@@ -46,6 +41,7 @@ export default function RootLayout({
         {children}
         <AgentationProvider />
       </body>
+      {gaId ? <GoogleAnalytics gaId={gaId} /> : null}
     </html>
   );
 }

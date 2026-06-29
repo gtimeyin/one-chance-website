@@ -108,7 +108,7 @@ function CharacterOverlay({
             <h2 className="font-['Barlow_Condensed'] text-[48px] font-[800] leading-[1] text-white uppercase -tracking-[0.02em] sm:text-[56px]">
               {char.realName}
             </h2>
-            <span className="font-['Barlow'] text-[14px] font-[600] uppercase tracking-[0.15em] text-white/60">
+            <span className="font-['Barlow_Condensed'] text-[14px] font-[600] uppercase tracking-[0.15em] text-white/60">
               {char.name}
             </span>
           </div>
@@ -121,13 +121,13 @@ function CharacterOverlay({
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: 0.35 + pi * 0.1 }}
-                    className="font-['Barlow'] text-[15px] leading-[1.7] text-white/85"
+                    className="font-['Barlow_Condensed'] text-[15px] leading-[1.7] text-white/85"
                   >
                     {para}
                   </motion.p>
                 ))
               : (
-                <p className="font-['Barlow'] text-[15px] leading-[1.7] text-white/85">
+                <p className="font-['Barlow_Condensed'] text-[15px] leading-[1.7] text-white/85">
                   {char.description}
                 </p>
               )}
@@ -162,7 +162,7 @@ export default function Characters() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.15 }}
-                className="font-['Barlow'] text-[16px] font-[600] uppercase tracking-[0.15em] text-neutral-500 text-center block"
+                className="font-['Barlow_Condensed'] text-[16px] font-[600] uppercase tracking-[0.15em] text-neutral-500 text-center block"
               >
                 {characters[hoveredIndex].realName} — {characters[hoveredIndex].name}
               </motion.span>

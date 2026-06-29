@@ -3,37 +3,26 @@
 import { useState } from "react";
 import Image from "next/image";
 
-const steps = [
-  {
-    number: "01",
-    title: "HOW TO PASS JAMB",
-    description:
-      "Lorem ipsum dolor sit amet consectetur. Porta tellus cursus diam feugiat vestibulum. Risus tincidunt condimentum sed pretium et velit cursus sagittis nibh. Ultricies commodo scelerisque mauris suspendisse feugiat nibh.",
-  },
-  {
-    number: "02",
-    title: "WHAT IS ONE CHANCE",
-    description: "Learn about the core mechanics and the story behind Nigeria's first authentic board game.",
-  },
-  {
-    number: "03",
-    title: "TRAFFIC & PRISON",
-    description: "Navigate the notorious Lagos traffic and avoid the pitfalls of the prison squares.",
-  },
-  {
-    number: "04",
-    title: "AJO CONTRIBUTION",
-    description: "Participate in the communal savings scheme to boost your wealth or help a friend.",
-  },
-  {
-    number: "05",
-    title: "GETTING RICH",
-    description: "Strategize your moves to accumulate the most Naira and become the ultimate winner.",
-  },
-];
+export interface QuickStartStep {
+  title: string;
+  description: string;
+}
 
-export default function QuickStartGuide() {
+interface QuickStartGuideProps {
+  steps: QuickStartStep[];
+  boardImage?: string;
+}
+
+export default function QuickStartGuide({ steps, boardImage }: QuickStartGuideProps) {
   const [activeStep, setActiveStep] = useState(0);
+
+  if (steps.length === 0) return null;
+
+  const numbered = steps.map((s, i) => ({
+    ...s,
+    number: String(i + 1).padStart(2, "0"),
+  }));
+  const active = numbered[activeStep] ?? numbered[0];
 
   return (
     <section className="w-full" style={{ background: "white" }}>
@@ -81,11 +70,11 @@ export default function QuickStartGuide() {
                   flexShrink: 0,
                 }}
               >
-                {steps[activeStep].number}
+                {active.number}
               </span>
               <div style={{ paddingTop: 6 }}>
                 <h3
-                  className="font-barlow font-bold uppercase"
+                  className="font-barlow-condensed font-bold uppercase"
                   style={{
                     fontSize: 17,
                     color: "var(--color-dark)",
@@ -93,17 +82,17 @@ export default function QuickStartGuide() {
                     letterSpacing: "0.02em",
                   }}
                 >
-                  {steps[activeStep].title}
+                  {active.title}
                 </h3>
                 <p
-                  className="font-barlow"
+                  className="font-barlow-condensed"
                   style={{
                     fontSize: 14,
                     color: "rgba(0,0,0,0.6)",
                     lineHeight: 1.6,
                   }}
                 >
-                  {steps[activeStep].description}
+                  {active.description}
                 </p>
               </div>
             </div>
@@ -113,21 +102,21 @@ export default function QuickStartGuide() {
 
             {/* Other step titles */}
             <div className="flex flex-col" style={{ gap: 24 }}>
-              {steps
-                .filter((_, i) => i !== activeStep)
-                .map((step, idx) => {
-                  const realIndex = steps.indexOf(step);
+              {numbered
+                .map((step, idx) => ({ step, idx }))
+                .filter(({ idx }) => idx !== activeStep)
+                .map(({ step, idx }) => {
                   return (
                     <button
                       key={step.number}
-                      onClick={() => setActiveStep(realIndex)}
+                      onClick={() => setActiveStep(idx)}
                       className="bg-transparent border-none text-left cursor-pointer p-0"
                       style={{ transition: "opacity 0.2s" }}
                       onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.7")}
                       onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
                     >
                       <span
-                        className="font-barlow font-bold uppercase"
+                        className="font-barlow-condensed font-bold uppercase"
                         style={{
                           fontSize: 17,
                           color: "var(--color-dark)",
@@ -144,47 +133,49 @@ export default function QuickStartGuide() {
         </div>
 
         {/* Right Column: Blue bg with board */}
-        <div
-          className="relative flex items-center justify-center overflow-visible"
-          style={{
-            background: "#68C5F2",
-            minHeight: 500,
-          }}
-        >
-          {/* Black diamond */}
+        {boardImage && (
           <div
-            className="absolute"
+            className="relative flex items-center justify-center overflow-visible"
             style={{
-              width: "70%",
-              paddingBottom: "70%",
-              background: "var(--color-dark)",
-              transform: "rotate(45deg) skew(-5deg, -5deg)",
-              boxShadow: "30px 30px 80px rgba(0,0,0,0.35)",
-              zIndex: 1,
-            }}
-          />
-
-          {/* Board image */}
-          <div
-            className="relative"
-            style={{
-              width: "85%",
-              height: "85%",
-              position: "absolute",
-              inset: 0,
-              margin: "auto",
-              zIndex: 2,
+              background: "#68C5F2",
+              minHeight: 500,
             }}
           >
-            <Image
-              src="/images/shop/game-board.png"
-              alt="One Chance Board"
-              fill
-              className="object-contain"
-              sizes="(max-width: 1024px) 100vw, 50vw"
+            {/* Black diamond */}
+            <div
+              className="absolute"
+              style={{
+                width: "70%",
+                paddingBottom: "70%",
+                background: "var(--color-dark)",
+                transform: "rotate(45deg) skew(-5deg, -5deg)",
+                boxShadow: "30px 30px 80px rgba(0,0,0,0.35)",
+                zIndex: 1,
+              }}
             />
+
+            {/* Board image */}
+            <div
+              className="relative"
+              style={{
+                width: "85%",
+                height: "85%",
+                position: "absolute",
+                inset: 0,
+                margin: "auto",
+                zIndex: 2,
+              }}
+            >
+              <Image
+                src={boardImage}
+                alt="Game board"
+                fill
+                className="object-contain"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );

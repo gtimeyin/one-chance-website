@@ -29,7 +29,7 @@ export default async function AccountDashboard() {
             sizes="80px"
           />
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
-            <span className="font-['Barlow'] text-[11px] font-[600] text-white opacity-0 group-hover:opacity-100 transition-opacity uppercase">
+            <span className="font-['Barlow_Condensed'] text-[11px] font-[600] text-white opacity-0 group-hover:opacity-100 transition-opacity uppercase">
               Edit
             </span>
           </div>
@@ -38,7 +38,7 @@ export default async function AccountDashboard() {
           <h1 className="font-['Barlow_Condensed'] text-[40px] font-[800] leading-[1.1] text-neutral-800 uppercase -tracking-[0.02em]">
             WELCOME{customer ? `, ${customer.first_name.toUpperCase()}` : ""}
           </h1>
-          <p className="font-['Barlow'] text-[16px] text-neutral-500">
+          <p className="font-['Barlow_Condensed'] text-[16px] text-neutral-500">
             Manage your account, view orders, and update your details.
           </p>
         </div>
@@ -61,7 +61,7 @@ export default async function AccountDashboard() {
             <span className="font-['Barlow_Condensed'] text-[20px] font-[700] text-neutral-800 uppercase">
               {card.label}
             </span>
-            <span className="font-['Barlow'] text-[14px] text-neutral-500">
+            <span className="font-['Barlow_Condensed'] text-[14px] text-neutral-500">
               {card.desc}
             </span>
           </Link>
@@ -74,7 +74,7 @@ export default async function AccountDashboard() {
           RECENT ORDERS
         </h2>
         {orders.length === 0 ? (
-          <p className="font-['Barlow'] text-[15px] text-neutral-500">
+          <p className="font-['Barlow_Condensed'] text-[15px] text-neutral-500">
             No orders yet.{" "}
             <Link href="/shop" className="text-[#fccd21] font-[600] underline">
               Start shopping
@@ -90,10 +90,10 @@ export default async function AccountDashboard() {
                 style={{ textDecoration: "none" }}
               >
                 <div className="flex flex-col gap-1">
-                  <span className="font-['Barlow'] text-[15px] font-[600] text-neutral-800">
+                  <span className="font-['Barlow_Condensed'] text-[15px] font-[600] text-neutral-800">
                     Order #{order.id}
                   </span>
-                  <span className="font-['Barlow'] text-[13px] text-neutral-400">
+                  <span className="font-['Barlow_Condensed'] text-[13px] text-neutral-400">
                     {new Date(order.date_created).toLocaleDateString("en-GB", {
                       day: "numeric",
                       month: "short",
@@ -102,11 +102,11 @@ export default async function AccountDashboard() {
                   </span>
                 </div>
                 <div className="flex items-center gap-4">
-                  <span className="font-['Barlow'] text-[14px] font-[600] text-neutral-800">
+                  <span className="font-['Barlow_Condensed'] text-[14px] font-[600] text-neutral-800">
                     {order.currency} {order.total}
                   </span>
                   <span
-                    className={`font-['Barlow'] text-[12px] font-[600] uppercase px-2 py-1 ${
+                    className={`font-['Barlow_Condensed'] text-[12px] font-[600] uppercase px-2 py-1 ${
                       order.status === "completed"
                         ? "bg-green-100 text-green-700"
                         : order.status === "processing"

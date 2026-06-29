@@ -260,7 +260,7 @@ export default function LottieBackground() {
                 zIndex: 9999,
                 boxShadow:
                   "0px 8px 30px rgba(0,0,0,0.12), 0px 2px 10px rgba(0,0,0,0.05)",
-                fontFamily: "Inter, sans-serif",
+                fontFamily: "Barlow Condensed, sans-serif",
               }}
             >
               <h4

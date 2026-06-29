@@ -71,13 +71,13 @@ export default function CartDrawer({ isOpen }: CartDrawerProps) {
             <div className="flex-1 overflow-y-auto" style={{ padding: "16px 24px" }}>
               {items.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full" style={{ gap: 16 }}>
-                  <p className="font-barlow" style={{ fontSize: 16, color: "var(--color-text-muted)" }}>
+                  <p className="font-barlow-condensed" style={{ fontSize: 16, color: "var(--color-text-muted)" }}>
                     Your cart is empty
                   </p>
                   <Link
                     href="/shop"
                     onClick={closeCart}
-                    className="font-barlow font-bold no-underline"
+                    className="font-barlow-condensed font-bold no-underline"
                     style={{
                       padding: "12px 24px",
                       background: "var(--color-yellow)",
@@ -122,7 +122,7 @@ export default function CartDrawer({ isOpen }: CartDrawerProps) {
                       <div className="flex-1 flex flex-col justify-between">
                         <div>
                           <p
-                            className="font-barlow font-semibold"
+                            className="font-barlow-condensed font-semibold"
                             style={{
                               fontSize: 14,
                               color: "var(--color-dark)",
@@ -132,7 +132,7 @@ export default function CartDrawer({ isOpen }: CartDrawerProps) {
                             {item.name}
                           </p>
                           <p
-                            className="font-barlow font-bold"
+                            className="font-barlow-condensed font-bold"
                             style={{ fontSize: 14, color: "var(--color-dark)", marginTop: 4 }}
                           >
                             {formatPrice(item.price)}
@@ -142,7 +142,7 @@ export default function CartDrawer({ isOpen }: CartDrawerProps) {
                           <div className="flex items-center" style={{ gap: 8 }}>
                             <button
                               onClick={() => updateQuantity(item.productId, item.quantity - 1)}
-                              className="cursor-pointer font-barlow font-bold flex items-center justify-center"
+                              className="cursor-pointer font-barlow-condensed font-bold flex items-center justify-center"
                               style={{
                                 width: 28,
                                 height: 28,
@@ -154,12 +154,12 @@ export default function CartDrawer({ isOpen }: CartDrawerProps) {
                             >
                               -
                             </button>
-                            <span className="font-barlow font-semibold" style={{ fontSize: 14, color: "var(--color-dark)" }}>
+                            <span className="font-barlow-condensed font-semibold" style={{ fontSize: 14, color: "var(--color-dark)" }}>
                               {item.quantity}
                             </span>
                             <button
                               onClick={() => updateQuantity(item.productId, item.quantity + 1)}
-                              className="cursor-pointer font-barlow font-bold flex items-center justify-center"
+                              className="cursor-pointer font-barlow-condensed font-bold flex items-center justify-center"
                               style={{
                                 width: 28,
                                 height: 28,
@@ -174,7 +174,7 @@ export default function CartDrawer({ isOpen }: CartDrawerProps) {
                           </div>
                           <button
                             onClick={() => removeItem(item.productId)}
-                            className="cursor-pointer bg-transparent border-none font-barlow"
+                            className="cursor-pointer bg-transparent border-none font-barlow-condensed"
                             style={{ fontSize: 12, color: "var(--color-red)", textDecoration: "underline" }}
                           >
                             Remove
@@ -196,15 +196,15 @@ export default function CartDrawer({ isOpen }: CartDrawerProps) {
                 }}
               >
                 <div className="flex items-center justify-between" style={{ marginBottom: 16 }}>
-                  <span className="font-barlow font-semibold" style={{ fontSize: 16, color: "var(--color-dark)" }}>
+                  <span className="font-barlow-condensed font-semibold" style={{ fontSize: 16, color: "var(--color-dark)" }}>
                     Subtotal
                   </span>
-                  <span className="font-barlow font-bold" style={{ fontSize: 18, color: "var(--color-dark)" }}>
+                  <span className="font-barlow-condensed font-bold" style={{ fontSize: 18, color: "var(--color-dark)" }}>
                     {formatPrice(getTotal())}
                   </span>
                 </div>
                 <button
-                  className="w-full font-barlow font-bold cursor-pointer border-none"
+                  className="w-full font-barlow-condensed font-bold cursor-pointer border-none"
                   style={{
                     padding: "14px",
                     background: "var(--color-yellow)",

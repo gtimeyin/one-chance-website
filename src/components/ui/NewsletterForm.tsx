@@ -25,7 +25,7 @@ export default function NewsletterForm({ variant = "dark" }: NewsletterFormProps
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Email address"
-        className="flex-1 font-barlow"
+        className="flex-1 font-barlow-condensed"
         style={{
           background: isDark ? "rgba(255,255,255,0.1)" : "white",
           border: isDark ? "1px solid rgba(255,255,255,0.2)" : "1px solid var(--color-border-light)",
@@ -39,7 +39,7 @@ export default function NewsletterForm({ variant = "dark" }: NewsletterFormProps
       />
       <button
         type="submit"
-        className="font-barlow cursor-pointer flex items-center justify-center"
+        className="font-barlow-condensed cursor-pointer flex items-center justify-center"
         style={{
           background: isDark ? "white" : "var(--color-yellow)",
           color: "var(--color-dark)",

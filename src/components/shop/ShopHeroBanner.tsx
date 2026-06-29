@@ -35,7 +35,7 @@ export default function ShopHeroBanner() {
           }}
         >
           <p
-            className="font-barlow uppercase"
+            className="font-barlow-condensed uppercase"
             style={{
               fontSize: 11,
               letterSpacing: "0.08em",

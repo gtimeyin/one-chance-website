@@ -75,7 +75,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       <div className="flex flex-col relative" style={{ padding: "16px 0 8px" }}>
         <Link
           href={`/shop/${product.slug}`}
-          className="font-barlow font-medium no-underline block"
+          className="font-barlow-condensed font-medium no-underline block"
           style={{
             fontSize: 14,
             color: "var(--color-dark)",
@@ -87,7 +87,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           {product.name}
         </Link>
         <span
-          className="font-barlow"
+          className="font-barlow-condensed"
           style={{
             fontSize: 15,
             color: "var(--color-dark)",

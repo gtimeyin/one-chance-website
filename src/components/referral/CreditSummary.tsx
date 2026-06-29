@@ -25,7 +25,7 @@ export default function CreditSummary({
           <span className="font-['Barlow_Condensed'] text-[28px] font-[700] text-green-700">
             ${totalEarned.toFixed(2)}
           </span>
-          <span className="font-['Barlow'] text-[13px] text-green-600">
+          <span className="font-['Barlow_Condensed'] text-[13px] text-green-600">
             Total Earned
           </span>
         </div>
@@ -33,7 +33,7 @@ export default function CreditSummary({
           <span className="font-['Barlow_Condensed'] text-[28px] font-[700] text-orange-700">
             ${totalWithdrawn.toFixed(2)}
           </span>
-          <span className="font-['Barlow'] text-[13px] text-orange-600">
+          <span className="font-['Barlow_Condensed'] text-[13px] text-orange-600">
             Withdrawn
           </span>
         </div>
@@ -47,7 +47,7 @@ export default function CreditSummary({
           >
             ${currentBalance.toFixed(2)}
           </span>
-          <span className="font-['Barlow'] text-[13px] text-neutral-600">
+          <span className="font-['Barlow_Condensed'] text-[13px] text-neutral-600">
             Balance
           </span>
         </div>

@@ -286,11 +286,11 @@ export default function RulesContent() {
       <div
         className="w-full flex flex-col items-center justify-center text-center"
         style={{
-          background: "var(--color-yellow)",
+          background: "#ffffff",
           padding: "clamp(80px, 12vw, 140px) 24px clamp(30px, 4vw, 40px)",
         }}
       >
-        <span className="font-['Barlow'] text-[14px] font-[600] uppercase tracking-[0.2em] text-neutral-600 mb-4">
+        <span className="font-['Barlow_Condensed'] text-[14px] font-[600] uppercase tracking-[0.2em] text-neutral-600 mb-4">
           How to play
         </span>
         <h1
@@ -305,7 +305,7 @@ export default function RulesContent() {
           THE RULES
         </h1>
         <p
-          className="font-['Barlow'] font-[600] mt-6 max-w-[480px]"
+          className="font-['Barlow_Condensed'] font-[600] mt-6 max-w-[480px]"
           style={{ fontSize: 20, lineHeight: 1.5, color: "var(--color-dark)" }}
         >
           Hustle. Invest. Survive Lagos.
@@ -317,11 +317,11 @@ export default function RulesContent() {
       {/* Sticky tab bar + search */}
       <div
         className="w-full sticky top-0 z-40"
-        style={{ background: "var(--color-yellow)", borderBottom: "1px solid rgba(0,0,0,0.08)" }}
+        style={{ background: "#ffffff", borderBottom: "1px solid rgba(0,0,0,0.08)" }}
       >
         <div className="max-w-[1024px] mx-auto px-4 py-3">
           {/* Search */}
-          <div className="relative mb-3">
+          <div className="relative mb-3 max-w-[480px] mx-auto">
             <svg
               className="absolute left-3 top-1/2 -translate-y-1/2"
               width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -335,7 +335,7 @@ export default function RulesContent() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search rules... e.g. prison, salary, gbese"
-              className="w-full font-['Barlow'] text-[14px]"
+              className="w-full font-['Barlow_Condensed'] text-[14px]"
               style={{
                 background: "rgba(0,0,0,0.05)",
                 border: "none",
@@ -357,12 +357,12 @@ export default function RulesContent() {
           </div>
           {/* Tabs */}
           {!isSearching && (
-            <div className="flex items-center gap-1 overflow-x-auto [-webkit-overflow-scrolling:touch]">
+            <div className="flex items-center justify-center gap-1 overflow-x-auto [-webkit-overflow-scrolling:touch]">
               {TABS.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className="font-['Barlow'] font-[600] text-[13px] uppercase tracking-[0.06em] cursor-pointer border-none shrink-0 px-4 py-2 transition-all duration-200"
+                  className="font-['Barlow_Condensed'] font-[600] text-[13px] uppercase tracking-[0.06em] cursor-pointer border-none shrink-0 px-4 py-2 transition-all duration-200"
                   style={{
                     background: activeTab === tab.id ? "var(--color-dark)" : "transparent",
                     color: activeTab === tab.id ? "var(--color-yellow)" : "rgba(18,27,25,0.45)",
@@ -384,12 +384,12 @@ export default function RulesContent() {
           style={{ background: "white", padding: "clamp(40px, 6vw, 60px) 24px", minHeight: 400 }}
         >
           <div className="max-w-[1024px] mx-auto">
-            <p className="font-['Barlow'] mb-6" style={{ fontSize: 14, color: "rgba(18,27,25,0.5)" }}>
+            <p className="font-['Barlow_Condensed'] mb-6" style={{ fontSize: 14, color: "rgba(18,27,25,0.5)" }}>
               {searchResults!.length} result{searchResults!.length !== 1 ? "s" : ""} for &ldquo;{search}&rdquo;
             </p>
             {searchResults!.length === 0 ? (
               <div className="text-center py-16">
-                <p className="font-['Barlow'] font-[600]" style={{ fontSize: 18, color: "rgba(18,27,25,0.3)" }}>
+                <p className="font-['Barlow_Condensed'] font-[600]" style={{ fontSize: 18, color: "rgba(18,27,25,0.3)" }}>
                   No rules found. Try a different search term.
                 </p>
               </div>
@@ -401,7 +401,7 @@ export default function RulesContent() {
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.03 }}
-                    className="font-['Barlow']"
+                    className="font-['Barlow_Condensed']"
                     style={{
                       background: "rgba(0,0,0,0.03)",
                       padding: "16px 20px",
@@ -464,7 +464,7 @@ export default function RulesContent() {
           Ready to Play?
         </h2>
         <p
-          className="font-['Barlow'] mb-8"
+          className="font-['Barlow_Condensed'] mb-8"
           style={{ fontSize: 15, color: "rgba(255,255,255,0.6)", maxWidth: 400 }}
         >
           Now that you know the rules, grab a copy and find out who&apos;s the real Lagos big shot.
@@ -498,7 +498,7 @@ function OverviewTab() {
           >
             Watch Instead
           </h2>
-          <p className="font-['Barlow'] mb-6" style={{ fontSize: 14, color: "rgba(18,27,25,0.6)" }}>
+          <p className="font-['Barlow_Condensed'] mb-6" style={{ fontSize: 14, color: "rgba(18,27,25,0.6)" }}>
             Reading is the worst way to learn a game. Watch and play along.
           </p>
           <div className="relative w-full" style={{ paddingBottom: "56.25%", borderRadius: 4, overflow: "hidden" }}>
@@ -527,7 +527,7 @@ function OverviewTab() {
             The Objective
           </h2>
           <p
-            className="font-['Barlow'] max-w-[600px]"
+            className="font-['Barlow_Condensed'] max-w-[600px]"
             style={{ fontSize: 16, lineHeight: 1.7, color: "rgba(18,27,25,0.7)" }}
           >
             Use strategy and smart investments to build your wealth while dodging the chaos that faces every everyday Nigerian. When the game ends, the richest player wins.
@@ -547,14 +547,14 @@ function OverviewTab() {
           >
             What&apos;s in the Box
           </h2>
-          <p className="font-['Barlow'] mb-6" style={{ fontSize: 14, color: "rgba(18,27,25,0.6)" }}>
+          <p className="font-['Barlow_Condensed'] mb-6" style={{ fontSize: 14, color: "rgba(18,27,25,0.6)" }}>
             Everything you need to start playing.
           </p>
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-3">
             {gameComponents.map((comp) => (
               <div
                 key={comp.name}
-                className="flex flex-col items-center justify-center font-['Barlow'] text-center"
+                className="flex flex-col items-center justify-center font-['Barlow_Condensed'] text-center"
                 style={{ background: "rgba(0,0,0,0.05)", padding: "20px 12px", borderRadius: 4 }}
               >
                 <span style={{ fontSize: 32, fontWeight: 800, color: "var(--color-dark)" }}>{comp.count}</span>
@@ -577,16 +577,16 @@ function OverviewTab() {
           >
             Know the Lingo
           </h2>
-          <p className="font-['Barlow'] mb-6" style={{ fontSize: 14, color: "rgba(18,27,25,0.6)" }}>
+          <p className="font-['Barlow_Condensed'] mb-6" style={{ fontSize: 14, color: "rgba(18,27,25,0.6)" }}>
             Key terms you&apos;ll hear during the game.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {keyTerms.map((item) => (
               <div key={item.term} style={{ background: "rgba(0,0,0,0.05)", padding: "16px 20px", borderRadius: 4 }}>
-                <h3 className="font-['Barlow'] font-[700]" style={{ fontSize: 16, color: "var(--color-dark)", marginBottom: 4 }}>
+                <h3 className="font-['Barlow_Condensed'] font-[700]" style={{ fontSize: 16, color: "var(--color-dark)", marginBottom: 4 }}>
                   {item.term}
                 </h3>
-                <p className="font-['Barlow']" style={{ fontSize: 14, lineHeight: 1.6, color: "rgba(18,27,25,0.7)" }}>
+                <p className="font-['Barlow_Condensed']" style={{ fontSize: 14, lineHeight: 1.6, color: "rgba(18,27,25,0.7)" }}>
                   {item.definition}
                 </p>
               </div>
@@ -605,7 +605,7 @@ function SetupTab() {
     <>
       <div className="w-full" style={{ background: "#7CB342", padding: "clamp(60px, 8vw, 100px) 24px" }}>
         <div className="max-w-[1024px] mx-auto">
-          <span className="font-['Barlow'] text-[13px] font-[600] uppercase tracking-[0.15em]" style={{ color: "rgba(255,255,255,0.5)" }}>
+          <span className="font-['Barlow_Condensed'] text-[13px] font-[600] uppercase tracking-[0.15em]" style={{ color: "rgba(255,255,255,0.5)" }}>
             Before you begin
           </span>
           <h2 className="font-['Barlow_Condensed'] font-[800] uppercase mb-10 text-white" style={{ fontSize: "clamp(32px, 5vw, 48px)", letterSpacing: "-2px", marginTop: 4 }}>
@@ -617,7 +617,7 @@ function SetupTab() {
                 <span className="font-['Barlow_Condensed'] font-[800] shrink-0" style={{ fontSize: 36, lineHeight: 1, color: "rgba(255,255,255,0.25)" }}>
                   {step.number}
                 </span>
-                <p className="font-['Barlow']" style={{ fontSize: 15, lineHeight: 1.6, color: "rgba(255,255,255,0.9)", paddingTop: 4 }}>
+                <p className="font-['Barlow_Condensed']" style={{ fontSize: 15, lineHeight: 1.6, color: "rgba(255,255,255,0.9)", paddingTop: 4 }}>
                   {step.text}
                 </p>
               </div>
@@ -629,25 +629,25 @@ function SetupTab() {
       {/* JAMB */}
       <div className="w-full" style={{ background: "#558B2F", padding: "clamp(60px, 8vw, 100px) 24px" }}>
         <div className="max-w-[1024px] mx-auto">
-          <span className="font-['Barlow'] text-[13px] font-[600] uppercase tracking-[0.15em]" style={{ color: "rgba(255,255,255,0.4)" }}>
+          <span className="font-['Barlow_Condensed'] text-[13px] font-[600] uppercase tracking-[0.15em]" style={{ color: "rgba(255,255,255,0.4)" }}>
             Your first challenge
           </span>
           <h2 className="font-['Barlow_Condensed'] font-[800] uppercase mb-3 text-white" style={{ fontSize: "clamp(32px, 5vw, 48px)", letterSpacing: "-2px", marginTop: 4 }}>
             Pass JAMB First
           </h2>
-          <p className="font-['Barlow'] text-white mb-8" style={{ fontSize: 16, lineHeight: 1.6, opacity: 0.85, maxWidth: 600 }}>
+          <p className="font-['Barlow_Condensed'] text-white mb-8" style={{ fontSize: 16, lineHeight: 1.6, opacity: 0.85, maxWidth: 600 }}>
             Before you can start your Lagos journey, you need to pass JAMB. Roll a 4 or higher to get in. You have 3 tries.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
             {jambRolls.map((j) => (
-              <div key={j.roll} className="flex flex-col items-center text-center font-['Barlow']" style={{ background: "rgba(255,255,255,0.1)", padding: "28px 20px", borderRadius: 4 }}>
+              <div key={j.roll} className="flex flex-col items-center text-center font-['Barlow_Condensed']" style={{ background: "rgba(255,255,255,0.1)", padding: "28px 20px", borderRadius: 4 }}>
                 <span style={{ fontSize: 36 }}>{j.icon}</span>
                 <span style={{ fontWeight: 800, fontSize: 28, color: "#C5E1A5", marginTop: 8 }}>{j.roll}</span>
                 <span style={{ fontSize: 14, color: "rgba(255,255,255,0.8)", marginTop: 6 }}>{j.result}</span>
               </div>
             ))}
           </div>
-          <div className="font-['Barlow']" style={{ background: "rgba(0,0,0,0.15)", padding: "20px 24px", borderRadius: 4, borderLeft: "4px solid #C5E1A5" }}>
+          <div className="font-['Barlow_Condensed']" style={{ background: "rgba(0,0,0,0.15)", padding: "20px 24px", borderRadius: 4, borderLeft: "4px solid #C5E1A5" }}>
             <p style={{ fontSize: 15, lineHeight: 1.6, color: "rgba(255,255,255,0.85)" }}>
               <strong>Failed all 3 tries?</strong> Go to SALARY and collect only N100k. Life isn&apos;t fair to everyone.
             </p>
@@ -672,13 +672,13 @@ function TilesTab({
   return (
     <div className="w-full" style={{ background: "#1976B8", padding: "clamp(60px, 8vw, 100px) 24px" }}>
       <div className="max-w-[1024px] mx-auto">
-        <span className="font-['Barlow'] text-[13px] font-[600] uppercase tracking-[0.15em]" style={{ color: "rgba(255,255,255,0.4)" }}>
+        <span className="font-['Barlow_Condensed'] text-[13px] font-[600] uppercase tracking-[0.15em]" style={{ color: "rgba(255,255,255,0.4)" }}>
           The board
         </span>
         <h2 className="font-['Barlow_Condensed'] font-[800] uppercase mb-3 text-white" style={{ fontSize: "clamp(32px, 5vw, 48px)", letterSpacing: "-2px", marginTop: 4 }}>
           Every Tile Explained
         </h2>
-        <p className="font-['Barlow'] mb-8" style={{ fontSize: 15, color: "rgba(255,255,255,0.6)" }}>
+        <p className="font-['Barlow_Condensed'] mb-8" style={{ fontSize: 15, color: "rgba(255,255,255,0.6)" }}>
           Tap a tile to see what happens when you land on it.
         </p>
 
@@ -687,7 +687,7 @@ function TilesTab({
             <button
               key={tile.title}
               onClick={() => setActiveTile(i)}
-              className="font-['Barlow'] font-[600] text-[13px] uppercase tracking-[0.04em] cursor-pointer border-none transition-all duration-200"
+              className="font-['Barlow_Condensed'] font-[600] text-[13px] uppercase tracking-[0.04em] cursor-pointer border-none transition-all duration-200"
               style={{
                 background: activeTile === i ? tile.color : "rgba(255,255,255,0.1)",
                 color: activeTile === i ? "#111" : "rgba(255,255,255,0.6)",
@@ -712,11 +712,11 @@ function TilesTab({
             <div className="flex items-center gap-4 mb-3">
               <span style={{ fontSize: 36 }}>{active.emoji}</span>
               <div>
-                <h3 className="font-['Barlow'] font-[700] uppercase" style={{ fontSize: 24, color: "white" }}>{active.title}</h3>
-                <span className="font-['Barlow'] font-[600]" style={{ fontSize: 14, color: active.color }}>{active.short}</span>
+                <h3 className="font-['Barlow_Condensed'] font-[700] uppercase" style={{ fontSize: 24, color: "white" }}>{active.title}</h3>
+                <span className="font-['Barlow_Condensed'] font-[600]" style={{ fontSize: 14, color: active.color }}>{active.short}</span>
               </div>
             </div>
-            <p className="font-['Barlow']" style={{ fontSize: 16, lineHeight: 1.7, color: "rgba(255,255,255,0.9)", marginTop: 8 }}>
+            <p className="font-['Barlow_Condensed']" style={{ fontSize: 16, lineHeight: 1.7, color: "rgba(255,255,255,0.9)", marginTop: 8 }}>
               {active.text}
             </p>
           </motion.div>
@@ -724,10 +724,10 @@ function TilesTab({
 
         {activeTile === 6 && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25, delay: 0.1 }} className="mt-6">
-            <h3 className="font-['Barlow'] font-[700] uppercase text-white mb-4" style={{ fontSize: 16 }}>Fare Table</h3>
+            <h3 className="font-['Barlow_Condensed'] font-[700] uppercase text-white mb-4" style={{ fontSize: 16 }}>Fare Table</h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
               {busStopPrices.map((item) => (
-                <div key={item.destination} className="font-['Barlow'] flex flex-col" style={{ background: "rgba(255,255,255,0.1)", padding: "14px 16px", borderRadius: 4 }}>
+                <div key={item.destination} className="font-['Barlow_Condensed'] flex flex-col" style={{ background: "rgba(255,255,255,0.1)", padding: "14px 16px", borderRadius: 4 }}>
                   <span style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", fontWeight: 600 }}>{item.destination}</span>
                   <span style={{ fontSize: 18, fontWeight: 700, color: "white" }}>{item.price}</span>
                 </div>
@@ -747,7 +747,7 @@ function ModesTab() {
     <>
       <div className="w-full" style={{ background: "#6A1B9A", padding: "clamp(60px, 8vw, 100px) 24px" }}>
         <div className="max-w-[1024px] mx-auto">
-          <span className="font-['Barlow'] text-[13px] font-[600] uppercase tracking-[0.15em]" style={{ color: "rgba(255,255,255,0.4)" }}>
+          <span className="font-['Barlow_Condensed'] text-[13px] font-[600] uppercase tracking-[0.15em]" style={{ color: "rgba(255,255,255,0.4)" }}>
             Choose your style
           </span>
           <h2 className="font-['Barlow_Condensed'] font-[800] uppercase mb-10 text-white" style={{ fontSize: "clamp(32px, 5vw, 48px)", letterSpacing: "-2px", marginTop: 4 }}>
@@ -756,12 +756,12 @@ function ModesTab() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {gameModes.map((mode) => (
               <div key={mode.title} className="flex flex-col" style={{ background: "rgba(255,255,255,0.08)", padding: "28px 24px", borderRadius: 4 }}>
-                <span className="font-['Barlow'] font-[700] uppercase text-[11px] tracking-[0.1em]" style={{ color: "#CE93D8", marginBottom: 8 }}>
+                <span className="font-['Barlow_Condensed'] font-[700] uppercase text-[11px] tracking-[0.1em]" style={{ color: "#CE93D8", marginBottom: 8 }}>
                   {mode.tag}
                 </span>
-                <h3 className="font-['Barlow'] font-[700]" style={{ fontSize: 20, color: "white", marginBottom: 4 }}>{mode.title}</h3>
-                <span className="font-['Barlow']" style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", marginBottom: 12 }}>{mode.subtitle}</span>
-                <p className="font-['Barlow']" style={{ fontSize: 14, lineHeight: 1.7, color: "rgba(255,255,255,0.8)" }}>{mode.description}</p>
+                <h3 className="font-['Barlow_Condensed'] font-[700]" style={{ fontSize: 20, color: "white", marginBottom: 4 }}>{mode.title}</h3>
+                <span className="font-['Barlow_Condensed']" style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", marginBottom: 12 }}>{mode.subtitle}</span>
+                <p className="font-['Barlow_Condensed']" style={{ fontSize: 14, lineHeight: 1.7, color: "rgba(255,255,255,0.8)" }}>{mode.description}</p>
               </div>
             ))}
           </div>
@@ -774,7 +774,7 @@ function ModesTab() {
           <h2 className="font-['Barlow_Condensed'] font-[800] uppercase mb-4 text-white" style={{ fontSize: "clamp(28px, 4vw, 40px)", letterSpacing: "-1px" }}>
             Game Over
           </h2>
-          <p className="font-['Barlow'] max-w-[520px] mx-auto" style={{ fontSize: 16, lineHeight: 1.7, color: "rgba(255,255,255,0.8)" }}>
+          <p className="font-['Barlow_Condensed'] max-w-[520px] mx-auto" style={{ fontSize: 16, lineHeight: 1.7, color: "rgba(255,255,255,0.8)" }}>
             When the last One Chance card is drawn or the timer runs out, everyone counts up. Cash in hand plus return on all investments. The richest player standing wins.
           </p>
         </div>
@@ -789,7 +789,7 @@ function DisputesTab() {
   return (
     <div className="w-full" style={{ background: "#C62828", padding: "clamp(60px, 8vw, 100px) 24px" }}>
       <div className="max-w-[1024px] mx-auto">
-        <span className="font-['Barlow'] text-[13px] font-[600] uppercase tracking-[0.15em]" style={{ color: "rgba(255,255,255,0.4)" }}>
+        <span className="font-['Barlow_Condensed'] text-[13px] font-[600] uppercase tracking-[0.15em]" style={{ color: "rgba(255,255,255,0.4)" }}>
           Mobile court
         </span>
         <h2 className="font-['Barlow_Condensed'] font-[800] uppercase mb-10 text-white" style={{ fontSize: "clamp(32px, 5vw, 48px)", letterSpacing: "-2px", marginTop: 4 }}>
@@ -798,12 +798,12 @@ function DisputesTab() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {disputeGroups.map((group) => (
             <div key={group.title}>
-              <h3 className="font-['Barlow'] font-[700] uppercase" style={{ fontSize: 14, letterSpacing: "0.08em", color: "rgba(255,255,255,0.5)", marginBottom: 12 }}>
+              <h3 className="font-['Barlow_Condensed'] font-[700] uppercase" style={{ fontSize: 14, letterSpacing: "0.08em", color: "rgba(255,255,255,0.5)", marginBottom: 12 }}>
                 {group.title}
               </h3>
               <div className="flex flex-col gap-3">
                 {group.items.map((item, i) => (
-                  <div key={i} className="font-['Barlow']" style={{ background: "rgba(255,255,255,0.08)", padding: "14px 16px", borderRadius: 4, fontSize: 14, lineHeight: 1.6, color: "rgba(255,255,255,0.85)" }}>
+                  <div key={i} className="font-['Barlow_Condensed']" style={{ background: "rgba(255,255,255,0.08)", padding: "14px 16px", borderRadius: 4, fontSize: 14, lineHeight: 1.6, color: "rgba(255,255,255,0.85)" }}>
                     {item}
                   </div>
                 ))}

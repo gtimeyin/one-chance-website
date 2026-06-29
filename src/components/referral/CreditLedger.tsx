@@ -39,7 +39,7 @@ export default function CreditLedger({ entries }: Props) {
         <span className="font-['Barlow_Condensed'] text-[20px] font-[700] text-neutral-800 uppercase">
           Recent Activity
         </span>
-        <p className="font-['Barlow'] text-[14px] text-neutral-500">
+        <p className="font-['Barlow_Condensed'] text-[14px] text-neutral-500">
           No transactions yet. Start sharing your referral code!
         </p>
       </div>
@@ -55,19 +55,19 @@ export default function CreditLedger({ entries }: Props) {
       <div className="flex flex-col">
         {/* Header */}
         <div className="flex items-center px-4 py-2 bg-neutral-50 border-b border-neutral-200">
-          <span className="flex-1 font-['Barlow'] text-[12px] font-[600] text-neutral-500 uppercase">
+          <span className="flex-1 font-['Barlow_Condensed'] text-[12px] font-[600] text-neutral-500 uppercase">
             Date
           </span>
-          <span className="w-28 font-['Barlow'] text-[12px] font-[600] text-neutral-500 uppercase">
+          <span className="w-28 font-['Barlow_Condensed'] text-[12px] font-[600] text-neutral-500 uppercase">
             Type
           </span>
-          <span className="flex-1 font-['Barlow'] text-[12px] font-[600] text-neutral-500 uppercase">
+          <span className="flex-1 font-['Barlow_Condensed'] text-[12px] font-[600] text-neutral-500 uppercase">
             Description
           </span>
-          <span className="w-24 text-right font-['Barlow'] text-[12px] font-[600] text-neutral-500 uppercase">
+          <span className="w-24 text-right font-['Barlow_Condensed'] text-[12px] font-[600] text-neutral-500 uppercase">
             Amount
           </span>
-          <span className="w-24 text-right font-['Barlow'] text-[12px] font-[600] text-neutral-500 uppercase">
+          <span className="w-24 text-right font-['Barlow_Condensed'] text-[12px] font-[600] text-neutral-500 uppercase">
             Balance
           </span>
         </div>
@@ -78,7 +78,7 @@ export default function CreditLedger({ entries }: Props) {
             key={entry.id}
             className="flex items-center px-4 py-3 border-b border-neutral-100 last:border-b-0"
           >
-            <span className="flex-1 font-['Barlow'] text-[13px] text-neutral-600">
+            <span className="flex-1 font-['Barlow_Condensed'] text-[13px] text-neutral-600">
               {new Date(entry.created_at).toLocaleDateString("en-GB", {
                 day: "numeric",
                 month: "short",
@@ -86,22 +86,22 @@ export default function CreditLedger({ entries }: Props) {
             </span>
             <span className="w-28">
               <span
-                className={`inline-block px-2 py-0.5 font-['Barlow'] text-[11px] font-[600] uppercase ${typeBadgeClasses(entry.type)}`}
+                className={`inline-block px-2 py-0.5 font-['Barlow_Condensed'] text-[11px] font-[600] uppercase ${typeBadgeClasses(entry.type)}`}
               >
                 {typeLabel(entry.type)}
               </span>
             </span>
-            <span className="flex-1 font-['Barlow'] text-[13px] text-neutral-600 truncate">
+            <span className="flex-1 font-['Barlow_Condensed'] text-[13px] text-neutral-600 truncate">
               {entry.description || "-"}
             </span>
             <span
-              className={`w-24 text-right font-['Barlow'] text-[14px] font-[600] ${
+              className={`w-24 text-right font-['Barlow_Condensed'] text-[14px] font-[600] ${
                 entry.amount > 0 ? "text-green-600" : "text-orange-600"
               }`}
             >
               {entry.amount > 0 ? "+" : ""}${entry.amount.toFixed(2)}
             </span>
-            <span className="w-24 text-right font-['Barlow'] text-[13px] text-neutral-500">
+            <span className="w-24 text-right font-['Barlow_Condensed'] text-[13px] text-neutral-500">
               ${entry.balance_after.toFixed(2)}
             </span>
           </div>

@@ -22,7 +22,7 @@ export default function BlogCard({ post }: BlogCardProps) {
         />
         {/* Category tag */}
         <span
-          className="absolute font-barlow font-bold"
+          className="absolute font-barlow-condensed font-bold"
           style={{
             bottom: 12,
             left: 12,
@@ -47,7 +47,7 @@ export default function BlogCard({ post }: BlogCardProps) {
             <circle cx="12" cy="12" r="10" />
             <polyline points="12 6 12 12 16 14" />
           </svg>
-          <span className="font-barlow">{post.readTime}</span>
+          <span className="font-barlow-condensed">{post.readTime}</span>
         </div>
       </div>
 
@@ -67,7 +67,7 @@ export default function BlogCard({ post }: BlogCardProps) {
       </Link>
 
       {/* Description */}
-      <p className="font-barlow" style={{ fontSize: 13, color: "var(--color-text-muted)", lineHeight: 1.5 }}>
+      <p className="font-barlow-condensed" style={{ fontSize: 13, color: "var(--color-text-muted)", lineHeight: 1.5 }}>
         {post.description}
       </p>
 
@@ -75,7 +75,7 @@ export default function BlogCard({ post }: BlogCardProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div
-            className="rounded-full flex items-center justify-center font-barlow font-bold"
+            className="rounded-full flex items-center justify-center font-barlow-condensed font-bold"
             style={{
               width: 24,
               height: 24,
@@ -87,10 +87,10 @@ export default function BlogCard({ post }: BlogCardProps) {
             {post.author.name.charAt(0)}
           </div>
           <div>
-            <p className="font-barlow font-semibold" style={{ fontSize: 11, color: "var(--color-dark)" }}>
+            <p className="font-barlow-condensed font-semibold" style={{ fontSize: 11, color: "var(--color-dark)" }}>
               {post.author.name}
             </p>
-            <p className="font-barlow" style={{ fontSize: 10, color: "var(--color-text-muted)" }}>
+            <p className="font-barlow-condensed" style={{ fontSize: 10, color: "var(--color-text-muted)" }}>
               {post.date}
             </p>
           </div>

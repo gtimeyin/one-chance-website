@@ -95,11 +95,11 @@ function BlogContent({
                 gap: 8,
               }}
             >
-              <p className="font-barlow" style={{ fontSize: 12, color: "var(--color-dark)" }}>
+              <p className="font-barlow-condensed" style={{ fontSize: 12, color: "var(--color-dark)" }}>
                 ONE CHANCE BLOG &bull; {post.date} &bull; {post.readTime}
               </p>
               <div className="flex items-center gap-2">
-                <p className="font-barlow" style={{ fontSize: 12, color: "var(--color-dark)" }}>
+                <p className="font-barlow-condensed" style={{ fontSize: 12, color: "var(--color-dark)" }}>
                   By {post.author.name}
                 </p>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-dark)" strokeWidth="2">
@@ -133,7 +133,7 @@ function BlogContent({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="font-barlow"
+              className="font-barlow-condensed"
               style={{
                 fontSize: 15,
                 color: "var(--color-text-muted)",
@@ -159,7 +159,7 @@ function BlogContent({
               }}
             >
               <div className="flex items-center gap-2">
-                <span className="font-barlow font-semibold" style={{ fontSize: 13, color: "var(--color-dark)" }}>
+                <span className="font-barlow-condensed font-semibold" style={{ fontSize: 13, color: "var(--color-dark)" }}>
                   Can&apos;t stop gisting? Share the fun
                 </span>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-dark)" strokeWidth="2">
@@ -188,7 +188,7 @@ function BlogContent({
 
             {/* Comment section */}
             <div style={{ marginBottom: 60 }}>
-              <p className="font-barlow" style={{ fontSize: 13, color: "var(--color-text-muted)", marginBottom: 16 }}>
+              <p className="font-barlow-condensed" style={{ fontSize: 13, color: "var(--color-text-muted)", marginBottom: 16 }}>
                 Great read?
               </p>
               <CommentForm />
@@ -219,7 +219,7 @@ function BlogContent({
               </h2>
               <Link
                 href="/updates"
-                className="font-barlow font-bold uppercase no-underline flex items-center gap-1 shrink-0"
+                className="font-barlow-condensed font-bold uppercase no-underline flex items-center gap-1 shrink-0"
                 style={{ fontSize: 12, color: "var(--color-dark)", textDecoration: "none" }}
               >
                 VIEW ALL BLOG
@@ -267,7 +267,7 @@ function BlogContent({
               DON&apos;T MISS AN<br />UPDATE
             </h2>
             <div>
-              <p className="font-barlow" style={{ fontSize: 14, color: "var(--color-text-muted)", marginBottom: 12 }}>
+              <p className="font-barlow-condensed" style={{ fontSize: 14, color: "var(--color-text-muted)", marginBottom: 12 }}>
                 Subscribe to our newsletter
               </p>
               <NewsletterForm variant="light" />

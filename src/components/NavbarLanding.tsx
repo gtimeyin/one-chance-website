@@ -32,7 +32,7 @@ export default function Navbar() {
           aria-label="Toggle menu"
         >
           <span
-            className="font-barlow text-lg font-semibold"
+            className="font-barlow-condensed text-lg font-semibold"
             style={{
               fontSize: 18,
               lineHeight: "24px",
