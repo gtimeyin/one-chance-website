@@ -1,61 +1,42 @@
-import "server-only";
-import { cookies, headers } from "next/headers";
-
 export const COUNTRY_COOKIE = "oc-country";
 export const DEFAULT_COUNTRY = "NG";
 
-// Country → currency (ISO 4217). Defaults to NGN for anywhere we don't list.
-// Extend as your WCPBC zones expand. Currency is what we'll charge in;
-// country is the geo identity (passed to Woo's `?country=XX` for WCPBC).
-const CURRENCY_BY_COUNTRY: Record<string, string> = {
-  NG: "NGN",
-  KE: "KES",
-  GB: "GBP",
-  IE: "EUR",
-  DE: "EUR",
-  FR: "EUR",
-  ES: "EUR",
-  IT: "EUR",
-  NL: "EUR",
-  BE: "EUR",
-  AT: "EUR",
-  PT: "EUR",
-  FI: "EUR",
-  GR: "EUR",
-  US: "USD",
-  CA: "USD",
+// Woo store's base currency (set in WP admin → WooCommerce → Settings → General).
+// Used when the visitor's country isn't covered by a WCPBC zone.
+export const BASE_CURRENCY = "USD";
+
+/**
+ * WCPBC zones configured in WP admin → WooCommerce → Settings → Pricing Zones.
+ * The `slug` here MUST match the prefix Woo uses in product meta keys
+ * (`_<slug>_price`, `_<slug>_regular_price`, `_<slug>_sale_price`). Extend
+ * this map whenever you add a new zone in the admin.
+ */
+export const ZONES: Record<string, { currency: string; countries: string[] }> = {
+  nigeria: { currency: "NGN", countries: ["NG"] },
+  kenya: { currency: "KES", countries: ["KE"] },
+  "united-kingdom": { currency: "GBP", countries: ["GB"] },
+  "north-america": { currency: "USD", countries: ["US", "CA"] },
+  europe: {
+    currency: "EUR",
+    countries: [
+      "AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR",
+      "DE", "GR", "HU", "IE", "IT", "LV", "LT", "LU", "MT", "NL",
+      "PL", "PT", "RO", "SK", "SI", "ES", "SE",
+      // EFTA / EU-adjacent that often share EUR-zone pricing:
+      "CH", "NO", "IS", "LI",
+    ],
+  },
 };
 
-export function currencyForCountry(country: string): string {
-  return CURRENCY_BY_COUNTRY[country.toUpperCase()] ?? "NGN";
-}
-
-function readGeoHeaders(h: Headers): string | null {
-  // Vercel, Cloudflare, then a generic X-Country header for proxies.
-  const v = h.get("x-vercel-ip-country");
-  if (v && v.length === 2) return v.toUpperCase();
-  const c = h.get("cf-ipcountry");
-  if (c && c.length === 2 && c !== "XX") return c.toUpperCase();
-  const x = h.get("x-country");
-  if (x && x.length === 2) return x.toUpperCase();
+export function zoneSlugForCountry(country: string): string | null {
+  const c = country.toUpperCase();
+  for (const [slug, info] of Object.entries(ZONES)) {
+    if (info.countries.includes(c)) return slug;
+  }
   return null;
 }
 
-/**
- * Country to use for this request:
- *  1. `oc-country` cookie (user override or previously detected)
- *  2. Geo header from Vercel/Cloudflare
- *  3. DEFAULT_COUNTRY
- */
-export async function getActiveCountry(): Promise<string> {
-  const c = await cookies();
-  const cookieValue = c.get(COUNTRY_COOKIE)?.value;
-  if (cookieValue && cookieValue.length === 2) return cookieValue.toUpperCase();
-
-  const h = await headers();
-  return readGeoHeaders(h) ?? DEFAULT_COUNTRY;
-}
-
-export async function getActiveCurrency(): Promise<string> {
-  return currencyForCountry(await getActiveCountry());
+export function currencyForCountry(country: string): string {
+  const slug = zoneSlugForCountry(country);
+  return slug ? ZONES[slug].currency : BASE_CURRENCY;
 }

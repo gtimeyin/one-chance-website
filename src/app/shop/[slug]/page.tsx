@@ -6,7 +6,7 @@ import {
   type WooProduct,
 } from "@/lib/woocommerce";
 import { stripHtml, truncate, getImageSrc } from "@/lib/utils";
-import { getActiveCountry } from "@/lib/currency";
+import { getActiveCountry } from "@/lib/currency.server";
 import ProductDetailClient from "./ProductDetailClient";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";

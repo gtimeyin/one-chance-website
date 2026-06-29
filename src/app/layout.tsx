@@ -6,7 +6,7 @@ import ReferralCodeCapture from "@/components/referral/ReferralCodeCapture";
 import AnalyticsLoader from "@/components/analytics/AnalyticsLoader";
 import CookieConsent from "@/components/analytics/CookieConsent";
 import { CurrencyProvider } from "@/components/CurrencyProvider";
-import { getActiveCurrency } from "@/lib/currency";
+import { getActiveCurrency } from "@/lib/currency.server";
 import { siteUrl } from "@/lib/site";
 import { Suspense } from "react";
 import "./globals.css";

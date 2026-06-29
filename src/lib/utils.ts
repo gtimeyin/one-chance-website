@@ -5,7 +5,12 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // Currencies typically rendered without decimal places.
-const ZERO_DECIMAL_CURRENCIES = new Set(["NGN", "JPY", "KRW", "VND", "CLP"]);
+const ZERO_DECIMAL_CURRENCIES = new Set(["NGN", "JPY", "KRW", "VND", "CLP", "KES"]);
+
+// Override ICU's narrowSymbol where the local convention differs.
+const CURRENCY_SYMBOL_OVERRIDES: Record<string, string> = {
+  KES: "KSh",
+};
 
 export function formatPrice(
   price: number | string,
@@ -14,12 +19,15 @@ export function formatPrice(
 ): string {
   const numericPrice = typeof price === "string" ? parseFloat(price) : price;
   const noDecimals = ZERO_DECIMAL_CURRENCIES.has(currency);
-  return new Intl.NumberFormat(locale, {
+  const formatted = new Intl.NumberFormat(locale, {
     style: "currency",
     currency,
+    currencyDisplay: "narrowSymbol",
     minimumFractionDigits: noDecimals ? 0 : 2,
     maximumFractionDigits: noDecimals ? 0 : 2,
   }).format(numericPrice);
+  const override = CURRENCY_SYMBOL_OVERRIDES[currency];
+  return override ? formatted.replace(currency, override) : formatted;
 }
 
 export function stripHtml(html: string): string {

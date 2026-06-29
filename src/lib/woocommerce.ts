@@ -1,6 +1,7 @@
 import WooCommerceRestApi from "@woocommerce/woocommerce-rest-api";
 import { unstable_cache } from "next/cache";
 import { createLogger } from "./logger";
+import { zoneSlugForCountry } from "./currency";
 
 const log = createLogger("woocommerce");
 
@@ -91,6 +92,34 @@ export function getMetaJson<T>(product: WooProduct, key: string): T | null {
   }
 }
 
+/**
+ * Override a product's `price`/`regular_price`/`sale_price` with the WCPBC
+ * zone-specific values stored in meta_data (e.g. `_nigeria_regular_price`).
+ * WCPBC ignores the REST `?country=` param, so we apply the zone here on the
+ * server before products leave the data layer. If no zone matches the country,
+ * the base prices (in the store's base currency) are returned unchanged.
+ */
+export function applyZonePricing(product: WooProduct, country: string | undefined): WooProduct {
+  if (!country) return product;
+  const zone = zoneSlugForCountry(country);
+  if (!zone) return product;
+
+  const zonePrice = getMetaValue(product, `_${zone}_price`);
+  if (!zonePrice) return product;
+
+  const regular = getMetaValue(product, `_${zone}_regular_price`) ?? zonePrice;
+  const sale = getMetaValue(product, `_${zone}_sale_price`);
+  const onSale = Boolean(sale && parseFloat(sale) < parseFloat(regular));
+
+  return {
+    ...product,
+    price: zonePrice,
+    regular_price: regular,
+    sale_price: sale ?? "",
+    on_sale: onSale,
+  };
+}
+
 const hasApiCredentials = (): boolean => {
   const key = process.env.WOOCOMMERCE_CONSUMER_KEY;
   const secret = process.env.WOOCOMMERCE_CONSUMER_SECRET;
@@ -145,10 +174,10 @@ export async function getProducts(params?: {
       orderby: params?.orderby || "date",
       order: params?.order || "desc",
       status: "publish",
-      ...(params?.country && { country: params.country }),
     });
 
-    return response.data;
+    const products: WooProduct[] = response.data;
+    return products.map((p) => applyZonePricing(p, params?.country));
   } catch (error) {
     log.error("Error fetching products", error);
     return [];
@@ -160,11 +189,9 @@ export async function getProduct(slug: string, country?: string): Promise<WooPro
   if (!client) return null;
 
   try {
-    const response = await client.get("products", {
-      slug,
-      ...(country && { country }),
-    });
-    return response.data[0] || null;
+    const response = await client.get("products", { slug });
+    const product = response.data[0] as WooProduct | undefined;
+    return product ? applyZonePricing(product, country) : null;
   } catch (error) {
     log.error("Error fetching product", error);
     return null;
@@ -176,9 +203,9 @@ export async function getProductById(id: number, country?: string): Promise<WooP
   if (!client) return null;
 
   try {
-    const queryParams = country ? `?country=${country}` : "";
-    const response = await client.get(`products/${id}${queryParams}`);
-    return response.data;
+    const response = await client.get(`products/${id}`);
+    const product = response.data as WooProduct | undefined;
+    return product ? applyZonePricing(product, country) : null;
   } catch (error) {
     log.error("Error fetching product by ID", error);
     return null;
@@ -199,9 +226,9 @@ export async function getProductsByIds(ids: number[], country?: string): Promise
     const response = await client.get("products", {
       include: ids.join(","),
       per_page: ids.length,
-      ...(country && { country }),
     });
-    return response.data;
+    const products: WooProduct[] = response.data;
+    return products.map((p) => applyZonePricing(p, country));
   } catch (error) {
     log.error("Error fetching products by IDs", error);
     return [];
@@ -241,6 +268,94 @@ export async function createProductReview(data: {
   if (!client) throw new Error("API not configured");
 
   const response = await client.post("products/reviews", data);
+  return response.data;
+}
+
+// ─── Shipping zones ──────────────────────────────────────────────
+
+export interface WooShippingZone {
+  id: number;
+  name: string;
+  order: number;
+}
+
+export interface WooShippingZoneLocation {
+  code: string;       // ISO 3166-1 alpha-2 country code (or state code for "state" type)
+  type: "country" | "state" | "postcode" | "continent";
+}
+
+export interface WooShippingMethod {
+  id: number;             // instance id
+  instance_id: number;
+  title: string;
+  order: number;
+  enabled: boolean;
+  method_id: string;      // e.g. "flat_rate", "free_shipping", "local_pickup"
+  method_title: string;
+  method_description: string;
+  settings?: Record<string, { id: string; value: string }>;
+}
+
+export async function getShippingZones(): Promise<WooShippingZone[]> {
+  const client = getApiClient();
+  if (!client) return [];
+  try {
+    const response = await client.get("shipping/zones");
+    return response.data;
+  } catch (error) {
+    log.error("Error fetching shipping zones", error);
+    return [];
+  }
+}
+
+export async function getShippingZoneLocations(
+  zoneId: number
+): Promise<WooShippingZoneLocation[]> {
+  const client = getApiClient();
+  if (!client) return [];
+  try {
+    const response = await client.get(`shipping/zones/${zoneId}/locations`);
+    return response.data;
+  } catch (error) {
+    log.error("Error fetching shipping zone locations", error);
+    return [];
+  }
+}
+
+export async function getShippingZoneMethods(
+  zoneId: number
+): Promise<WooShippingMethod[]> {
+  const client = getApiClient();
+  if (!client) return [];
+  try {
+    const response = await client.get(`shipping/zones/${zoneId}/methods`);
+    return response.data;
+  } catch (error) {
+    log.error("Error fetching shipping zone methods", error);
+    return [];
+  }
+}
+
+// ─── Order creation ──────────────────────────────────────────────
+
+export interface CreateWooOrderInput {
+  customer_id?: number;
+  payment_method: string;
+  payment_method_title: string;
+  set_paid?: boolean;
+  status?: string;
+  currency: string;
+  billing: WooAddress & { email: string };
+  shipping: WooAddress;
+  line_items: { product_id: number; quantity: number; variation_id?: number }[];
+  shipping_lines?: { method_id: string; method_title: string; total: string }[];
+  meta_data?: { key: string; value: string | number | boolean }[];
+}
+
+export async function createWooOrder(input: CreateWooOrderInput): Promise<WooOrder> {
+  const client = getApiClient();
+  if (!client) throw new Error("Woo API not configured");
+  const response = await client.post("orders", input);
   return response.data;
 }
 

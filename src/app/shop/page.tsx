@@ -5,7 +5,7 @@ import ShopFilters from "@/components/shop/ShopFilters";
 import FooterShop from "@/components/layout/FooterShop";
 import SmoothScroll from "@/components/SmoothScroll";
 import { getProducts, getCategories } from "@/lib/woocommerce";
-import { getActiveCountry } from "@/lib/currency";
+import { getActiveCountry } from "@/lib/currency.server";
 
 export const metadata = {
   title: "Shop",
