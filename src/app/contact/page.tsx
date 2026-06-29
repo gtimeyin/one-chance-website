@@ -6,8 +6,9 @@ import FooterShop from "@/components/layout/FooterShop";
 import SmoothScroll from "@/components/SmoothScroll";
 
 export const metadata = {
-  title: "Contact Us - One Chance Board Game",
+  title: "Contact",
   description: "Get in touch with the One Chance team. For enquiries, partnerships, or just to say hello.",
+  alternates: { canonical: "/contact" },
 };
 
 export default function ContactPage() {

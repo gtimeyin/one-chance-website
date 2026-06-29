@@ -5,8 +5,9 @@ import SmoothScroll from "@/components/SmoothScroll";
 import RegisterForm from "@/components/auth/RegisterForm";
 
 export const metadata = {
-  title: "Create Account - One Chance Board Game",
+  title: "Create Account",
   description: "Create your One Chance account to start shopping.",
+  robots: { index: false, follow: true },
 };
 
 export default function RegisterPage() {

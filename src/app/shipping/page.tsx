@@ -4,8 +4,9 @@ import FooterShop from "@/components/layout/FooterShop";
 import SmoothScroll from "@/components/SmoothScroll";
 
 export const metadata = {
-  title: "Shipping & Returns - One Chance Board Game",
+  title: "Shipping & Returns",
   description: "Shipping information and return policy for the One Chance board game.",
+  alternates: { canonical: "/shipping" },
 };
 
 export default function ShippingPage() {

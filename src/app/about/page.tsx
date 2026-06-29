@@ -4,8 +4,9 @@ import FooterShop from "@/components/layout/FooterShop";
 import SmoothScroll from "@/components/SmoothScroll";
 
 export const metadata = {
-  title: "About Us - One Chance Board Game",
+  title: "About",
   description: "Learn about the team behind One Chance, the Lagos-themed board game.",
+  alternates: { canonical: "/about" },
 };
 
 export default function AboutPage() {

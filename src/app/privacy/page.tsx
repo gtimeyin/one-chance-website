@@ -4,8 +4,9 @@ import FooterShop from "@/components/layout/FooterShop";
 import SmoothScroll from "@/components/SmoothScroll";
 
 export const metadata = {
-  title: "Privacy Policy - One Chance Board Game",
+  title: "Privacy Policy",
   description: "Privacy policy for the One Chance board game website and shop.",
+  alternates: { canonical: "/privacy" },
 };
 
 export default function PrivacyPage() {

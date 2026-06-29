@@ -4,9 +4,10 @@ import FooterShop from "@/components/v2/FooterShop";
 import SmoothScroll from "@/components/SmoothScroll";
 
 export const metadata = {
-  title: "Meet the Lagosians — One Chance",
+  title: "Meet the Lagosians",
   description:
     "The 8 characters of One Chance. From Iya Bose to 2 Bobo — every one of them is somebody you know.",
+  alternates: { canonical: "/characters" },
 };
 
 export default function CharactersPage() {

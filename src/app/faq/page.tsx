@@ -5,8 +5,9 @@ import SmoothScroll from "@/components/SmoothScroll";
 import FAQs from "@/components/FAQs";
 
 export const metadata = {
-  title: "FAQ - One Chance Board Game",
+  title: "FAQ",
   description: "Frequently asked questions about the One Chance board game.",
+  alternates: { canonical: "/faq" },
 };
 
 const extendedFaqs = [

@@ -4,8 +4,9 @@ import FooterShop from "@/components/layout/FooterShop";
 import SmoothScroll from "@/components/SmoothScroll";
 
 export const metadata = {
-  title: "Terms & Conditions - One Chance Board Game",
+  title: "Terms & Conditions",
   description: "Terms and conditions for purchasing and using the One Chance board game.",
+  alternates: { canonical: "/terms" },
 };
 
 export default function TermsPage() {

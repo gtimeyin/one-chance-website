@@ -5,9 +5,10 @@ import FooterShop from "@/components/layout/FooterShop";
 import SmoothScroll from "@/components/SmoothScroll";
 
 export const metadata = {
-  title: "Rules - One Chance Board Game",
+  title: "Rules",
   description:
     "Learn how to play One Chance — the Lagos board game of hustle, luck, and survival for 2–6 players.",
+  alternates: { canonical: "/rules" },
 };
 
 export default function RulesPage() {

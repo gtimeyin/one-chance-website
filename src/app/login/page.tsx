@@ -5,8 +5,9 @@ import SmoothScroll from "@/components/SmoothScroll";
 import LoginForm from "@/components/auth/LoginForm";
 
 export const metadata = {
-  title: "Sign In - One Chance Board Game",
+  title: "Sign In",
   description: "Sign in to your One Chance account.",
+  robots: { index: false, follow: true },
 };
 
 export default function LoginPage() {
