@@ -100,80 +100,71 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
   return (
     <AnimatePresence>
       {isOpen && (
-        <>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+        <motion.div
+          initial={{ y: "-100%" }}
+          animate={{ y: 0 }}
+          exit={{ y: "-100%" }}
+          transition={{ type: "spring", damping: 32, stiffness: 320 }}
+          className="fixed inset-0 z-[70] flex h-full w-full flex-col"
+          style={{ background: "white" }}
+          role="dialog"
+          aria-label="Search"
+          aria-modal="true"
+        >
+          <button
+            type="button"
             onClick={onClose}
-            className="fixed inset-0 z-[60]"
-            style={{ background: "rgba(0,0,0,0.55)" }}
-          />
-
-          <motion.div
-            initial={{ y: "-100%" }}
-            animate={{ y: 0 }}
-            exit={{ y: "-100%" }}
-            transition={{ type: "spring", damping: 32, stiffness: 320 }}
-            className="fixed top-0 left-0 right-0 z-[70] flex w-full flex-col"
+            aria-label="Close search"
+            className="fixed flex cursor-pointer items-center justify-center border-none bg-transparent z-[80]"
             style={{
-              background: "white",
-              maxHeight: "85vh",
-              boxShadow: "0 24px 60px rgba(0,0,0,0.25)",
+              top: "clamp(20px, 4vw, 40px)",
+              right: "clamp(20px, 4vw, 40px)",
+              color: "var(--color-dark)",
+              padding: 8,
             }}
-            role="dialog"
-            aria-label="Search"
-            aria-modal="true"
           >
-            <div className="flex w-full justify-center" style={{ padding: "24px clamp(20px, 4vw, 48px)" }}>
-              <div className="flex w-full max-w-[1280px] flex-col" style={{ gap: 24 }}>
-                <form
-                  onSubmit={handleSubmit}
-                  className="flex items-center"
-                  style={{
-                    gap: 16,
-                    borderBottom: "2px solid var(--color-dark)",
-                    paddingBottom: 12,
-                  }}
-                >
-                  <FeatherSearch
-                    style={{
-                      fontSize: 24,
-                      color: "var(--color-dark)",
-                      flexShrink: 0,
-                    }}
-                  />
-                  <input
-                    ref={inputRef}
-                    type="search"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Search products, updates, pages…"
-                    className="font-barlow-condensed flex-1 border-none bg-transparent outline-none"
-                    style={{
-                      fontSize: "clamp(20px, 3vw, 32px)",
-                      fontWeight: 500,
-                      color: "var(--color-dark)",
-                    }}
-                    autoComplete="off"
-                    aria-label="Search query"
-                  />
-                  <button
-                    type="button"
-                    onClick={onClose}
-                    aria-label="Close search"
-                    className="flex cursor-pointer items-center justify-center border-none bg-transparent"
-                    style={{ color: "var(--color-dark)", padding: 4 }}
-                  >
-                    <FeatherX style={{ fontSize: 24 }} />
-                  </button>
-                </form>
+            <FeatherX style={{ fontSize: 32 }} />
+          </button>
 
-                <div
-                  className="flex-1 overflow-y-auto"
-                  style={{ maxHeight: "calc(85vh - 140px)" }}
-                >
+          <div
+            className="flex w-full flex-1 justify-center overflow-y-auto"
+            style={{ padding: "clamp(80px, 12vh, 160px) clamp(20px, 4vw, 48px) 64px" }}
+          >
+            <div className="flex w-full max-w-[720px] flex-col" style={{ gap: 32 }}>
+              <form
+                onSubmit={handleSubmit}
+                className="flex items-center"
+                style={{
+                  gap: 16,
+                  borderBottom: "2px solid var(--color-dark)",
+                  paddingBottom: 16,
+                }}
+              >
+                <FeatherSearch
+                  style={{
+                    fontSize: 28,
+                    color: "var(--color-dark)",
+                    flexShrink: 0,
+                  }}
+                />
+                <input
+                  ref={inputRef}
+                  type="search"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search products, updates, pages…"
+                  className="font-barlow-condensed flex-1 border-none bg-transparent outline-none"
+                  style={{
+                    fontSize: "clamp(24px, 4vw, 40px)",
+                    fontWeight: 500,
+                    color: "var(--color-dark)",
+                  }}
+                  autoComplete="off"
+                  aria-label="Search query"
+                />
+              </form>
+
+              <div className="flex flex-col">
                   {query.trim() === "" ? (
                     <EmptyState loading={productsLoading} error={productsError} />
                   ) : totalMatches === 0 ? (
@@ -229,8 +220,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                 </div>
               </div>
             </div>
-          </motion.div>
-        </>
+        </motion.div>
       )}
     </AnimatePresence>
   );
