@@ -9,8 +9,22 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
+import PaystackPop from "@paystack/inline-js";
 import { useCart } from "@/store/cart";
 import { formatPrice } from "@/lib/utils";
+import { supportedCountries } from "@/lib/currency";
+
+type Provider = "stripe" | "paystack";
+
+// Currencies that Paystack can charge in. Returned in order of preference
+// for that currency: the first entry is the default.
+function providersForCurrency(currency: string): Provider[] {
+  const c = currency.toUpperCase();
+  if (c === "NGN") return ["paystack", "stripe"];
+  if (c === "KES") return ["paystack", "stripe"];
+  if (c === "GHS" || c === "ZAR") return ["paystack"];
+  return ["stripe"]; // USD, GBP, EUR — Paystack doesn't natively charge these for Nigerian merchants
+}
 
 interface CheckoutClientProps {
   country: string;
@@ -40,9 +54,8 @@ interface AddressState {
   country: string;
 }
 
-export default function CheckoutClient({ country, currency, publishableKey }: CheckoutClientProps) {
+export default function CheckoutClient({ country, currency: initialCurrency, publishableKey }: CheckoutClientProps) {
   const items = useCart((s) => s.items);
-  const getTotal = useCart((s) => s.getTotal);
   const router = useRouter();
 
   const [address, setAddress] = useState<AddressState>({
@@ -60,10 +73,73 @@ export default function CheckoutClient({ country, currency, publishableKey }: Ch
   const [shippingOptions, setShippingOptions] = useState<ShippingOption[]>([]);
   const [shippingLoading, setShippingLoading] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState<ShippingOption | null>(null);
+  // Currency + per-item prices come from the server for the active country;
+  // they're refreshed when the user changes the country dropdown.
+  const [currency, setCurrency] = useState(initialCurrency);
+  const [repricedPrices, setRepricedPrices] = useState<Record<number, number>>({});
+  const [repricing, setRepricing] = useState(false);
+  const availableProviders = providersForCurrency(currency);
+  const [provider, setProvider] = useState<Provider>(availableProviders[0]);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Effective unit price for each cart line, falling back to the cart-store
+  // value (set at add-to-cart time) until the reprice API has responded.
+  function unitPriceFor(productId: number, fallback: number): number {
+    return repricedPrices[productId] ?? fallback;
+  }
+  const subtotal = items.reduce(
+    (sum, i) => sum + unitPriceFor(i.productId, i.price) * i.quantity,
+    0,
+  );
+
+  useEffect(() => {
+    // Keep the chosen provider valid as the currency changes (e.g. user
+    // edits country to a region where the current provider isn't supported).
+    if (!availableProviders.includes(provider)) {
+      setProvider(availableProviders[0]);
+    }
+  }, [availableProviders, provider]);
+
+  useEffect(() => {
+    // Reprice the cart when country changes — WCPBC has different prices
+    // (and possibly a different currency) per zone. Also persist the
+    // country to the oc-country cookie so navigating away from /checkout
+    // keeps the same context.
+    let cancelled = false;
+    const c = address.country.trim().toUpperCase();
+    if (c.length !== 2 || items.length === 0) return;
+
+    document.cookie = `oc-country=${c}; path=/; max-age=31536000; samesite=lax`;
+    setRepricing(true);
+    fetch("/api/checkout/reprice", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        productIds: Array.from(new Set(items.map((i) => i.productId))),
+        country: c,
+      }),
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        if (cancelled) return;
+        if (data?.currency) setCurrency(data.currency);
+        if (Array.isArray(data?.prices)) {
+          const map: Record<number, number> = {};
+          for (const p of data.prices) map[p.productId] = p.price;
+          setRepricedPrices(map);
+        }
+      })
+      .catch(() => { /* keep stale prices */ })
+      .finally(() => {
+        if (!cancelled) setRepricing(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [address.country, items]);
 
   useEffect(() => {
     let cancelled = false;
@@ -90,7 +166,6 @@ export default function CheckoutClient({ country, currency, publishableKey }: Ch
     };
   }, [address.country]);
 
-  const subtotal = getTotal();
   const shippingCost = selectedMethod?.cost ?? 0;
   const total = subtotal + shippingCost;
 
@@ -111,6 +186,45 @@ export default function CheckoutClient({ country, currency, publishableKey }: Ch
     return null;
   }
 
+  function buildPayload() {
+    // Server is now the authority on prices + currency — it looks them up
+    // by productId and country. Anything else is window dressing.
+    return {
+      email: address.email.trim(),
+      cart: items.map((i) => ({
+        productId: i.productId,
+        quantity: i.quantity,
+        ...(i.variationId ? { variationId: i.variationId } : {}),
+      })),
+      shippingAddress: {
+        first_name: address.first_name.trim(),
+        last_name: address.last_name.trim(),
+        address_1: address.address_1.trim(),
+        address_2: address.address_2.trim() || undefined,
+        city: address.city.trim(),
+        state: address.state.trim() || undefined,
+        postcode: address.postcode.trim() || undefined,
+        country: address.country.trim().toUpperCase(),
+        phone: address.phone.trim(),
+      },
+      shippingMethod: selectedMethod,
+    };
+  }
+
+  async function completeAndRedirect(sid: string) {
+    const res = await fetch("/api/checkout/complete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ sessionId: sid }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      setError(data?.error ?? "Order creation failed. Contact support.");
+      return;
+    }
+    router.push(`/order-complete?order=${data.orderId}&key=${data.orderKey}`);
+  }
+
   async function handleStartPayment() {
     setError(null);
     const err = validate();
@@ -120,45 +234,55 @@ export default function CheckoutClient({ country, currency, publishableKey }: Ch
     }
     setSubmitting(true);
     try {
-      const res = await fetch("/api/checkout/create-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      if (provider === "stripe") {
+        const res = await fetch("/api/checkout/create-session", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(buildPayload()),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          setError(data?.error ?? "Couldn't start checkout. Please try again.");
+          return;
+        }
+        setSessionId(data.sessionId);
+        setClientSecret(data.clientSecret);
+      } else {
+        // Paystack: initialise on the server, then open the inline popup.
+        const res = await fetch("/api/checkout/create-paystack-session", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(buildPayload()),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          setError(data?.error ?? "Couldn't start checkout. Please try again.");
+          return;
+        }
+        // Use newTransaction so we can wire onSuccess/onCancel callbacks
+        // instead of relying on a callback URL redirect.
+        const popup = new PaystackPop();
+        popup.newTransaction({
+          key: data.publicKey,
           email: address.email.trim(),
-          cart: items.map((i) => ({
-            productId: i.productId,
-            name: i.name,
-            quantity: i.quantity,
-            unitPrice: i.price,
-            ...(i.variationId ? { variationId: i.variationId } : {}),
-            image: i.image,
-          })),
-          shippingAddress: {
-            first_name: address.first_name.trim(),
-            last_name: address.last_name.trim(),
-            address_1: address.address_1.trim(),
-            address_2: address.address_2.trim() || undefined,
-            city: address.city.trim(),
-            state: address.state.trim() || undefined,
-            postcode: address.postcode.trim() || undefined,
-            country: address.country.trim().toUpperCase(),
-            phone: address.phone.trim(),
-          },
-          shippingMethod: selectedMethod,
+          amount: Math.round(data.amount * 100), // Paystack expects minor units
           currency,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data?.error ?? "Couldn't start checkout. Please try again.");
-        return;
+          reference: data.reference,
+          onSuccess: async () => {
+            await completeAndRedirect(data.sessionId);
+          },
+          onCancel: () => {
+            setError("Payment cancelled.");
+            setSubmitting(false);
+          },
+        });
       }
-      setSessionId(data.sessionId);
-      setClientSecret(data.clientSecret);
     } catch {
       setError("Network error. Please try again.");
     } finally {
-      setSubmitting(false);
+      if (provider === "stripe") setSubmitting(false);
+      // For Paystack we leave `submitting` true until the popup resolves —
+      // onSuccess/onCancel handle the unblock.
     }
   }
 
@@ -216,6 +340,9 @@ export default function CheckoutClient({ country, currency, publishableKey }: Ch
               selectedMethod={selectedMethod}
               setSelectedMethod={setSelectedMethod}
               currency={currency}
+              provider={provider}
+              setProvider={setProvider}
+              availableProviders={availableProviders}
               onSubmit={handleStartPayment}
               submitting={submitting}
               error={error}
@@ -235,7 +362,7 @@ export default function CheckoutClient({ country, currency, publishableKey }: Ch
             id: i.id,
             name: i.name,
             quantity: i.quantity,
-            price: i.price,
+            price: unitPriceFor(i.productId, i.price),
             image: i.image,
           }))}
           shippingTitle={selectedMethod?.title ?? null}
@@ -243,6 +370,7 @@ export default function CheckoutClient({ country, currency, publishableKey }: Ch
           subtotal={subtotal}
           total={total}
           currency={currency}
+          repricing={repricing}
         />
       </div>
     </section>
@@ -257,6 +385,9 @@ interface AddressAndShippingProps {
   selectedMethod: ShippingOption | null;
   setSelectedMethod: (m: ShippingOption) => void;
   currency: string;
+  provider: Provider;
+  setProvider: (p: Provider) => void;
+  availableProviders: Provider[];
   onSubmit: () => void;
   submitting: boolean;
   error: string | null;
@@ -270,6 +401,9 @@ function AddressAndShipping({
   selectedMethod,
   setSelectedMethod,
   currency,
+  provider,
+  setProvider,
+  availableProviders,
   onSubmit,
   submitting,
   error,
@@ -303,13 +437,7 @@ function AddressAndShipping({
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: 14 }}>
           <Field label="Postcode" value={address.postcode} onChange={(v) => setField("postcode", v)} />
-          <Field
-            label="Country (ISO-2)"
-            value={address.country}
-            onChange={(v) => setField("country", v.toUpperCase())}
-            maxLength={2}
-            required
-          />
+          <CountryField value={address.country} onChange={(v) => setField("country", v)} />
         </div>
       </section>
 
@@ -365,6 +493,38 @@ function AddressAndShipping({
         )}
       </section>
 
+      {availableProviders.length > 1 && (
+        <section className="flex flex-col" style={{ gap: 10 }}>
+          <SectionHeading>Payment method</SectionHeading>
+          <div className="flex" style={{ gap: 8 }}>
+            {availableProviders.map((p) => {
+              const active = provider === p;
+              const label = p === "paystack" ? "Paystack" : "Card (Stripe)";
+              return (
+                <button
+                  key={p}
+                  type="button"
+                  onClick={() => setProvider(p)}
+                  className="font-barlow-condensed font-medium uppercase cursor-pointer"
+                  style={{
+                    flex: 1,
+                    padding: "12px 16px",
+                    border: `1px solid ${active ? "var(--color-dark)" : "var(--color-border-light)"}`,
+                    background: active ? "#FFFBE6" : "white",
+                    color: "var(--color-dark)",
+                    fontSize: 13,
+                    letterSpacing: "0.05em",
+                    borderRadius: 4,
+                  }}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
       {error && (
         <p
           className="font-barlow-condensed"
@@ -387,7 +547,13 @@ function AddressAndShipping({
           cursor: submitting || !selectedMethod ? "default" : "pointer",
         }}
       >
-        {submitting ? "Starting…" : "Continue to payment"}
+        {submitting
+          ? provider === "paystack"
+            ? "Opening Paystack…"
+            : "Starting…"
+          : provider === "paystack"
+            ? "Pay with Paystack"
+            : "Continue to payment"}
       </button>
     </form>
   );
@@ -505,9 +671,10 @@ interface CheckoutSummaryProps {
   subtotal: number;
   total: number;
   currency: string;
+  repricing?: boolean;
 }
 
-function CheckoutSummary({ items, shippingTitle, shippingCost, subtotal, total, currency }: CheckoutSummaryProps) {
+function CheckoutSummary({ items, shippingTitle, shippingCost, subtotal, total, currency, repricing }: CheckoutSummaryProps) {
   return (
     <aside
       className="flex flex-col h-fit"
@@ -517,14 +684,23 @@ function CheckoutSummary({ items, shippingTitle, shippingCost, subtotal, total, 
         gap: 20,
         position: "sticky",
         top: 80,
+        opacity: repricing ? 0.6 : 1,
+        transition: "opacity 0.15s",
       }}
     >
-      <h2
-        className="font-barlow-condensed font-bold uppercase"
-        style={{ fontSize: 14, color: "var(--color-text-muted)", letterSpacing: "0.05em" }}
-      >
-        Order Summary
-      </h2>
+      <div className="flex items-center justify-between">
+        <h2
+          className="font-barlow-condensed font-bold uppercase"
+          style={{ fontSize: 14, color: "var(--color-text-muted)", letterSpacing: "0.05em" }}
+        >
+          Order Summary
+        </h2>
+        {repricing && (
+          <span className="font-barlow-condensed" style={{ fontSize: 12, color: "var(--color-text-muted)" }}>
+            Updating prices…
+          </span>
+        )}
+      </div>
       <div className="flex flex-col" style={{ gap: 16 }}>
         {items.map((item) => (
           <div key={item.id} className="flex items-center" style={{ gap: 12 }}>
@@ -603,6 +779,38 @@ interface FieldProps {
   onChange: (value: string) => void;
   required?: boolean;
   maxLength?: number;
+}
+
+function CountryField({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const countries = supportedCountries();
+  return (
+    <div className="flex flex-col" style={{ gap: 6 }}>
+      <label htmlFor="f-country" className="font-barlow-condensed" style={{ fontSize: 13, color: "var(--color-dark)" }}>
+        Country
+      </label>
+      <select
+        id="f-country"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        required
+        className="font-barlow-condensed cursor-pointer"
+        style={{
+          padding: "12px 14px",
+          border: "1px solid var(--color-border-light)",
+          borderRadius: 4,
+          fontSize: 14,
+          color: "var(--color-dark)",
+          background: "white",
+        }}
+      >
+        {countries.map((c) => (
+          <option key={c.code} value={c.code}>
+            {c.name}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
 }
 
 function Field({ label, type = "text", value, onChange, required, maxLength }: FieldProps) {

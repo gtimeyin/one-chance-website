@@ -28,6 +28,63 @@ export const ZONES: Record<string, { currency: string; countries: string[] }> = 
   },
 };
 
+// ISO-3166-1 alpha-2 → display name for the countries we serve.
+// Sourced from the union of all ZONES.countries. Add a country here when
+// you add it to a zone.
+export const COUNTRY_NAMES: Record<string, string> = {
+  NG: "Nigeria",
+  KE: "Kenya",
+  GB: "United Kingdom",
+  US: "United States",
+  CA: "Canada",
+  AT: "Austria",
+  BE: "Belgium",
+  BG: "Bulgaria",
+  HR: "Croatia",
+  CY: "Cyprus",
+  CZ: "Czechia",
+  DK: "Denmark",
+  EE: "Estonia",
+  FI: "Finland",
+  FR: "France",
+  DE: "Germany",
+  GR: "Greece",
+  HU: "Hungary",
+  IE: "Ireland",
+  IT: "Italy",
+  LV: "Latvia",
+  LT: "Lithuania",
+  LU: "Luxembourg",
+  MT: "Malta",
+  NL: "Netherlands",
+  PL: "Poland",
+  PT: "Portugal",
+  RO: "Romania",
+  SK: "Slovakia",
+  SI: "Slovenia",
+  ES: "Spain",
+  SE: "Sweden",
+  CH: "Switzerland",
+  NO: "Norway",
+  IS: "Iceland",
+  LI: "Liechtenstein",
+};
+
+/**
+ * All supported countries (those that appear in any ZONES entry), sorted
+ * alphabetically by display name. Use this to populate a country dropdown
+ * on the storefront.
+ */
+export function supportedCountries(): { code: string; name: string }[] {
+  const codes = new Set<string>();
+  for (const zone of Object.values(ZONES)) {
+    for (const c of zone.countries) codes.add(c);
+  }
+  return [...codes]
+    .map((code) => ({ code, name: COUNTRY_NAMES[code] ?? code }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
 export function zoneSlugForCountry(country: string): string | null {
   const c = country.toUpperCase();
   for (const [slug, info] of Object.entries(ZONES)) {

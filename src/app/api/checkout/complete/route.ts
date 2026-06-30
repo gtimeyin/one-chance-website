@@ -5,6 +5,7 @@ import {
   updateCheckoutSession,
 } from "@/lib/checkout-session";
 import { getStripeClient } from "@/lib/stripe";
+import { verifyPaystackTransaction } from "@/lib/paystack";
 import { createWooOrder } from "@/lib/woocommerce";
 import { createLogger } from "@/lib/logger";
 
@@ -48,26 +49,50 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Session missing shipping data" }, { status: 400 });
   }
 
-  // Verify Stripe payment actually succeeded server-side (never trust the
-  // client to claim payment success — they could spoof it).
-  const stripe = getStripeClient();
-  if (!stripe) {
-    return NextResponse.json({ error: "Stripe not configured" }, { status: 503 });
-  }
+  // Verify payment server-side via the provider that owns this session.
+  // Never trust the client to claim payment success — they could spoof it.
+  const provider = session.payment_provider;
+  let paymentMethodTitle: string;
+  let providerRef: string;
 
-  let intent;
-  try {
-    intent = await stripe.paymentIntents.retrieve(session.payment_intent_id);
-  } catch (error) {
-    log.error("Failed to retrieve PaymentIntent", error);
-    return NextResponse.json({ error: "Payment verification failed" }, { status: 502 });
-  }
-
-  if (intent.status !== "succeeded") {
-    return NextResponse.json(
-      { error: `Payment not completed (status: ${intent.status})` },
-      { status: 402 },
-    );
+  if (provider === "stripe") {
+    const stripe = getStripeClient();
+    if (!stripe) {
+      return NextResponse.json({ error: "Stripe not configured" }, { status: 503 });
+    }
+    let intent;
+    try {
+      intent = await stripe.paymentIntents.retrieve(session.payment_intent_id);
+    } catch (error) {
+      log.error("Failed to retrieve PaymentIntent", error);
+      return NextResponse.json({ error: "Payment verification failed" }, { status: 502 });
+    }
+    if (intent.status !== "succeeded") {
+      return NextResponse.json(
+        { error: `Payment not completed (status: ${intent.status})` },
+        { status: 402 },
+      );
+    }
+    paymentMethodTitle = "Stripe (Card)";
+    providerRef = intent.id;
+  } else if (provider === "paystack") {
+    let tx;
+    try {
+      tx = await verifyPaystackTransaction(session.payment_intent_id);
+    } catch (error) {
+      log.error("Failed to verify Paystack transaction", error);
+      return NextResponse.json({ error: "Payment verification failed" }, { status: 502 });
+    }
+    if (tx.status !== "success") {
+      return NextResponse.json(
+        { error: `Payment not completed (status: ${tx.status})` },
+        { status: 402 },
+      );
+    }
+    paymentMethodTitle = "Paystack";
+    providerRef = tx.reference;
+  } else {
+    return NextResponse.json({ error: "Unknown payment provider" }, { status: 400 });
   }
 
   // Create the Woo order
@@ -100,10 +125,12 @@ export async function POST(request: Request) {
   };
 
   try {
+    const providerMetaKey =
+      provider === "stripe" ? "_stripe_payment_intent_id" : "_paystack_reference";
     const order = await createWooOrder({
       customer_id: session.customer_id ?? 0,
-      payment_method: "stripe",
-      payment_method_title: "Stripe (Card)",
+      payment_method: provider,
+      payment_method_title: paymentMethodTitle,
       set_paid: true,
       status: "processing",
       currency: session.currency,
@@ -123,7 +150,7 @@ export async function POST(request: Request) {
       ],
       meta_data: [
         { key: "_oc_checkout_session_id", value: session.id },
-        { key: "_stripe_payment_intent_id", value: intent.id },
+        { key: providerMetaKey, value: providerRef },
       ],
     });
 

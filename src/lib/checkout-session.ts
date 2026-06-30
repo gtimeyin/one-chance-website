@@ -1,6 +1,9 @@
 import "server-only";
 import { getSupabaseClient } from "./supabase";
 import { createLogger } from "./logger";
+import { getProductsByIds, type WooProduct } from "./woocommerce";
+import { currencyForCountry } from "./currency";
+import { getImageSrc } from "./utils";
 
 const log = createLogger("checkout-session");
 
@@ -60,6 +63,88 @@ export interface CheckoutSession {
   failure_reason: string | null;
   created_at: string;
   updated_at: string;
+}
+
+export interface CartRequestLine {
+  productId: number;
+  quantity: number;
+  variationId?: number;
+}
+
+export interface PricedCartResult {
+  cart: CheckoutCartLine[];
+  subtotal: number;
+  currency: string;
+}
+
+/**
+ * Server-side pricing: given a country and a list of (productId, quantity)
+ * pairs, fetches each product, applies WCPBC zone pricing, and computes the
+ * authoritative subtotal + currency. Throws a tagged error if any line is
+ * unfulfillable (product missing or has a zero price). Never trusts the
+ * client to supply prices or currency.
+ */
+export async function priceCart(
+  lines: CartRequestLine[],
+  country: string,
+): Promise<PricedCartResult> {
+  if (lines.length === 0) {
+    throw new PriceCartError("cart_empty", "Cart is empty");
+  }
+
+  const ids = Array.from(new Set(lines.map((l) => l.productId)));
+  const products = await getProductsByIds(ids, country);
+  const byId = new Map<number, WooProduct>(products.map((p) => [p.id, p]));
+
+  const cart: CheckoutCartLine[] = [];
+  let subtotal = 0;
+
+  for (const line of lines) {
+    const product = byId.get(line.productId);
+    if (!product) {
+      throw new PriceCartError(
+        "product_missing",
+        `Product ${line.productId} not found`,
+      );
+    }
+    const unitPrice = parseFloat(product.price || "0");
+    if (!Number.isFinite(unitPrice) || unitPrice <= 0) {
+      throw new PriceCartError(
+        "product_no_price",
+        `Product ${product.name} has no price for this region`,
+      );
+    }
+    if (product.stock_status === "outofstock") {
+      throw new PriceCartError(
+        "product_out_of_stock",
+        `${product.name} is out of stock`,
+      );
+    }
+
+    cart.push({
+      productId: product.id,
+      name: product.name,
+      quantity: line.quantity,
+      unitPrice,
+      sku: product.sku || undefined,
+      ...(line.variationId ? { variationId: line.variationId } : {}),
+      image: getImageSrc(product.images),
+    });
+    subtotal += unitPrice * line.quantity;
+  }
+
+  return {
+    cart,
+    subtotal,
+    currency: currencyForCountry(country),
+  };
+}
+
+export class PriceCartError extends Error {
+  constructor(public code: string, message: string) {
+    super(message);
+    this.name = "PriceCartError";
+  }
 }
 
 export async function createCheckoutSession(input: {

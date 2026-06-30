@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { useCart } from "@/store/cart";
 import { useCurrency } from "@/components/CurrencyProvider";
 import { trackBeginCheckout } from "@/lib/analytics";
@@ -22,10 +21,9 @@ export default function CartDrawer({ isOpen }: CartDrawerProps) {
   const getTotal = useCart((s) => s.getTotal);
   const currency = useCurrency();
   const router = useRouter();
-  const [redirecting, setRedirecting] = useState(false);
 
   function handleCheckout() {
-    if (items.length === 0 || redirecting) return;
+    if (items.length === 0) return;
 
     trackBeginCheckout(
       items.map((i) => ({
@@ -37,7 +35,6 @@ export default function CartDrawer({ isOpen }: CartDrawerProps) {
       getTotal(),
     );
 
-    setRedirecting(true);
     closeCart();
     router.push("/checkout");
   }
@@ -230,17 +227,15 @@ export default function CartDrawer({ isOpen }: CartDrawerProps) {
                 </div>
                 <button
                   onClick={handleCheckout}
-                  disabled={redirecting}
                   className="w-full font-barlow-condensed font-bold cursor-pointer border-none"
                   style={{
                     padding: "14px",
-                    background: redirecting ? "#E5E7EB" : "var(--color-yellow)",
+                    background: "var(--color-yellow)",
                     color: "var(--color-dark)",
                     fontSize: 16,
-                    cursor: redirecting ? "default" : "pointer",
                   }}
                 >
-                  {redirecting ? "REDIRECTING…" : "CHECKOUT"}
+                  CHECKOUT
                 </button>
               </div>
             )}

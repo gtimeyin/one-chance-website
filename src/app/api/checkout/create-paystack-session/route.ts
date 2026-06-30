@@ -7,12 +7,12 @@ import {
   priceCart,
   PriceCartError,
 } from "@/lib/checkout-session";
-import { getStripeClient, toMinorUnits } from "@/lib/stripe";
+import { initializePaystackTransaction } from "@/lib/paystack";
 import { rateLimit } from "@/lib/rate-limit";
 import { decrypt } from "@/lib/session-crypto";
 import { createLogger } from "@/lib/logger";
 
-const log = createLogger("checkout/create-session");
+const log = createLogger("checkout/create-paystack-session");
 
 const CartLineSchema = z.object({
   productId: z.number().int().positive(),
@@ -40,15 +40,15 @@ const ShippingMethodSchema = z.object({
   cost: z.number().nonnegative(),
 });
 
-// Note: `cart` lines accept only productId/quantity/variationId — name,
-// unitPrice, image, currency etc. are looked up server-side. Any extra
-// fields sent by the client are ignored.
 const BodySchema = z.object({
   email: z.string().trim().email().max(254),
   cart: z.array(CartLineSchema).min(1).max(50),
   shippingAddress: AddressSchema,
   shippingMethod: ShippingMethodSchema,
 });
+
+// Currencies Paystack accepts.
+const PAYSTACK_CURRENCIES = new Set(["NGN", "GHS", "ZAR", "USD", "KES"]);
 
 export async function POST(request: Request) {
   const hdrs = await headers();
@@ -77,9 +77,6 @@ export async function POST(request: Request) {
   }
   const { email, cart, shippingAddress, shippingMethod } = parsed.data;
 
-  // Server-authoritative pricing. The client's displayed prices are derived
-  // from the same source, so they should match what the user saw — but if
-  // they don't, the server value wins.
   let priced;
   try {
     priced = await priceCart(cart, shippingAddress.country);
@@ -89,6 +86,13 @@ export async function POST(request: Request) {
     }
     log.error("priceCart failed", error);
     return NextResponse.json({ error: "Could not price cart" }, { status: 500 });
+  }
+
+  if (!PAYSTACK_CURRENCIES.has(priced.currency)) {
+    return NextResponse.json(
+      { error: `Paystack doesn't support ${priced.currency}. Use Stripe instead.` },
+      { status: 400 },
+    );
   }
 
   const amount = priced.subtotal + shippingMethod.cost;
@@ -113,51 +117,37 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Failed to create checkout session" }, { status: 500 });
   }
 
-  const stripe = getStripeClient();
-  if (!stripe) {
-    return NextResponse.json({ error: "Stripe not configured" }, { status: 503 });
-  }
-
   try {
-    const intent = await stripe.paymentIntents.create({
-      amount: toMinorUnits(amount, priced.currency),
-      currency: priced.currency.toLowerCase(),
-      receipt_email: email,
-      automatic_payment_methods: { enabled: true },
+    const init = await initializePaystackTransaction({
+      email,
+      amount,
+      currency: priced.currency,
+      reference: `oc_${checkoutSession.id}`,
       metadata: {
         checkout_session_id: checkoutSession.id,
-      },
-      shipping: {
-        name: `${shippingAddress.first_name} ${shippingAddress.last_name}`,
-        phone: shippingAddress.phone,
-        address: {
-          line1: shippingAddress.address_1,
-          line2: shippingAddress.address_2 || undefined,
-          city: shippingAddress.city,
-          state: shippingAddress.state || undefined,
-          postal_code: shippingAddress.postcode || undefined,
-          country: shippingAddress.country,
-        },
+        customer_id: customerId,
       },
     });
 
     await updateCheckoutSession(checkoutSession.id, {
       status: "payment_started",
-      payment_provider: "stripe",
-      payment_intent_id: intent.id,
+      payment_provider: "paystack",
+      payment_intent_id: init.reference,
     });
 
     return NextResponse.json({
       sessionId: checkoutSession.id,
-      clientSecret: intent.client_secret,
+      accessCode: init.access_code,
+      reference: init.reference,
+      publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
       amount,
       currency: priced.currency,
     });
   } catch (error) {
-    log.error("Failed to create Stripe PaymentIntent", error);
+    log.error("Failed to initialize Paystack transaction", error);
     await updateCheckoutSession(checkoutSession.id, {
       status: "failed",
-      failure_reason: "stripe_payment_intent_creation_failed",
+      failure_reason: "paystack_init_failed",
     });
     return NextResponse.json({ error: "Payment provider error" }, { status: 502 });
   }
