@@ -47,7 +47,6 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
-  const [isMobileNav, setIsMobileNav] = useState(false);
   const [hidden, setHidden] = useState(false);
   const cartItemCount = useCart((s) => s.getItemCount());
   const toggleCart = useCart((s) => s.toggleCart);
@@ -55,14 +54,6 @@ export default function Navbar() {
 
   useEffect(() => {
     setHasMounted(true);
-  }, []);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 767px)");
-    const sync = () => setIsMobileNav(mq.matches);
-    sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
   }, []);
 
   useEffect(() => {
@@ -173,12 +164,11 @@ export default function Navbar() {
             transition={{ duration: 0.3 }}
             className="fixed inset-0 z-[60] flex h-full w-full flex-col items-center justify-between bg-brand-yellow px-16 py-16 mobile:px-6 mobile:py-8"
           >
-            <div className="flex w-full max-w-[1280px] grow shrink-0 basis-0 flex-col items-center justify-between">
-              {/* Top: Close button */}
+            <div className="flex w-full grow shrink-0 basis-0 flex-col items-center justify-between">
+              {/* Top: Close button — matches the menu trigger (size + variant). */}
               <div className="flex w-full flex-col items-start pb-4">
                 <Button
-                  variant="white"
-                  size={isMobileNav ? "small" : "medium"}
+                  size="small"
                   icon={<FeatherX />}
                   onClick={() => setIsOpen(false)}
                 >
@@ -187,7 +177,7 @@ export default function Navbar() {
               </div>
 
               {/* Middle: Nav links + secondary */}
-              <div className="flex w-full items-start gap-32 mobile:flex-col mobile:gap-12">
+              <div className="flex w-full items-start justify-between gap-16 mobile:flex-col mobile:gap-12">
                 <div className="mb-[12px] mt-[12px] flex flex-col items-start gap-2">
                   {navLinks.map((link, i) => (
                     <motion.div
@@ -216,10 +206,10 @@ export default function Navbar() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.3, duration: 0.4 }}
-                  className="flex flex-col items-start gap-1 pt-8 mobile:px-0 mobile:py-0"
+                  className="flex flex-col items-start gap-2 pt-8 mobile:px-0 mobile:py-0"
                 >
                   {/* Account */}
-                  <span className="text-caption-bold font-caption-bold uppercase text-black-800 opacity-50 mb-2">
+                  <span className="font-barlow-condensed font-bold uppercase text-black-800 opacity-50 mb-2" style={{ fontSize: 14, letterSpacing: "0.05em" }}>
                     {isAuth && firstName ? `Hi, ${firstName}` : "Account"}
                   </span>
                   {isAuth ? (
@@ -227,25 +217,26 @@ export default function Navbar() {
                       <Link
                         href="/account"
                         onClick={() => setIsOpen(false)}
-                        className="flex items-center gap-2 text-[16px] leading-[24px] font-heading-medium-default text-black-950 no-underline"
-                        style={{ textDecoration: "none" }}
+                        className="flex items-center gap-2 font-barlow-condensed font-semibold text-black-950 no-underline"
+                        style={{ textDecoration: "none", fontSize: 22, lineHeight: 1.3 }}
                       >
-                        <FeatherUser className="text-[18px]" /> My Account
+                        <FeatherUser style={{ fontSize: 22 }} /> My Account
                       </Link>
                       <Link
                         href="/account/orders"
                         onClick={() => setIsOpen(false)}
-                        className="flex items-center gap-2 text-[16px] leading-[24px] font-heading-medium-default text-black-950 no-underline"
-                        style={{ textDecoration: "none" }}
+                        className="flex items-center gap-2 font-barlow-condensed font-semibold text-black-950 no-underline"
+                        style={{ textDecoration: "none", fontSize: 22, lineHeight: 1.3 }}
                       >
-                        <FeatherPackage className="text-[18px]" /> My Orders
+                        <FeatherPackage style={{ fontSize: 22 }} /> My Orders
                       </Link>
                       <form action={logout} onSubmit={() => setIsOpen(false)}>
                         <button
                           type="submit"
-                          className="flex items-center gap-2 text-[16px] leading-[24px] font-heading-medium-default text-black-950 no-underline bg-transparent border-none cursor-pointer p-0"
+                          className="flex items-center gap-2 font-barlow-condensed font-semibold text-black-950 no-underline bg-transparent border-none cursor-pointer p-0"
+                          style={{ fontSize: 22, lineHeight: 1.3 }}
                         >
-                          <FeatherLogOut className="text-[18px]" /> Sign Out
+                          <FeatherLogOut style={{ fontSize: 22 }} /> Sign Out
                         </button>
                       </form>
                     </>
@@ -254,23 +245,23 @@ export default function Navbar() {
                       <Link
                         href="/login"
                         onClick={() => setIsOpen(false)}
-                        className="flex items-center gap-2 text-[16px] leading-[24px] font-heading-medium-default text-black-950 no-underline"
-                        style={{ textDecoration: "none" }}
+                        className="flex items-center gap-2 font-barlow-condensed font-semibold text-black-950 no-underline"
+                        style={{ textDecoration: "none", fontSize: 22, lineHeight: 1.3 }}
                       >
-                        <FeatherUser className="text-[18px]" /> Sign In
+                        <FeatherUser style={{ fontSize: 22 }} /> Sign In
                       </Link>
                       <Link
                         href="/register"
                         onClick={() => setIsOpen(false)}
-                        className="text-[16px] leading-[24px] font-heading-medium-default text-black-950 no-underline"
-                        style={{ textDecoration: "none" }}
+                        className="font-barlow-condensed font-semibold text-black-950 no-underline"
+                        style={{ textDecoration: "none", fontSize: 22, lineHeight: 1.3 }}
                       >
                         Create Account
                       </Link>
                     </>
                   )}
 
-                  <span className="text-caption-bold font-caption-bold uppercase text-black-800 opacity-50 mt-6 mb-2">
+                  <span className="font-barlow-condensed font-bold uppercase text-black-800 opacity-50 mt-6 mb-2" style={{ fontSize: 14, letterSpacing: "0.05em" }}>
                     More
                   </span>
                   {secondaryLinks.map((link) => (
@@ -278,8 +269,8 @@ export default function Navbar() {
                       key={link.label}
                       href={link.href}
                       onClick={() => setIsOpen(false)}
-                      className="text-[16px] leading-[24px] font-heading-medium-default text-black-800 no-underline"
-                      style={{ textDecoration: "none" }}
+                      className="font-barlow-condensed font-semibold text-black-800 no-underline"
+                      style={{ textDecoration: "none", fontSize: 22, lineHeight: 1.3 }}
                     >
                       {link.label}
                     </Link>
@@ -295,12 +286,20 @@ export default function Navbar() {
                 className="flex w-full items-end justify-between mobile:flex-col mobile:items-start mobile:gap-8"
               >
                 <div className="flex flex-col items-start gap-1">
-                  <span className="text-body-bold font-body-bold text-black-800">
-                    T: 2349031114455
-                  </span>
-                  <span className="text-body-bold font-body-bold text-black-800">
+                  <a
+                    href="tel:+2349027305417"
+                    className="font-barlow-condensed font-bold text-black-800 no-underline"
+                    style={{ fontSize: 18, textDecoration: "none" }}
+                  >
+                    T: +234 902 730 5417
+                  </a>
+                  <a
+                    href="mailto:info@onechancegame.com"
+                    className="font-barlow-condensed font-bold text-black-800 no-underline"
+                    style={{ fontSize: 18, textDecoration: "none" }}
+                  >
                     E: info@onechancegame.com
-                  </span>
+                  </a>
                 </div>
                 <div className="flex flex-col items-end gap-8 mobile:w-full mobile:items-start">
                   <div className="flex items-center gap-4">
@@ -311,9 +310,15 @@ export default function Navbar() {
                     <FeatherMusic className="font-['Barlow_Condensed'] text-[20px] font-[400] leading-[30px] text-default-font" />
                     <FeatherYoutube className="font-['Barlow_Condensed'] text-[20px] font-[400] leading-[30px] text-default-font" />
                   </div>
-                  <span className="text-caption-bold font-caption-bold text-black-800">
+                  <a
+                    href="https://neuro6.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-barlow-condensed font-bold uppercase text-black-800 no-underline"
+                    style={{ fontSize: 12, letterSpacing: "0.05em", textDecoration: "none" }}
+                  >
                     DESIGNED BY N6
-                  </span>
+                  </a>
                 </div>
               </motion.div>
             </div>
