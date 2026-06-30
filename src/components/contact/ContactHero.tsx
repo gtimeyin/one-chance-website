@@ -56,10 +56,7 @@ export default function ContactHero() {
           className="flex flex-col items-center text-center relative z-10"
           style={{ gap: 8 }}
         >
-          <h1
-            className="text-display-title-bold font-display-title-bold uppercase -tracking-[3px] mobile:text-[48px] mobile:leading-[48px]"
-            style={{ color: "#121B19" }}
-          >
+          <h1 className="type-display uppercase" style={{ color: "#121B19" }}>
             NO NEED
             <br />
             TO BE SHY

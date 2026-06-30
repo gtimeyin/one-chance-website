@@ -13,7 +13,7 @@ import FAQs from "@/components/FAQs";
 import ProductDescription from "@/components/product/ProductDescription";
 import FooterShop from "@/components/layout/FooterShop";
 import SmoothScroll from "@/components/SmoothScroll";
-import { getMetaJson, getMetaValue, type WooProduct, type WooReview } from "@/lib/woocommerce";
+import { getMetaJson, getMetaValue, type WooProduct, type WooReview } from "@/lib/woocommerce-shared";
 
 interface FaqItem {
   question: string;

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import type { WooProduct } from "@/lib/woocommerce";
+import type { WooProduct } from "@/lib/woocommerce-shared";
 import { getPlaceholderImage } from "@/lib/utils";
 
 interface ProductImageGalleryProps {

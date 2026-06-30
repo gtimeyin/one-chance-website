@@ -39,8 +39,8 @@ export default function NewsSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6 }}
-            className="text-display-title-bold font-display-title-bold uppercase -tracking-[3px] mobile:text-[48px] mobile:leading-[48px]"
-            style={{ color: "rgb(18, 27, 25)" }}
+            className="type-display uppercase"
+            style={{ color: "rgb(18, 27, 25)", whiteSpace: "pre-line" }}
           >
             {"News, Updates\n& Amebo"}
           </motion.h2>

@@ -42,15 +42,7 @@ function SectionHeader({
             {subtitle}
           </p>
         )}
-        <h2
-          className="font-barlow-condensed font-extrabold uppercase"
-          style={{
-            fontSize: "clamp(32px, 5vw, 56px)",
-            color: "var(--color-dark)",
-            letterSpacing: "-2px",
-            lineHeight: 0.95,
-          }}
-        >
+        <h2 className="type-h1 uppercase" style={{ color: "var(--color-dark)" }}>
           {title}
         </h2>
       </div>
@@ -194,15 +186,7 @@ export default function UpdatesPage() {
             className="mx-auto flex flex-col md:flex-row items-start md:items-center justify-between"
             style={{ maxWidth: 1280, gap: 32 }}
           >
-            <h2
-              className="font-barlow-condensed font-extrabold uppercase"
-              style={{
-                fontSize: "clamp(32px, 5vw, 56px)",
-                color: "var(--color-dark)",
-                letterSpacing: "-2px",
-                lineHeight: 0.95,
-              }}
-            >
+            <h2 className="type-h1 uppercase" style={{ color: "var(--color-dark)" }}>
               DON&apos;T MISS AN<br />UPDATE
             </h2>
             <div>

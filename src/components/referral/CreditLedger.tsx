@@ -53,8 +53,8 @@ export default function CreditLedger({ entries }: Props) {
       </span>
 
       <div className="flex flex-col">
-        {/* Header */}
-        <div className="flex items-center px-4 py-2 bg-neutral-50 border-b border-neutral-200">
+        {/* Header — desktop only */}
+        <div className="hidden md:flex items-center px-4 py-2 bg-neutral-50 border-b border-neutral-200">
           <span className="flex-1 font-['Barlow_Condensed'] text-[12px] font-[600] text-neutral-500 uppercase">
             Date
           </span>
@@ -73,39 +73,69 @@ export default function CreditLedger({ entries }: Props) {
         </div>
 
         {/* Rows */}
-        {entries.map((entry) => (
-          <div
-            key={entry.id}
-            className="flex items-center px-4 py-3 border-b border-neutral-100 last:border-b-0"
-          >
-            <span className="flex-1 font-['Barlow_Condensed'] text-[13px] text-neutral-600">
-              {new Date(entry.created_at).toLocaleDateString("en-GB", {
-                day: "numeric",
-                month: "short",
-              })}
-            </span>
-            <span className="w-28">
-              <span
-                className={`inline-block px-2 py-0.5 font-['Barlow_Condensed'] text-[11px] font-[600] uppercase ${typeBadgeClasses(entry.type)}`}
-              >
-                {typeLabel(entry.type)}
-              </span>
-            </span>
-            <span className="flex-1 font-['Barlow_Condensed'] text-[13px] text-neutral-600 truncate">
-              {entry.description || "-"}
-            </span>
-            <span
-              className={`w-24 text-right font-['Barlow_Condensed'] text-[14px] font-[600] ${
-                entry.amount > 0 ? "text-green-600" : "text-orange-600"
-              }`}
+        {entries.map((entry) => {
+          const dateStr = new Date(entry.created_at).toLocaleDateString("en-GB", {
+            day: "numeric",
+            month: "short",
+          });
+          const amountClass = entry.amount > 0 ? "text-green-600" : "text-orange-600";
+          const amountStr = `${entry.amount > 0 ? "+" : ""}$${entry.amount.toFixed(2)}`;
+          return (
+            <div
+              key={entry.id}
+              className="flex items-center px-4 py-3 border-b border-neutral-100 last:border-b-0 mobile:flex-col mobile:items-stretch mobile:gap-2"
             >
-              {entry.amount > 0 ? "+" : ""}${entry.amount.toFixed(2)}
-            </span>
-            <span className="w-24 text-right font-['Barlow_Condensed'] text-[13px] text-neutral-500">
-              ${entry.balance_after.toFixed(2)}
-            </span>
-          </div>
-        ))}
+              {/* Desktop columns */}
+              <span className="mobile:hidden flex-1 font-['Barlow_Condensed'] text-[13px] text-neutral-600">
+                {dateStr}
+              </span>
+              <span className="mobile:hidden w-28">
+                <span
+                  className={`inline-block px-2 py-0.5 font-['Barlow_Condensed'] text-[11px] font-[600] uppercase ${typeBadgeClasses(entry.type)}`}
+                >
+                  {typeLabel(entry.type)}
+                </span>
+              </span>
+              <span className="mobile:hidden flex-1 font-['Barlow_Condensed'] text-[13px] text-neutral-600 truncate">
+                {entry.description || "-"}
+              </span>
+              <span
+                className={`mobile:hidden w-24 text-right font-['Barlow_Condensed'] text-[14px] font-[600] ${amountClass}`}
+              >
+                {amountStr}
+              </span>
+              <span className="mobile:hidden w-24 text-right font-['Barlow_Condensed'] text-[13px] text-neutral-500">
+                ${entry.balance_after.toFixed(2)}
+              </span>
+              {/* Mobile card */}
+              <div className="hidden mobile:flex items-center justify-between gap-3">
+                <span
+                  className={`inline-block px-2 py-0.5 font-['Barlow_Condensed'] text-[11px] font-[600] uppercase ${typeBadgeClasses(entry.type)}`}
+                >
+                  {typeLabel(entry.type)}
+                </span>
+                <span
+                  className={`font-['Barlow_Condensed'] text-[14px] font-[700] ${amountClass}`}
+                >
+                  {amountStr}
+                </span>
+              </div>
+              {entry.description && (
+                <span className="hidden mobile:block font-['Barlow_Condensed'] text-[13px] text-neutral-700">
+                  {entry.description}
+                </span>
+              )}
+              <div className="hidden mobile:flex items-center justify-between gap-3">
+                <span className="font-['Barlow_Condensed'] text-[12px] text-neutral-500">
+                  {dateStr}
+                </span>
+                <span className="font-['Barlow_Condensed'] text-[12px] text-neutral-500">
+                  Balance ${entry.balance_after.toFixed(2)}
+                </span>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

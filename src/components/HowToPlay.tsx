@@ -97,7 +97,7 @@ export default function HowToPlay() {
           {/* Heading */}
           <div className="w-full">
             <h1
-              className="text-display-title-bold font-display-title-bold uppercase -tracking-[3px] mobile:text-[60px] mobile:leading-[54px]"
+              className="type-display uppercase"
               style={{ color: "#121B19", wordWrap: "break-word", overflowWrap: "break-word" }}
             >
               Survive Lagos in 6 steps
@@ -353,7 +353,7 @@ export default function HowToPlay() {
         style={{ gap: 48, padding: "64px 24px 80px" }}
       >
         <h2
-          className="text-display-title-bold font-display-title-bold uppercase text-center -tracking-[3px] mobile:text-[48px] mobile:leading-[48px]"
+          className="type-display uppercase text-center"
           style={{ color: "#121B19", whiteSpace: "pre-wrap" }}
         >
           {"Ready to experience\none chance?"}

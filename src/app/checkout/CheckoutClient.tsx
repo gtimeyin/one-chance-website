@@ -9,7 +9,8 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
-import PaystackPop from "@paystack/inline-js";
+// @paystack/inline-js touches `window` at module scope, which crashes SSR
+// even for client components. Lazy-import it from the Paystack branch below.
 import { useCart } from "@/store/cart";
 import { formatPrice } from "@/lib/utils";
 import { supportedCountries } from "@/lib/currency";
@@ -30,15 +31,6 @@ interface CheckoutClientProps {
   country: string;
   currency: string;
   publishableKey: string;
-}
-
-interface ShippingOption {
-  zone_id: number;
-  zone_name: string;
-  method_id: string;
-  instance_id: number;
-  title: string;
-  cost: number;
 }
 
 interface AddressState {
@@ -70,13 +62,12 @@ export default function CheckoutClient({ country, currency: initialCurrency, pub
     postcode: "",
     country,
   });
-  const [shippingOptions, setShippingOptions] = useState<ShippingOption[]>([]);
-  const [shippingLoading, setShippingLoading] = useState(false);
-  const [selectedMethod, setSelectedMethod] = useState<ShippingOption | null>(null);
   // Currency + per-item prices come from the server for the active country;
   // they're refreshed when the user changes the country dropdown.
   const [currency, setCurrency] = useState(initialCurrency);
-  const [repricedPrices, setRepricedPrices] = useState<Record<number, number>>({});
+  const [repricedPrices, setRepricedPrices] = useState<
+    Record<number, { price: number; regular_price: number; on_sale: boolean }>
+  >({});
   const [repricing, setRepricing] = useState(false);
   const availableProviders = providersForCurrency(currency);
   const [provider, setProvider] = useState<Provider>(availableProviders[0]);
@@ -88,7 +79,12 @@ export default function CheckoutClient({ country, currency: initialCurrency, pub
   // Effective unit price for each cart line, falling back to the cart-store
   // value (set at add-to-cart time) until the reprice API has responded.
   function unitPriceFor(productId: number, fallback: number): number {
-    return repricedPrices[productId] ?? fallback;
+    return repricedPrices[productId]?.price ?? fallback;
+  }
+  function saleInfoFor(productId: number): { regular_price: number; on_sale: boolean } | null {
+    const r = repricedPrices[productId];
+    if (!r || !r.on_sale || r.regular_price <= r.price) return null;
+    return { regular_price: r.regular_price, on_sale: true };
   }
   const subtotal = items.reduce(
     (sum, i) => sum + unitPriceFor(i.productId, i.price) * i.quantity,
@@ -127,8 +123,14 @@ export default function CheckoutClient({ country, currency: initialCurrency, pub
         if (cancelled) return;
         if (data?.currency) setCurrency(data.currency);
         if (Array.isArray(data?.prices)) {
-          const map: Record<number, number> = {};
-          for (const p of data.prices) map[p.productId] = p.price;
+          const map: Record<number, { price: number; regular_price: number; on_sale: boolean }> = {};
+          for (const p of data.prices) {
+            map[p.productId] = {
+              price: p.price,
+              regular_price: p.regular_price ?? p.price,
+              on_sale: Boolean(p.on_sale),
+            };
+          }
           setRepricedPrices(map);
         }
       })
@@ -141,33 +143,7 @@ export default function CheckoutClient({ country, currency: initialCurrency, pub
     };
   }, [address.country, items]);
 
-  useEffect(() => {
-    let cancelled = false;
-    const c = address.country.trim().toUpperCase();
-    if (c.length !== 2) return;
-    setShippingLoading(true);
-    setSelectedMethod(null);
-    fetch(`/api/checkout/shipping-options?country=${c}`)
-      .then((r) => r.json())
-      .then((data) => {
-        if (cancelled) return;
-        const opts: ShippingOption[] = data.options ?? [];
-        setShippingOptions(opts);
-        if (opts.length > 0) setSelectedMethod(opts[0]);
-      })
-      .catch(() => {
-        if (!cancelled) setShippingOptions([]);
-      })
-      .finally(() => {
-        if (!cancelled) setShippingLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [address.country]);
-
-  const shippingCost = selectedMethod?.cost ?? 0;
-  const total = subtotal + shippingCost;
+  const total = subtotal;
 
   function field(key: keyof AddressState, value: string) {
     setAddress((a) => ({ ...a, [key]: value }));
@@ -182,7 +158,6 @@ export default function CheckoutClient({ country, currency: initialCurrency, pub
     if (!address.address_1.trim()) return "Address is required.";
     if (!address.city.trim()) return "City is required.";
     if (address.country.length !== 2) return "Country must be a 2-letter ISO code.";
-    if (!selectedMethod) return "Select a shipping method.";
     return null;
   }
 
@@ -207,7 +182,6 @@ export default function CheckoutClient({ country, currency: initialCurrency, pub
         country: address.country.trim().toUpperCase(),
         phone: address.phone.trim(),
       },
-      shippingMethod: selectedMethod,
     };
   }
 
@@ -261,6 +235,7 @@ export default function CheckoutClient({ country, currency: initialCurrency, pub
         }
         // Use newTransaction so we can wire onSuccess/onCancel callbacks
         // instead of relying on a callback URL redirect.
+        const { default: PaystackPop } = await import("@paystack/inline-js");
         const popup = new PaystackPop();
         popup.newTransaction({
           key: data.publicKey,
@@ -290,7 +265,7 @@ export default function CheckoutClient({ country, currency: initialCurrency, pub
     return (
       <section style={{ padding: "clamp(60px, 8vw, 120px) clamp(20px, 4vw, 60px)" }}>
         <div className="mx-auto" style={{ maxWidth: 720 }}>
-          <h1 className="font-barlow-condensed font-extrabold uppercase" style={{ fontSize: "clamp(28px, 4vw, 40px)", color: "var(--color-dark)" }}>
+          <h1 className="type-h1 uppercase" style={{ color: "var(--color-dark)" }}>
             Your cart is empty
           </h1>
           <p className="font-barlow-condensed" style={{ fontSize: 16, color: "var(--color-text-muted)", marginTop: 12 }}>
@@ -324,10 +299,7 @@ export default function CheckoutClient({ country, currency: initialCurrency, pub
         style={{ maxWidth: 1080, gap: "clamp(28px, 4vw, 56px)" }}
       >
         <div className="flex flex-col" style={{ gap: 28 }}>
-          <h1
-            className="font-barlow-condensed font-extrabold uppercase"
-            style={{ fontSize: "clamp(32px, 4vw, 48px)", color: "var(--color-dark)", lineHeight: 1, letterSpacing: "-1px" }}
-          >
+          <h1 className="type-h1 uppercase" style={{ color: "var(--color-dark)" }}>
             Checkout
           </h1>
 
@@ -335,11 +307,6 @@ export default function CheckoutClient({ country, currency: initialCurrency, pub
             <AddressAndShipping
               address={address}
               setField={field}
-              shippingOptions={shippingOptions}
-              shippingLoading={shippingLoading}
-              selectedMethod={selectedMethod}
-              setSelectedMethod={setSelectedMethod}
-              currency={currency}
               provider={provider}
               setProvider={setProvider}
               availableProviders={availableProviders}
@@ -358,15 +325,17 @@ export default function CheckoutClient({ country, currency: initialCurrency, pub
         </div>
 
         <CheckoutSummary
-          items={items.map((i) => ({
-            id: i.id,
-            name: i.name,
-            quantity: i.quantity,
-            price: unitPriceFor(i.productId, i.price),
-            image: i.image,
-          }))}
-          shippingTitle={selectedMethod?.title ?? null}
-          shippingCost={shippingCost}
+          items={items.map((i) => {
+            const sale = saleInfoFor(i.productId);
+            return {
+              id: i.id,
+              name: i.name,
+              quantity: i.quantity,
+              price: unitPriceFor(i.productId, i.price),
+              regularPrice: sale?.regular_price ?? null,
+              image: i.image,
+            };
+          })}
           subtotal={subtotal}
           total={total}
           currency={currency}
@@ -380,11 +349,6 @@ export default function CheckoutClient({ country, currency: initialCurrency, pub
 interface AddressAndShippingProps {
   address: AddressState;
   setField: (key: keyof AddressState, value: string) => void;
-  shippingOptions: ShippingOption[];
-  shippingLoading: boolean;
-  selectedMethod: ShippingOption | null;
-  setSelectedMethod: (m: ShippingOption) => void;
-  currency: string;
   provider: Provider;
   setProvider: (p: Provider) => void;
   availableProviders: Provider[];
@@ -396,11 +360,6 @@ interface AddressAndShippingProps {
 function AddressAndShipping({
   address,
   setField,
-  shippingOptions,
-  shippingLoading,
-  selectedMethod,
-  setSelectedMethod,
-  currency,
   provider,
   setProvider,
   availableProviders,
@@ -428,7 +387,7 @@ function AddressAndShipping({
       </section>
 
       <section className="flex flex-col" style={{ gap: 14 }}>
-        <SectionHeading>Shipping address</SectionHeading>
+        <SectionHeading>Delivery address</SectionHeading>
         <Field label="Address" value={address.address_1} onChange={(v) => setField("address_1", v)} required />
         <Field label="Apartment, suite, etc. (optional)" value={address.address_2} onChange={(v) => setField("address_2", v)} />
         <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: 14 }}>
@@ -439,58 +398,6 @@ function AddressAndShipping({
           <Field label="Postcode" value={address.postcode} onChange={(v) => setField("postcode", v)} />
           <CountryField value={address.country} onChange={(v) => setField("country", v)} />
         </div>
-      </section>
-
-      <section className="flex flex-col" style={{ gap: 14 }}>
-        <SectionHeading>Shipping method</SectionHeading>
-        {shippingLoading ? (
-          <p className="font-barlow-condensed" style={{ fontSize: 14, color: "var(--color-text-muted)" }}>
-            Loading shipping options…
-          </p>
-        ) : shippingOptions.length === 0 ? (
-          <p
-            className="font-barlow-condensed"
-            style={{ fontSize: 14, color: "#B91C1C", padding: "10px 14px", background: "#FEE2E2", borderRadius: 4 }}
-          >
-            No shipping methods available for {address.country.toUpperCase()}. Try a different country or contact us.
-          </p>
-        ) : (
-          <div className="flex flex-col" style={{ gap: 8 }}>
-            {shippingOptions.map((opt) => {
-              const id = `ship-${opt.zone_id}-${opt.instance_id}`;
-              const isSelected = selectedMethod?.instance_id === opt.instance_id && selectedMethod?.zone_id === opt.zone_id;
-              return (
-                <label
-                  key={id}
-                  htmlFor={id}
-                  className="flex items-center cursor-pointer font-barlow-condensed"
-                  style={{
-                    padding: "12px 16px",
-                    border: `1px solid ${isSelected ? "var(--color-dark)" : "var(--color-border-light)"}`,
-                    background: isSelected ? "#FFFBE6" : "white",
-                    borderRadius: 4,
-                    gap: 12,
-                  }}
-                >
-                  <input
-                    id={id}
-                    type="radio"
-                    name="shipping_method"
-                    checked={isSelected}
-                    onChange={() => setSelectedMethod(opt)}
-                    style={{ accentColor: "var(--color-dark)" }}
-                  />
-                  <span className="flex-1" style={{ fontSize: 15, color: "var(--color-dark)" }}>
-                    {opt.title}
-                  </span>
-                  <span style={{ fontSize: 15, fontWeight: 600, color: "var(--color-dark)" }}>
-                    {opt.cost === 0 ? "Free" : formatPrice(opt.cost, currency)}
-                  </span>
-                </label>
-              );
-            })}
-          </div>
-        )}
       </section>
 
       {availableProviders.length > 1 && (
@@ -536,15 +443,15 @@ function AddressAndShipping({
 
       <button
         type="submit"
-        disabled={submitting || !selectedMethod}
+        disabled={submitting}
         className="font-barlow-condensed font-bold uppercase cursor-pointer border-none"
         style={{
           padding: "16px 24px",
-          background: submitting || !selectedMethod ? "#E5E7EB" : "#FFD600",
+          background: submitting ? "#E5E7EB" : "#FFD600",
           color: "var(--color-dark)",
           fontSize: 16,
           letterSpacing: "0.05em",
-          cursor: submitting || !selectedMethod ? "default" : "pointer",
+          cursor: submitting ? "default" : "pointer",
         }}
       >
         {submitting
@@ -665,16 +572,21 @@ function PaymentForm({ sessionId, router }: { sessionId: string; router: ReturnT
 }
 
 interface CheckoutSummaryProps {
-  items: { id: number; name: string; quantity: number; price: number; image: string }[];
-  shippingTitle: string | null;
-  shippingCost: number;
+  items: {
+    id: number;
+    name: string;
+    quantity: number;
+    price: number;
+    regularPrice: number | null;
+    image: string;
+  }[];
   subtotal: number;
   total: number;
   currency: string;
   repricing?: boolean;
 }
 
-function CheckoutSummary({ items, shippingTitle, shippingCost, subtotal, total, currency, repricing }: CheckoutSummaryProps) {
+function CheckoutSummary({ items, subtotal, total, currency, repricing }: CheckoutSummaryProps) {
   return (
     <aside
       className="flex flex-col h-fit"
@@ -722,20 +634,31 @@ function CheckoutSummary({ items, shippingTitle, shippingCost, subtotal, total, 
                 Qty {item.quantity}
               </span>
             </div>
-            <span className="font-barlow-condensed font-bold" style={{ fontSize: 14, color: "var(--color-dark)" }}>
-              {formatPrice(item.price * item.quantity, currency)}
-            </span>
+            <div className="flex flex-col items-end">
+              {item.regularPrice !== null && item.regularPrice > item.price && (
+                <span
+                  className="font-barlow-condensed"
+                  style={{ fontSize: 12, color: "var(--color-text-muted)", textDecoration: "line-through" }}
+                >
+                  {formatPrice(item.regularPrice * item.quantity, currency)}
+                </span>
+              )}
+              <span
+                className="font-barlow-condensed font-bold"
+                style={{
+                  fontSize: 14,
+                  color: item.regularPrice !== null && item.regularPrice > item.price ? "#B91C1C" : "var(--color-dark)",
+                }}
+              >
+                {formatPrice(item.price * item.quantity, currency)}
+              </span>
+            </div>
           </div>
         ))}
       </div>
       <div style={{ height: 1, background: "var(--color-border-light)" }} />
       <div className="flex flex-col" style={{ gap: 8 }}>
         <SummaryRow label="Subtotal" value={formatPrice(subtotal, currency)} />
-        <SummaryRow
-          label={shippingTitle ? `Shipping (${shippingTitle})` : "Shipping"}
-          value={shippingCost === 0 ? "Free" : formatPrice(shippingCost, currency)}
-        />
-        <div style={{ height: 1, background: "var(--color-border-light)", margin: "4px 0" }} />
         <SummaryRow label="Total" value={formatPrice(total, currency)} bold />
       </div>
     </aside>

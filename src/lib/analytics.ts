@@ -74,3 +74,45 @@ export function trackBeginCheckout(items: CartItem[], total: number): void {
 export function trackSignUp(method: string, hasReferral: boolean): void {
   track("sign_up", { method, has_referral: hasReferral });
 }
+
+type PurchaseItem = {
+  productId: number;
+  name: string;
+  price: number;
+  quantity: number;
+};
+
+type PurchaseInput = {
+  transactionId: string;
+  value: number;
+  currency: string;
+  tax?: number;
+  shipping?: number;
+  coupon?: string;
+  items: PurchaseItem[];
+};
+
+const PURCHASE_FIRED_KEY = "oc_purchase_fired";
+
+export function trackPurchase(input: PurchaseInput): void {
+  if (typeof window === "undefined") return;
+  // De-dupe in the rare case a user refreshes /order-complete.
+  const fired = window.sessionStorage.getItem(PURCHASE_FIRED_KEY);
+  if (fired === input.transactionId) return;
+  window.sessionStorage.setItem(PURCHASE_FIRED_KEY, input.transactionId);
+
+  track("purchase", {
+    transaction_id: input.transactionId,
+    value: input.value,
+    currency: input.currency,
+    tax: input.tax,
+    shipping: input.shipping,
+    coupon: input.coupon,
+    items: input.items.map((i) => ({
+      item_id: String(i.productId),
+      item_name: i.name,
+      price: i.price,
+      quantity: i.quantity,
+    })),
+  });
+}

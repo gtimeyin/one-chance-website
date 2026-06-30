@@ -20,7 +20,7 @@ export default function CreditSummary({
         Credit Summary
       </span>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="flex flex-col gap-1 p-4 bg-green-50">
           <span className="font-['Barlow_Condensed'] text-[28px] font-[700] text-green-700">
             ${totalEarned.toFixed(2)}

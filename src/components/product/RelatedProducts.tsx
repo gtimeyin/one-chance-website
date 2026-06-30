@@ -3,7 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import ProductCard from "@/components/ui/ProductCard";
-import type { WooProduct } from "@/lib/woocommerce";
+import type { WooProduct } from "@/lib/woocommerce-shared";
 
 interface RelatedProductsProps {
   products: WooProduct[];
@@ -29,14 +29,8 @@ export default function RelatedProducts({ products }: RelatedProductsProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
-          className="font-barlow-condensed font-extrabold uppercase"
-          style={{
-            fontSize: "clamp(32px, 5vw, 64px)",
-            color: "var(--color-dark)",
-            letterSpacing: "-0.02em",
-            lineHeight: "100%",
-            marginBottom: 48,
-          }}
+          className="type-h1 uppercase"
+          style={{ color: "var(--color-dark)", marginBottom: 48 }}
         >
           YOU MIGHT ALSO LIKE
         </motion.h2>

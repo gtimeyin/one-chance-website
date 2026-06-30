@@ -2,6 +2,8 @@ import Navbar from "@/components/layout/Navbar";
 import Breadcrumb from "@/components/layout/Breadcrumb";
 import FooterShop from "@/components/layout/FooterShop";
 import SmoothScroll from "@/components/SmoothScroll";
+import PageHero from "@/components/ui/PageHero";
+import SectionHeading from "@/components/ui/SectionHeading";
 
 export const metadata = {
   title: "About",
@@ -24,53 +26,39 @@ export default function AboutPage() {
           />
         </div>
 
-        {/* Hero */}
-        <section
-          className="flex w-full flex-col items-center bg-[#121b19]"
-          style={{ padding: "clamp(60px, 8vw, 128px) 24px" }}
-        >
-          <div className="flex w-full max-w-[1024px] flex-col items-start gap-8">
-            <span
-              className="font-['Barlow_Condensed'] uppercase"
-              style={{ fontSize: 12, fontWeight: 500, letterSpacing: "0.15em", color: "#a3a3a3" }}
-            >
-              ABOUT US
-            </span>
-            <h1 className="text-display-title-bold font-display-title-bold text-white uppercase -tracking-[2px]">
-              WE MADE A GAME OUT OF LAGOS
-            </h1>
-            <p className="font-['Barlow_Condensed'] text-[18px] leading-[28px] text-[#a3a3a3] max-w-[720px]">
-              One Chance was born from the wild, unpredictable energy of Lagos, Nigeria. We wanted to capture the hustle, the chaos, and the humour of everyday life in a city where anything can happen — and turn it into something you can experience around a table with friends and family.
-            </p>
-          </div>
-        </section>
+        <PageHero
+          eyebrow="ABOUT US"
+          title="WE MADE A GAME OUT OF LAGOS"
+          subtitle="One Chance was born from the wild, unpredictable energy of Lagos, Nigeria. We wanted to capture the hustle, the chaos, and the humour of everyday life in a city where anything can happen — and turn it into something you can experience around a table with friends and family."
+          background="#121b19"
+          textColor="white"
+        />
 
-        {/* Story */}
         <section
           className="flex w-full flex-col items-center bg-white"
           style={{ padding: "clamp(48px, 6vw, 96px) 24px" }}
         >
-          <div className="flex w-full max-w-[1024px] flex-col items-start gap-12">
-            <div className="flex flex-col gap-4">
-              <h2 className="font-['Barlow_Condensed'] text-[48px] font-[800] leading-[1.1] text-neutral-800 uppercase -tracking-[0.02em]">
+          <div className="flex w-full max-w-[1024px] flex-col items-start" style={{ gap: 48 }}>
+            <div className="flex flex-col" style={{ gap: 16 }}>
+              <SectionHeading as="h2" color="var(--color-neutral-800)" className="uppercase">
                 OUR STORY
-              </h2>
-              <p className="font-['Barlow_Condensed'] text-[16px] leading-[26px] text-neutral-600 max-w-[720px]">
+              </SectionHeading>
+              <p className="type-body-lg text-neutral-600" style={{ maxWidth: 720 }}>
                 It started as a conversation between friends — &quot;What if Lagos was a board game?&quot; From the danfo buses to the area boys, from the slay queens to the big men, every character and every scenario in One Chance is inspired by real Lagos life.
               </p>
-              <p className="font-['Barlow_Condensed'] text-[16px] leading-[26px] text-neutral-600 max-w-[720px]">
+              <p className="type-body-lg text-neutral-600" style={{ maxWidth: 720 }}>
                 We spent months researching, designing, and play-testing to make sure the game was not just fun, but authentically Lagos. Every card, every character, every rule was crafted to make you feel like you&apos;re navigating the streets of Eko.
               </p>
             </div>
 
-            <div className="flex flex-col gap-4">
-              <h2 className="font-['Barlow_Condensed'] text-[48px] font-[800] leading-[1.1] text-neutral-800 uppercase -tracking-[0.02em]">
+            <div className="flex flex-col" style={{ gap: 16 }}>
+              <SectionHeading as="h2" color="var(--color-neutral-800)" className="uppercase">
                 OUR MISSION
-              </h2>
-              <p className="font-['Barlow_Condensed'] text-[16px] leading-[26px] text-neutral-600 max-w-[720px]">
+              </SectionHeading>
+              <p className="type-body-lg text-neutral-600" style={{ maxWidth: 720 }}>
                 We believe in the power of games to bring people together. Our mission is to celebrate African culture through interactive entertainment — starting with Lagos, and expanding to tell more stories from the continent.
               </p>
-              <p className="font-['Barlow_Condensed'] text-[16px] leading-[26px] text-neutral-600 max-w-[720px]">
+              <p className="type-body-lg text-neutral-600" style={{ maxWidth: 720 }}>
                 One Chance is made by Divisions Africa, a creative studio dedicated to building culturally rich experiences that resonate across borders.
               </p>
             </div>

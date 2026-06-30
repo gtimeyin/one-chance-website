@@ -115,12 +115,9 @@ function BlogContent({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="font-barlow-condensed font-extrabold uppercase"
+              className="type-h1 uppercase"
               style={{
-                fontSize: "clamp(32px, 5vw, 56px)",
                 color: "var(--color-dark)",
-                letterSpacing: "-2px",
-                lineHeight: 1,
                 marginTop: 32,
                 marginBottom: 32,
               }}
@@ -206,15 +203,7 @@ function BlogContent({
         >
           <div className="mx-auto" style={{ maxWidth: 1280 }}>
             <div className="flex items-end justify-between" style={{ marginBottom: 32 }}>
-              <h2
-                className="font-barlow-condensed font-extrabold uppercase"
-                style={{
-                  fontSize: "clamp(32px, 5vw, 56px)",
-                  color: "var(--color-dark)",
-                  letterSpacing: "-2px",
-                  lineHeight: 0.95,
-                }}
-              >
+              <h2 className="type-h1 uppercase" style={{ color: "var(--color-dark)" }}>
                 RELATED<br />BLOG
               </h2>
               <Link
@@ -255,15 +244,7 @@ function BlogContent({
             className="mx-auto flex flex-col md:flex-row items-start md:items-center justify-between"
             style={{ maxWidth: 1280, gap: 32 }}
           >
-            <h2
-              className="font-barlow-condensed font-extrabold uppercase"
-              style={{
-                fontSize: "clamp(32px, 5vw, 56px)",
-                color: "var(--color-dark)",
-                letterSpacing: "-2px",
-                lineHeight: 0.95,
-              }}
-            >
+            <h2 className="type-h1 uppercase" style={{ color: "var(--color-dark)" }}>
               DON&apos;T MISS AN<br />UPDATE
             </h2>
             <div>

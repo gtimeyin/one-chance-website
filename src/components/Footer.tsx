@@ -33,7 +33,7 @@ export default function Footer() {
           style={{ minWidth: 320, gap: 16 }}
         >
           <h2
-            className="text-display-title-bold font-display-title-bold uppercase -tracking-[3px] mobile:text-[48px] mobile:leading-[48px]"
+            className="type-display uppercase"
             style={{
               color: "#121B19",
               whiteSpace: "pre-wrap",

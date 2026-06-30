@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import TestimonialCard from "@/components/ui/TestimonialCard";
 import WriteReviewDialog from "./WriteReviewDialog";
 import { stripHtml } from "@/lib/utils";
-import type { WooReview } from "@/lib/woocommerce";
+import type { WooReview } from "@/lib/woocommerce-shared";
 
 interface TestimonialsSectionProps {
   productId: number;
@@ -45,15 +45,7 @@ export default function TestimonialsSection({
           className="flex flex-col sm:flex-row sm:items-end sm:justify-between"
           style={{ marginBottom: 40, gap: 16 }}
         >
-          <h2
-            className="font-barlow-condensed font-extrabold uppercase"
-            style={{
-              fontSize: "clamp(32px, 5vw, 64px)",
-              color: "black",
-              letterSpacing: "-0.02em",
-              lineHeight: "100%",
-            }}
-          >
+          <h2 className="type-h1 uppercase" style={{ color: "black" }}>
             WORDS ON THE<br />STREET ABOUT US
           </h2>
           <button

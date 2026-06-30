@@ -43,7 +43,7 @@ export default async function AccountLayout({
           className="flex w-full justify-center bg-white"
           style={{ padding: "clamp(32px, 4vw, 64px) clamp(20px, 4vw, 40px)" }}
         >
-          <div className="flex w-full max-w-[1024px] gap-10">
+          <div className="flex w-full max-w-[1024px] gap-10 mobile:flex-col mobile:gap-6">
             <AccountSidebar avatarSrc={avatarSrc} avatarName={avatarName} />
             <main className="flex-1 min-w-0">{children}</main>
           </div>

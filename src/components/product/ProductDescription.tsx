@@ -1,6 +1,6 @@
 "use client";
 
-import { getAttribute, type WooProduct } from "@/lib/woocommerce";
+import { getAttribute, type WooProduct } from "@/lib/woocommerce-shared";
 
 interface ProductDescriptionProps {
   product: WooProduct;

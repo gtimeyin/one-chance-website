@@ -32,19 +32,10 @@ const AddressSchema = z.object({
   phone: z.string().trim().min(5).max(30),
 });
 
-const ShippingMethodSchema = z.object({
-  zone_id: z.number().int().nonnegative(),
-  method_id: z.string().min(1).max(50),
-  instance_id: z.number().int().nonnegative(),
-  title: z.string().min(1).max(100),
-  cost: z.number().nonnegative(),
-});
-
 const BodySchema = z.object({
   email: z.string().trim().email().max(254),
   cart: z.array(CartLineSchema).min(1).max(50),
   shippingAddress: AddressSchema,
-  shippingMethod: ShippingMethodSchema,
 });
 
 // Currencies Paystack accepts.
@@ -75,7 +66,7 @@ export async function POST(request: Request) {
       { status: 400 },
     );
   }
-  const { email, cart, shippingAddress, shippingMethod } = parsed.data;
+  const { email, cart, shippingAddress } = parsed.data;
 
   let priced;
   try {
@@ -95,7 +86,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const amount = priced.subtotal + shippingMethod.cost;
+  const amount = priced.subtotal;
   if (amount <= 0) {
     return NextResponse.json({ error: "Amount must be > 0" }, { status: 400 });
   }
@@ -109,7 +100,6 @@ export async function POST(request: Request) {
     email,
     cart: priced.cart,
     shippingAddress,
-    shippingMethod,
     currency: priced.currency,
     amount,
   });

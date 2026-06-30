@@ -6,7 +6,7 @@ import { formatPrice, getImageSrc } from "@/lib/utils";
 import { useCart } from "@/store/cart";
 import { useCurrency } from "@/components/CurrencyProvider";
 import { trackAddToCart } from "@/lib/analytics";
-import type { WooProduct } from "@/lib/woocommerce";
+import type { WooProduct } from "@/lib/woocommerce-shared";
 
 interface ProductCardProps {
   product: WooProduct;
@@ -16,6 +16,13 @@ export default function ProductCard({ product }: ProductCardProps) {
   const imageSrc = getImageSrc(product.images);
   const addItem = useCart((s) => s.addItem);
   const currency = useCurrency();
+
+  const activePrice = parseFloat(product.price || "0");
+  const regularPrice = parseFloat(product.regular_price || "0");
+  const onSale = product.on_sale && regularPrice > activePrice;
+  const discountPct = onSale
+    ? Math.round(((regularPrice - activePrice) / regularPrice) * 100)
+    : 0;
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -57,6 +64,22 @@ export default function ProductCard({ product }: ProductCardProps) {
           className="object-contain p-4 group-hover:scale-105 transition-transform duration-500"
           sizes="(max-width: 768px) 100vw, 33vw"
         />
+        {onSale && (
+          <span
+            className="absolute font-barlow-condensed font-bold uppercase z-10"
+            style={{
+              top: 12,
+              left: 12,
+              padding: "4px 8px",
+              background: "var(--color-dark)",
+              color: "var(--color-yellow)",
+              fontSize: 11,
+              letterSpacing: "0.05em",
+            }}
+          >
+            {discountPct}% OFF
+          </span>
+        )}
         {/* Star/bookmark icon - top right */}
         <button
           onClick={(e) => {
@@ -98,15 +121,29 @@ export default function ProductCard({ product }: ProductCardProps) {
           {product.name}
         </Link>
         <span
-          className="font-barlow-condensed"
+          className="font-barlow-condensed flex items-baseline"
           style={{
             fontSize: 15,
             color: "var(--color-dark)",
             marginTop: 4,
-            fontWeight: 400
+            fontWeight: 400,
+            gap: 8,
           }}
         >
-          {formatPrice(product.price, currency)}
+          {onSale && (
+            <span
+              style={{
+                fontSize: 13,
+                color: "var(--color-text-muted)",
+                textDecoration: "line-through",
+              }}
+            >
+              {formatPrice(product.regular_price, currency)}
+            </span>
+          )}
+          <span style={{ fontWeight: onSale ? 600 : 400, color: onSale ? "#B91C1C" : "var(--color-dark)" }}>
+            {formatPrice(product.price, currency)}
+          </span>
         </span>
 
         {/* Cart/bag icon - positioned at bottom right of the card info area */}

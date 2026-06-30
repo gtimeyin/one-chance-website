@@ -6,6 +6,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 import { getOrderById } from "@/lib/woocommerce";
 import { formatPrice } from "@/lib/utils";
 import ClearLocalCart from "./ClearLocalCart";
+import PurchaseTracker from "@/components/analytics/PurchaseTracker";
 
 export const metadata = {
   title: "Order Complete",
@@ -31,7 +32,23 @@ export default async function OrderCompletePage({ searchParams }: OrderCompleteP
     <div className="flex flex-col w-full" style={{ background: "white", minHeight: "100vh" }}>
       <SmoothScroll />
       <Navbar />
-      {valid && <ClearLocalCart />}
+      {valid && order && (
+        <>
+          <ClearLocalCart />
+          <PurchaseTracker
+            transactionId={String(order.id)}
+            value={parseFloat(order.total)}
+            currency={order.currency}
+            shipping={parseFloat(order.shipping_total)}
+            items={order.line_items.map((li) => ({
+              productId: li.product_id,
+              name: li.name,
+              price: li.price,
+              quantity: li.quantity,
+            }))}
+          />
+        </>
+      )}
       <div className="relative z-[1]" style={{ paddingTop: 56, background: "white" }}>
         <section
           className="w-full"
@@ -79,10 +96,7 @@ function OrderReceipt({
             <polyline points="20 6 9 17 4 12" />
           </svg>
         </div>
-        <h1
-          className="font-barlow-condensed font-extrabold uppercase"
-          style={{ fontSize: "clamp(36px, 5vw, 56px)", color: "var(--color-dark)", lineHeight: 1, letterSpacing: "-1px" }}
-        >
+        <h1 className="type-h1 uppercase" style={{ color: "var(--color-dark)" }}>
           Thanks for your order
         </h1>
         <p className="font-barlow-condensed" style={{ fontSize: 16, color: "var(--color-text-muted)" }}>
@@ -204,10 +218,7 @@ function SummaryRow({ label, value, bold }: { label: string; value: string; bold
 function NotFound() {
   return (
     <div className="flex flex-col items-center text-center" style={{ gap: 16 }}>
-      <h1
-        className="font-barlow-condensed font-extrabold uppercase"
-        style={{ fontSize: "clamp(28px, 4vw, 40px)", color: "var(--color-dark)", lineHeight: 1.1, letterSpacing: "-0.5px" }}
-      >
+      <h1 className="type-h2 uppercase" style={{ color: "var(--color-dark)" }}>
         Order not found
       </h1>
       <p className="font-barlow-condensed" style={{ fontSize: 16, color: "var(--color-text-muted)", maxWidth: 420 }}>

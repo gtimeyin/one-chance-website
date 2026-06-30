@@ -42,21 +42,10 @@ export default function FAQs({
           className="flex flex-col items-start"
           style={{ gap: 24 }}
         >
-          <span
-            className="font-['Barlow_Condensed'] uppercase"
-            style={{
-              fontSize: 12,
-              fontWeight: 500,
-              lineHeight: "16px",
-              letterSpacing: "0.15em",
-              color: "#a3a3a3",
-            }}
-          >
+          <span className="type-eyebrow" style={{ color: "#a3a3a3" }}>
             {heading}
           </span>
-          <span className="text-display-title-bold font-display-title-bold text-white uppercase -tracking-[2px]">
-            {subheading}
-          </span>
+          <h2 className="type-display text-white uppercase">{subheading}</h2>
         </motion.div>
 
         {/* FAQ items */}

@@ -61,12 +61,9 @@ export default function VideoSection({ videoUrl, headline }: VideoSectionProps) 
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
-          className="font-barlow-condensed font-extrabold uppercase"
+          className="type-h1 uppercase"
           style={{
-            fontSize: "clamp(32px, 5vw, 64px)",
             color: "black",
-            letterSpacing: "-0.02em",
-            lineHeight: "100%",
             marginBottom: 48,
             maxWidth: 800,
           }}

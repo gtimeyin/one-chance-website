@@ -3,7 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import ProductCard from "@/components/ui/ProductCard";
-import type { WooProduct } from "@/lib/woocommerce";
+import type { WooProduct } from "@/lib/woocommerce-shared";
 
 interface ShopProductGridProps {
   products: WooProduct[];
@@ -38,13 +38,8 @@ export default function ShopProductGrid({ products }: ShopProductGridProps) {
           style={{ marginBottom: 40 }}
         >
           <h2
-            className="font-barlow-condensed font-extrabold uppercase"
-            style={{
-              fontSize: "clamp(36px, 5vw, 56px)",
-              color: "var(--color-dark)",
-              letterSpacing: "-2px",
-              lineHeight: 1,
-            }}
+            className="type-h1 uppercase"
+            style={{ color: "var(--color-dark)" }}
           >
             SHOP ALL PRODUCTS
           </h2>

@@ -27,7 +27,7 @@ export default async function OrderDetailPage({
       </div>
 
       <div className="flex flex-col gap-2">
-        <h1 className="font-['Barlow_Condensed'] text-[36px] font-[800] leading-[1.1] text-neutral-800 uppercase">
+        <h1 className="font-['Barlow_Condensed'] text-[36px] mobile:text-[28px] font-[800] leading-[1.1] text-neutral-800 uppercase">
           ORDER #{order.id}
         </h1>
         <div className="flex items-center gap-3">
@@ -54,7 +54,7 @@ export default async function OrderDetailPage({
 
       {/* Line items */}
       <div className="flex flex-col border border-neutral-200">
-        <div className="flex items-center px-5 py-3 bg-neutral-50 border-b border-neutral-200">
+        <div className="hidden md:flex items-center px-5 py-3 bg-neutral-50 border-b border-neutral-200">
           <span className="flex-1 font-['Barlow_Condensed'] text-[12px] font-[600] uppercase tracking-[0.1em] text-neutral-500">Product</span>
           <span className="w-[60px] text-center font-['Barlow_Condensed'] text-[12px] font-[600] uppercase tracking-[0.1em] text-neutral-500">Qty</span>
           <span className="w-[100px] text-right font-['Barlow_Condensed'] text-[12px] font-[600] uppercase tracking-[0.1em] text-neutral-500">Total</span>
@@ -62,17 +62,29 @@ export default async function OrderDetailPage({
         {order.line_items.map((item) => (
           <div
             key={item.id}
-            className="flex items-center px-5 py-4 border-b border-neutral-100 last:border-b-0"
+            className="flex items-center px-5 py-4 border-b border-neutral-100 last:border-b-0 mobile:flex-col mobile:items-stretch mobile:gap-2 mobile:px-4"
           >
-            <span className="flex-1 font-['Barlow_Condensed'] text-[15px] text-neutral-800">
+            <span className="mobile:hidden flex-1 font-['Barlow_Condensed'] text-[15px] text-neutral-800">
               {item.name}
             </span>
-            <span className="w-[60px] text-center font-['Barlow_Condensed'] text-[14px] text-neutral-500">
+            <span className="mobile:hidden w-[60px] text-center font-['Barlow_Condensed'] text-[14px] text-neutral-500">
               {item.quantity}
             </span>
-            <span className="w-[100px] text-right font-['Barlow_Condensed'] text-[14px] font-[600] text-neutral-800">
+            <span className="mobile:hidden w-[100px] text-right font-['Barlow_Condensed'] text-[14px] font-[600] text-neutral-800">
               {order.currency} {item.total}
             </span>
+            {/* Mobile-only stacked */}
+            <span className="hidden mobile:block font-['Barlow_Condensed'] text-[15px] font-[600] text-neutral-800">
+              {item.name}
+            </span>
+            <div className="hidden mobile:flex items-center justify-between gap-3">
+              <span className="font-['Barlow_Condensed'] text-[13px] text-neutral-500">
+                Qty {item.quantity}
+              </span>
+              <span className="font-['Barlow_Condensed'] text-[14px] font-[700] text-neutral-800">
+                {order.currency} {item.total}
+              </span>
+            </div>
           </div>
         ))}
       </div>

@@ -45,8 +45,8 @@ export async function POST(request: Request) {
   if (!session.payment_intent_id) {
     return NextResponse.json({ error: "No payment intent on session" }, { status: 400 });
   }
-  if (!session.shipping_address || !session.shipping_method) {
-    return NextResponse.json({ error: "Session missing shipping data" }, { status: 400 });
+  if (!session.shipping_address) {
+    return NextResponse.json({ error: "Session missing address" }, { status: 400 });
   }
 
   // Verify payment server-side via the provider that owns this session.
@@ -97,7 +97,6 @@ export async function POST(request: Request) {
 
   // Create the Woo order
   const addr = session.shipping_address;
-  const method = session.shipping_method;
   const billing = {
     first_name: addr.first_name,
     last_name: addr.last_name,
@@ -141,13 +140,6 @@ export async function POST(request: Request) {
         quantity: line.quantity,
         ...(line.variationId ? { variation_id: line.variationId } : {}),
       })),
-      shipping_lines: [
-        {
-          method_id: method.method_id,
-          method_title: method.title,
-          total: method.cost.toFixed(2),
-        },
-      ],
       meta_data: [
         { key: "_oc_checkout_session_id", value: session.id },
         { key: providerMetaKey, value: providerRef },

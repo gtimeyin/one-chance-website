@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useTransition } from "react";
 import { Select } from "@/ui/components/Select";
-import type { WooCategory } from "@/lib/woocommerce";
+import type { WooCategory } from "@/lib/woocommerce-shared";
 
 export interface SortOption {
   key: string;

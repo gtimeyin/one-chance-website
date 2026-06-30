@@ -112,12 +112,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
             <div className="flex items-baseline" style={{ gap: 12 }}>
               <h1
-                className="font-barlow-condensed font-extrabold uppercase"
-                style={{
-                  fontSize: "clamp(28px, 4vw, 48px)",
-                  color: "var(--color-dark)",
-                  letterSpacing: "-0.01em",
-                }}
+                className="type-h1 uppercase"
+                style={{ color: "var(--color-dark)" }}
               >
                 {query.trim()
                   ? `Results for "${query}"`

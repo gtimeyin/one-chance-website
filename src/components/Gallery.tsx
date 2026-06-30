@@ -27,14 +27,14 @@ export default function Gallery() {
       }}
     >
       <div className="flex w-full max-w-[1280px] flex-col items-start" style={{ gap: 48 }}>
-        <motion.span
+        <motion.h2
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-display-title-bold font-display-title-bold text-default-font uppercase -tracking-[3px]"
+          className="type-display text-default-font uppercase"
         >
           Gallery
-        </motion.span>
+        </motion.h2>
 
         <div className="flex w-full min-w-full flex-wrap items-start gap-6 mobile:flex-col mobile:gap-6">
           {/* Left column: text + large image */}

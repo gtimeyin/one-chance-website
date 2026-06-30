@@ -7,7 +7,7 @@ import { useCart } from "@/store/cart";
 import { useCurrency } from "@/components/CurrencyProvider";
 import { trackAddToCart } from "@/lib/analytics";
 import { formatPrice, getImageSrc } from "@/lib/utils";
-import { getAttribute, getMetaValue, type WooProduct } from "@/lib/woocommerce";
+import { getAttribute, getMetaValue, type WooProduct } from "@/lib/woocommerce-shared";
 
 interface ProductInfoProps {
   product: WooProduct;
@@ -43,6 +43,12 @@ export default function ProductInfo({ product }: ProductInfoProps) {
   const playTime = getAttribute(product, "Play Time");
   const ratingValue = parseFloat(product.average_rating || "0");
   const ratingCount = product.rating_count || 0;
+  const activePrice = parseFloat(product.price || "0");
+  const regularPrice = parseFloat(product.regular_price || "0");
+  const onSale = product.on_sale && regularPrice > activePrice;
+  const discountPct = onSale
+    ? Math.round(((regularPrice - activePrice) / regularPrice) * 100)
+    : 0;
 
   return (
     <div className="flex flex-col" style={{ gap: 20 }}>
@@ -54,15 +60,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
       )}
 
       {/* Title */}
-      <h1
-        className="font-barlow-condensed font-extrabold uppercase"
-        style={{
-          fontSize: "clamp(24px, 3vw, 36px)",
-          color: "var(--color-dark)",
-          lineHeight: 1.1,
-          letterSpacing: "-1px",
-        }}
-      >
+      <h1 className="type-h2 uppercase" style={{ color: "var(--color-dark)" }}>
         {product.name}
       </h1>
 
@@ -101,9 +99,35 @@ export default function ProductInfo({ product }: ProductInfoProps) {
 
       {/* Price */}
       <div className="flex flex-col gap-1" style={{ marginTop: 10 }}>
+        {onSale && (
+          <div className="flex items-center" style={{ gap: 10 }}>
+            <span
+              className="font-barlow-condensed"
+              style={{
+                fontSize: 20,
+                color: "var(--color-text-muted)",
+                textDecoration: "line-through",
+              }}
+            >
+              {formatPrice(product.regular_price, currency)}
+            </span>
+            <span
+              className="font-barlow-condensed font-bold uppercase"
+              style={{
+                padding: "4px 10px",
+                background: "var(--color-dark)",
+                color: "var(--color-yellow)",
+                fontSize: 12,
+                letterSpacing: "0.05em",
+              }}
+            >
+              {discountPct}% OFF
+            </span>
+          </div>
+        )}
         <span
           className="font-barlow-condensed font-extrabold"
-          style={{ fontSize: 64, color: "#1A202C", lineHeight: 1 }}
+          style={{ fontSize: 64, color: onSale ? "#B91C1C" : "#1A202C", lineHeight: 1 }}
         >
           {formatPrice(product.price, currency)}
         </span>
