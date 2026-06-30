@@ -164,7 +164,7 @@ export default function Navbar() {
             transition={{ duration: 0.3 }}
             className="fixed inset-0 z-[60] flex h-full w-full flex-col items-center justify-between bg-brand-yellow px-16 py-16 mobile:px-6 mobile:py-8"
           >
-            <div className="flex w-full grow shrink-0 basis-0 flex-col items-center justify-between">
+            <div className="flex w-full max-w-[1280px] grow shrink-0 basis-0 flex-col items-center justify-between">
               {/* Top: Close button — matches the menu trigger (size + variant). */}
               <div className="flex w-full flex-col items-start pb-4">
                 <Button
@@ -176,9 +176,9 @@ export default function Navbar() {
                 </Button>
               </div>
 
-              {/* Middle: Nav links + secondary */}
+              {/* Middle: Nav links (fill width) + secondary (right) */}
               <div className="flex w-full items-start justify-between gap-16 mobile:flex-col mobile:gap-12">
-                <div className="mb-[12px] mt-[12px] flex flex-col items-start gap-2">
+                <div className="mb-[12px] mt-[12px] flex flex-1 flex-col items-start gap-2">
                   {navLinks.map((link, i) => (
                     <motion.div
                       key={link.label}
