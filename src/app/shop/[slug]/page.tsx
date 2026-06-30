@@ -4,9 +4,12 @@ import {
   getProductReviews,
   getProductsByIds,
   type WooProduct,
+  type WooReview,
 } from "@/lib/woocommerce";
 import { stripHtml, truncate, getImageSrc } from "@/lib/utils";
 import { getActiveCountry } from "@/lib/currency.server";
+import { currencyForCountry } from "@/lib/currency";
+import { siteUrl } from "@/lib/site";
 import ProductDetailClient from "./ProductDetailClient";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -63,20 +66,95 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const reviews = await getProductReviews(product.id);
 
   return (
-    <ProductDetailClient
-      product={product}
-      relatedProducts={relatedProducts}
-      reviews={reviews}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(buildProductJsonLd(product, reviews, country)),
+        }}
+      />
+      <ProductDetailClient
+        product={product}
+        relatedProducts={relatedProducts}
+        reviews={reviews}
+      />
+    </>
   );
+}
+
+const AVAILABILITY: Record<string, string> = {
+  instock: "https://schema.org/InStock",
+  outofstock: "https://schema.org/OutOfStock",
+  onbackorder: "https://schema.org/BackOrder",
+};
+
+function buildProductJsonLd(
+  product: WooProduct,
+  reviews: WooReview[],
+  country: string,
+) {
+  const url = `${siteUrl}/shop/${product.slug}`;
+  const description = stripHtml(product.short_description || product.description);
+  const image = getImageSrc(product.images);
+
+  const offers = {
+    "@type": "Offer",
+    url,
+    priceCurrency: currencyForCountry(country),
+    price: product.price,
+    availability: AVAILABILITY[product.stock_status] ?? "https://schema.org/InStock",
+    itemCondition: "https://schema.org/NewCondition",
+  };
+
+  const ratingValue = parseFloat(product.average_rating || "0");
+  const ratingCount = product.rating_count || 0;
+  const aggregateRating =
+    ratingCount > 0 && ratingValue > 0
+      ? {
+          "@type": "AggregateRating",
+          ratingValue: ratingValue.toFixed(1),
+          reviewCount: ratingCount,
+        }
+      : undefined;
+
+  const review =
+    reviews.length > 0
+      ? reviews.slice(0, 5).map((r) => ({
+          "@type": "Review",
+          reviewRating: {
+            "@type": "Rating",
+            ratingValue: r.rating,
+            bestRating: 5,
+          },
+          author: { "@type": "Person", name: r.reviewer },
+          datePublished: r.date_created,
+          reviewBody: stripHtml(r.review),
+        }))
+      : undefined;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description,
+    sku: product.sku || undefined,
+    image: image ? [image] : undefined,
+    url,
+    brand: { "@type": "Brand", name: "One Chance" },
+    offers,
+    aggregateRating,
+    review,
+  };
 }
 
 const RELATED_LIMIT = 4;
 
 async function getRelatedProducts(product: WooProduct, country: string): Promise<WooProduct[]> {
-  // Prefer manually merchandised cross-sells, then Woo's auto-computed related_ids,
-  // then fall back to recent products so the section never sits empty.
-  const preferred = [...(product.cross_sell_ids ?? []), ...(product.related_ids ?? [])];
+  // Woo convention: upsells live on the product page ("get the better one"),
+  // cross-sells live in the cart ("complete your purchase"). So on the PDP
+  // we prefer upsells, fall back to Woo's auto-computed related_ids, then
+  // recent products so the section never sits empty.
+  const preferred = [...(product.upsell_ids ?? []), ...(product.related_ids ?? [])];
   const uniqueIds = Array.from(new Set(preferred));
 
   const byIds = uniqueIds.length > 0 ? await getProductsByIds(uniqueIds, country) : [];

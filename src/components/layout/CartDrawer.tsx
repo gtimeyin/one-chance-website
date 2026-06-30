@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useCart } from "@/store/cart";
 import { useCurrency } from "@/components/CurrencyProvider";
 import { trackBeginCheckout } from "@/lib/analytics";
@@ -13,26 +14,96 @@ interface CartDrawerProps {
   isOpen: boolean;
 }
 
+interface CrossSellItem {
+  id: number;
+  name: string;
+  slug: string;
+  price: number;
+  regular_price: number;
+  on_sale: boolean;
+  image: string | null;
+}
+
+function getCookie(name: string): string | null {
+  if (typeof document === "undefined") return null;
+  const m = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]+)`));
+  return m ? decodeURIComponent(m[1]) : null;
+}
+
 export default function CartDrawer({ isOpen }: CartDrawerProps) {
   const items = useCart((s) => s.items);
   const closeCart = useCart((s) => s.closeCart);
   const removeItem = useCart((s) => s.removeItem);
   const updateQuantity = useCart((s) => s.updateQuantity);
-  const getTotal = useCart((s) => s.getTotal);
+  const addItem = useCart((s) => s.addItem);
   const currency = useCurrency();
   const router = useRouter();
+  // Cart-store price was captured in whatever currency was active when the
+  // item was added, so we can't trust it after a country/currency change.
+  // Reprice against the active country whenever items or currency change.
+  const [repricedPrices, setRepricedPrices] = useState<Record<number, number>>({});
+  const [crossSells, setCrossSells] = useState<CrossSellItem[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (items.length === 0) {
+      // Stale state is harmless (nothing iterates it while cart is empty),
+      // and avoiding setState here keeps us out of cascading-render lint.
+      return;
+    }
+    const country = (getCookie("oc-country") ?? "NG").toUpperCase();
+    const productIds = Array.from(new Set(items.map((i) => i.productId)));
+
+    fetch("/api/checkout/reprice", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ productIds, country }),
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        if (cancelled || !Array.isArray(data?.prices)) return;
+        const map: Record<number, number> = {};
+        for (const p of data.prices) map[p.productId] = p.price;
+        setRepricedPrices(map);
+      })
+      .catch(() => { /* keep skeletons on transient failure */ });
+
+    fetch("/api/cart/cross-sells", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ productIds, country }),
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        if (cancelled || !Array.isArray(data?.products)) return;
+        setCrossSells(data.products);
+      })
+      .catch(() => { /* silently skip cross-sells on transient failure */ });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [items, currency]);
+
+  function priceFor(productId: number): number | null {
+    return repricedPrices[productId] ?? null;
+  }
+  const allLinesPriced = items.every((i) => repricedPrices[i.productId] != null);
+  const total = allLinesPriced
+    ? items.reduce((sum, i) => sum + (priceFor(i.productId) ?? 0) * i.quantity, 0)
+    : null;
 
   function handleCheckout() {
-    if (items.length === 0) return;
+    if (items.length === 0 || !allLinesPriced) return;
 
     trackBeginCheckout(
       items.map((i) => ({
         productId: i.productId,
         name: i.name,
-        price: i.price,
+        price: priceFor(i.productId) ?? 0,
         quantity: i.quantity,
       })),
-      getTotal(),
+      total ?? 0,
     );
 
     closeCart();
@@ -155,9 +226,22 @@ export default function CartDrawer({ isOpen }: CartDrawerProps) {
                           </p>
                           <p
                             className="font-barlow-condensed font-bold"
-                            style={{ fontSize: 14, color: "var(--color-dark)", marginTop: 4 }}
+                            style={{ fontSize: 14, color: "var(--color-dark)", marginTop: 4, minHeight: 18 }}
                           >
-                            {formatPrice(item.price, currency)}
+                            {priceFor(item.productId) === null ? (
+                              <span
+                                aria-hidden
+                                style={{
+                                  display: "inline-block",
+                                  width: 70,
+                                  height: 12,
+                                  background: "var(--color-border-light)",
+                                  borderRadius: 3,
+                                }}
+                              />
+                            ) : (
+                              formatPrice(priceFor(item.productId)!, currency)
+                            )}
                           </p>
                         </div>
                         <div className="flex items-center justify-between">
@@ -207,6 +291,72 @@ export default function CartDrawer({ isOpen }: CartDrawerProps) {
                   ))}
                 </div>
               )}
+
+              {crossSells.length > 0 && (
+                <div
+                  style={{
+                    padding: "20px 24px 4px",
+                    borderTop: "1px solid var(--color-border-light)",
+                  }}
+                >
+                  <p
+                    className="font-barlow-condensed font-bold uppercase"
+                    style={{ fontSize: 12, color: "var(--color-text-muted)", letterSpacing: "0.05em", marginBottom: 12 }}
+                  >
+                    You might also like
+                  </p>
+                  <div className="flex flex-col" style={{ gap: 10 }}>
+                    {crossSells.map((cs) => (
+                      <div key={cs.id} className="flex items-center" style={{ gap: 10 }}>
+                        {cs.image ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={cs.image}
+                            alt={cs.name}
+                            style={{ width: 44, height: 44, objectFit: "contain", background: "var(--color-light-bg)" }}
+                          />
+                        ) : null}
+                        <Link
+                          href={`/shop/${cs.slug}`}
+                          className="flex-1 font-barlow-condensed font-bold"
+                          style={{ fontSize: 13, color: "var(--color-dark)", textDecoration: "none", lineHeight: 1.3 }}
+                          onClick={closeCart}
+                        >
+                          {cs.name}
+                          <span style={{ display: "block", fontSize: 12, color: "var(--color-text-muted)", fontWeight: 400, marginTop: 2 }}>
+                            {formatPrice(cs.price, currency)}
+                          </span>
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            addItem({
+                              productId: cs.id,
+                              name: cs.name,
+                              price: cs.price,
+                              quantity: 1,
+                              image: cs.image ?? "",
+                              slug: cs.slug,
+                            })
+                          }
+                          className="font-barlow-condensed font-bold uppercase cursor-pointer"
+                          style={{
+                            padding: "6px 10px",
+                            border: "1px solid var(--color-dark)",
+                            background: "white",
+                            color: "var(--color-dark)",
+                            fontSize: 11,
+                            letterSpacing: "0.05em",
+                          }}
+                          aria-label={`Add ${cs.name} to cart`}
+                        >
+                          Add
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Footer */}
@@ -222,20 +372,21 @@ export default function CartDrawer({ isOpen }: CartDrawerProps) {
                     Subtotal
                   </span>
                   <span className="font-barlow-condensed font-bold" style={{ fontSize: 18, color: "var(--color-dark)" }}>
-                    {formatPrice(getTotal(), currency)}
+                    {total === null ? "—" : formatPrice(total, currency)}
                   </span>
                 </div>
                 <button
                   onClick={handleCheckout}
+                  disabled={!allLinesPriced}
                   className="w-full font-barlow-condensed font-bold cursor-pointer border-none"
                   style={{
                     padding: "14px",
-                    background: "var(--color-yellow)",
+                    background: !allLinesPriced ? "#E5E7EB" : "var(--color-yellow)",
                     color: "var(--color-dark)",
                     fontSize: 16,
                   }}
                 >
-                  CHECKOUT
+                  {!allLinesPriced ? "UPDATING…" : "CHECKOUT"}
                 </button>
               </div>
             )}
