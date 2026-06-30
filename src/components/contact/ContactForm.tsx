@@ -44,8 +44,8 @@ export default function ContactForm() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="flex flex-col"
-          style={{ flex: "0 0 auto", maxWidth: 300, gap: 32 }}
+          className="flex flex-col w-full md:w-auto md:max-w-[300px]"
+          style={{ flex: "0 0 auto", gap: 32 }}
         >
           <p
             className="font-barlow-condensed"

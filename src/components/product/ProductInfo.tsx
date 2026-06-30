@@ -127,7 +127,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
         )}
         <span
           className="font-barlow-condensed font-extrabold"
-          style={{ fontSize: 64, color: onSale ? "#B91C1C" : "#1A202C", lineHeight: 1 }}
+          style={{ fontSize: "clamp(40px, 8vw, 64px)", color: onSale ? "#B91C1C" : "#1A202C", lineHeight: 1 }}
         >
           {formatPrice(product.price, currency)}
         </span>

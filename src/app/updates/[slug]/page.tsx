@@ -139,9 +139,8 @@ function BlogContent({
               }}
             >
               <div
-                className="blog-content"
+                className="blog-content md:[column-count:2] md:[column-gap:40px]"
                 dangerouslySetInnerHTML={{ __html: post.content }}
-                style={{ columnCount: 2, columnGap: 40 }}
               />
             </motion.div>
 

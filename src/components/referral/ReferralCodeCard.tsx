@@ -66,7 +66,7 @@ export default function ReferralCodeCard({ code, totalReferrals, totalEarned }: 
         style={{ background: "var(--color-yellow, #FFD600)" }}
       >
         <span
-          className="font-['Barlow_Condensed'] text-[32px] font-[800] tracking-[0.1em]"
+          className="font-['Barlow_Condensed'] text-[32px] mobile:text-[24px] font-[800] tracking-[0.1em] break-all text-center"
           style={{ color: "var(--color-dark, #1A202C)" }}
         >
           {code.code}

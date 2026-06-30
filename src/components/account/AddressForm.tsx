@@ -36,7 +36,7 @@ export default function AddressForm({
         </div>
       )}
 
-      <div className="flex gap-4">
+      <div className="flex gap-4 mobile:flex-col">
         <div className="flex-1">
           <TextField label="First Name">
             <TextField.Input name="first_name" defaultValue={address.first_name} placeholder="First name" />
@@ -57,7 +57,7 @@ export default function AddressForm({
         <TextField.Input name="address_2" defaultValue={address.address_2} placeholder="Apartment, suite, etc." />
       </TextField>
 
-      <div className="flex gap-4">
+      <div className="flex gap-4 mobile:flex-col">
         <div className="flex-1">
           <TextField label="City">
             <TextField.Input name="city" defaultValue={address.city} placeholder="City" />
@@ -70,7 +70,7 @@ export default function AddressForm({
         </div>
       </div>
 
-      <div className="flex gap-4">
+      <div className="flex gap-4 mobile:flex-col">
         <div className="flex-1">
           <TextField label="Postcode">
             <TextField.Input name="postcode" defaultValue={address.postcode} placeholder="Postal code" />

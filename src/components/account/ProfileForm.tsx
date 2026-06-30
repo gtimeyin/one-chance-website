@@ -33,7 +33,7 @@ export default function ProfileForm({
         </div>
       )}
 
-      <div className="flex gap-4">
+      <div className="flex gap-4 mobile:flex-col">
         <div className="flex-1 flex flex-col gap-1">
           <TextField label="First Name" error={!!state.errors?.firstName}>
             <TextField.Input name="firstName" defaultValue={firstName} placeholder="First name" />

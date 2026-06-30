@@ -27,7 +27,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
   return (
     <input
       className={SubframeUtils.twClassNames(
-        "group/b0d608f7 h-full w-full border-none bg-transparent px-0 py-0 text-body font-body text-default-font outline-none placeholder:text-neutral-400",
+        "group/b0d608f7 h-full w-full border-none bg-transparent px-0 py-0 text-[16px] leading-[24px] font-body text-default-font outline-none placeholder:text-neutral-400",
         className
       )}
       placeholder={placeholder as string}
@@ -91,13 +91,13 @@ const TextFieldRoot = React.forwardRef<HTMLLabelElement, TextFieldRootProps>(
         {...otherProps}
       >
         {label ? (
-          <span className="text-caption-bold font-caption-bold text-default-font">
+          <span className="text-[14px] leading-[20px] font-semibold text-default-font">
             {label}
           </span>
         ) : null}
         <div
           className={SubframeUtils.twClassNames(
-            "flex h-8 w-full flex-none items-center gap-1 rounded-md border border-solid border-neutral-border bg-default-background px-2 group-focus-within/be48ca43:border group-focus-within/be48ca43:border-solid group-focus-within/be48ca43:border-brand-primary",
+            "flex h-12 w-full flex-none items-center gap-2 rounded-md border border-solid border-neutral-border bg-default-background px-4 group-focus-within/be48ca43:border group-focus-within/be48ca43:border-solid group-focus-within/be48ca43:border-brand-primary",
             {
               "border border-solid border-neutral-100 bg-neutral-100 group-hover/be48ca43:border group-hover/be48ca43:border-solid group-hover/be48ca43:border-neutral-border group-focus-within/be48ca43:bg-default-background":
                 variant === "filled",
@@ -107,7 +107,7 @@ const TextFieldRoot = React.forwardRef<HTMLLabelElement, TextFieldRootProps>(
           )}
         >
           {icon ? (
-            <SubframeCore.IconWrapper className="text-body font-body text-subtext-color">
+            <SubframeCore.IconWrapper className="text-[18px] leading-[24px] font-body text-subtext-color">
               {icon}
             </SubframeCore.IconWrapper>
           ) : null}
@@ -119,7 +119,7 @@ const TextFieldRoot = React.forwardRef<HTMLLabelElement, TextFieldRootProps>(
           {iconRight ? (
             <SubframeCore.IconWrapper
               className={SubframeUtils.twClassNames(
-                "text-body font-body text-subtext-color",
+                "text-[18px] leading-[24px] font-body text-subtext-color",
                 { "text-error-500": error }
               )}
             >
@@ -130,7 +130,7 @@ const TextFieldRoot = React.forwardRef<HTMLLabelElement, TextFieldRootProps>(
         {helpText ? (
           <span
             className={SubframeUtils.twClassNames(
-              "text-caption font-caption text-subtext-color",
+              "text-[14px] leading-[20px] font-caption text-subtext-color",
               { "text-error-700": error }
             )}
           >

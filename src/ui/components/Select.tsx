@@ -54,7 +54,7 @@ const Item = React.forwardRef<HTMLDivElement, ItemProps>(function Item(
     >
       <div
         className={SubframeUtils.twClassNames(
-          "group/969e345b flex h-8 w-full cursor-pointer items-center gap-1 rounded-md px-3 hover:bg-neutral-100 active:bg-neutral-50 data-[highlighted]:bg-brand-50",
+          "group/969e345b flex h-11 w-full cursor-pointer items-center gap-2 rounded-md px-4 hover:bg-neutral-100 active:bg-neutral-50 data-[highlighted]:bg-brand-50",
           className
         )}
         ref={ref}
@@ -62,7 +62,7 @@ const Item = React.forwardRef<HTMLDivElement, ItemProps>(function Item(
         <Select.ItemText className="h-auto grow shrink-0 basis-0">
           {children || value}
         </Select.ItemText>
-        <FeatherCheck className="hidden text-body font-body text-brand-600 group-data-[state=checked]/969e345b:inline-flex" />
+        <FeatherCheck className="hidden text-[18px] leading-[24px] font-body text-brand-600 group-data-[state=checked]/969e345b:inline-flex" />
       </div>
     </SubframeCore.Select.Item>
   );
@@ -83,7 +83,7 @@ const ItemText = React.forwardRef<HTMLSpanElement, ItemTextProps>(
       <SubframeCore.Select.ItemText {...otherProps}>
         <span
           className={SubframeUtils.twClassNames(
-            "text-body font-body text-default-font",
+            "text-[16px] leading-[24px] font-body text-default-font",
             className
           )}
           ref={ref}
@@ -114,18 +114,18 @@ const Trigger = React.forwardRef<HTMLButtonElement, TriggerProps>(
       <SubframeCore.Select.Trigger asChild={true} {...otherProps}>
         <button
           className={SubframeUtils.twClassNames(
-            "flex h-full w-full items-center gap-2 px-3 text-left",
+            "flex h-full w-full items-center gap-2 px-4 text-left",
             className
           )}
           ref={ref}
         >
           {icon ? (
-            <SubframeCore.IconWrapper className="text-body font-body text-neutral-400">
+            <SubframeCore.IconWrapper className="text-[18px] leading-[24px] font-body text-neutral-400">
               {icon}
             </SubframeCore.IconWrapper>
           ) : null}
           <Select.TriggerValue placeholder={placeholder as string} />
-          <FeatherChevronDown className="text-body font-body text-subtext-color" />
+          <FeatherChevronDown className="text-[18px] leading-[24px] font-body text-subtext-color" />
         </button>
       </SubframeCore.Select.Trigger>
     );
@@ -148,7 +148,7 @@ const TriggerValue = React.forwardRef<
   return (
     <SubframeCore.Select.Value
       className={SubframeUtils.twClassNames(
-        "w-full whitespace-nowrap text-body font-body text-default-font",
+        "w-full whitespace-nowrap text-[16px] leading-[24px] font-body text-default-font",
         className
       )}
       ref={ref}
@@ -226,13 +226,13 @@ const SelectRoot = React.forwardRef<HTMLDivElement, SelectRootProps>(
           {...otherProps}
         >
           {label ? (
-            <span className="text-caption-bold font-caption-bold text-default-font">
+            <span className="text-[14px] leading-[20px] font-semibold text-default-font">
               {label}
             </span>
           ) : null}
           <div
             className={SubframeUtils.twClassNames(
-              "flex h-8 w-full flex-none flex-col items-start rounded-md border border-solid border-neutral-border bg-default-background group-focus-within/bb88f90b:border group-focus-within/bb88f90b:border-solid group-focus-within/bb88f90b:border-brand-primary",
+              "flex h-12 w-full flex-none flex-col items-start rounded-md border border-solid border-neutral-border bg-default-background group-focus-within/bb88f90b:border group-focus-within/bb88f90b:border-solid group-focus-within/bb88f90b:border-brand-primary",
               {
                 "border border-solid border-neutral-100 bg-neutral-100":
                   variant === "filled",
@@ -246,7 +246,7 @@ const SelectRoot = React.forwardRef<HTMLDivElement, SelectRootProps>(
           {helpText ? (
             <span
               className={SubframeUtils.twClassNames(
-                "text-caption font-caption text-subtext-color",
+                "text-[14px] leading-[20px] font-caption text-subtext-color",
                 { "text-error-700": error }
               )}
             >

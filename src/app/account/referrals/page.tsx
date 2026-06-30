@@ -46,7 +46,7 @@ export default async function ReferralsPage() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
-        <h1 className="font-['Barlow_Condensed'] text-[40px] font-[800] leading-[1.1] text-neutral-800 uppercase -tracking-[0.02em]">
+        <h1 className="font-['Barlow_Condensed'] text-[40px] mobile:text-[28px] font-[800] leading-[1.1] text-neutral-800 uppercase -tracking-[0.02em]">
           REFERRAL PROGRAM
         </h1>
         <p className="font-['Barlow_Condensed'] text-[16px] text-neutral-500">

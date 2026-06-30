@@ -26,7 +26,7 @@ const Input = React.forwardRef<HTMLTextAreaElement, InputProps>(function Input(
   return (
     <textarea
       className={SubframeUtils.twClassNames(
-        "min-h-[96px] w-full border-none bg-transparent px-2 py-1.5 text-body font-body text-default-font outline-none placeholder:text-neutral-400",
+        "min-h-[112px] w-full border-none bg-transparent px-4 py-3 text-[16px] leading-[24px] font-body text-default-font outline-none placeholder:text-neutral-400",
         className
       )}
       placeholder={placeholder as string}
@@ -69,7 +69,7 @@ const TextAreaRoot = React.forwardRef<HTMLLabelElement, TextAreaRootProps>(
         {...otherProps}
       >
         {label ? (
-          <span className="text-caption-bold font-caption-bold text-default-font">
+          <span className="text-[14px] leading-[20px] font-semibold text-default-font">
             {label}
           </span>
         ) : null}
@@ -90,7 +90,7 @@ const TextAreaRoot = React.forwardRef<HTMLLabelElement, TextAreaRootProps>(
         {helpText ? (
           <span
             className={SubframeUtils.twClassNames(
-              "text-caption font-caption text-subtext-color",
+              "text-[14px] leading-[20px] font-caption text-subtext-color",
               { "text-error-700": error }
             )}
           >
