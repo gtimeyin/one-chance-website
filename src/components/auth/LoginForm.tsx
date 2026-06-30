@@ -9,11 +9,12 @@ import type { FormState } from "@/lib/auth-definitions";
 
 const initialState: FormState = {};
 
-export default function LoginForm() {
+export default function LoginForm({ redirectTo }: { redirectTo?: string }) {
   const [state, formAction, pending] = useActionState(login, initialState);
 
   return (
     <form action={formAction} className="flex flex-col gap-5 w-full">
+      {redirectTo && <input type="hidden" name="redirectTo" value={redirectTo} />}
       {state.message && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded text-[14px] font-['Barlow_Condensed']">
           {state.message}

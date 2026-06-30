@@ -10,7 +10,14 @@ export const metadata = {
   robots: { index: false, follow: true },
 };
 
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ redirect?: string }>;
+}) {
+  const { redirect } = await searchParams;
+  const redirectTo =
+    redirect && redirect.startsWith("/") && !redirect.startsWith("//") ? redirect : undefined;
   return (
     <div className="flex flex-col w-full" style={{ background: "white" }}>
       <SmoothScroll />
@@ -38,7 +45,7 @@ export default function LoginPage() {
                 Access your account, orders, and more
               </p>
             </div>
-            <LoginForm />
+            <LoginForm redirectTo={redirectTo} />
           </div>
         </section>
       </div>
