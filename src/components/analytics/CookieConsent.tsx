@@ -37,7 +37,7 @@ export default function CookieConsent() {
         className="mx-auto flex flex-col gap-3 md:flex-row md:items-center md:justify-between"
         style={{ maxWidth: 1200, gap: 16 }}
       >
-        <p style={{ fontSize: 14, color: "var(--color-dark)", lineHeight: 1.5 }}>
+        <p style={{ fontSize: 16, color: "var(--color-dark)", lineHeight: 1.5 }}>
           We use cookies to measure how the site is used (Google Analytics) so we can make it better. See our{" "}
           <Link href="/privacy" style={{ textDecoration: "underline" }}>
             privacy policy
@@ -53,7 +53,7 @@ export default function CookieConsent() {
               background: "white",
               color: "var(--color-dark)",
               border: "1px solid var(--color-dark)",
-              fontSize: 13,
+              fontSize: 15,
               letterSpacing: "0.04em",
             }}
           >
@@ -66,7 +66,7 @@ export default function CookieConsent() {
               padding: "10px 18px",
               background: "#FFD600",
               color: "var(--color-dark)",
-              fontSize: 13,
+              fontSize: 15,
               letterSpacing: "0.04em",
             }}
           >

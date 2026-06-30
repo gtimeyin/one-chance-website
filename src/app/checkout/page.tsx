@@ -21,7 +21,7 @@ export default async function CheckoutPage() {
     return (
       <div className="flex flex-col w-full" style={{ background: "white", minHeight: "100vh" }}>
         <Navbar />
-        <div className="relative z-[1]" style={{ paddingTop: 56 }}>
+        <div className="relative z-[1]" style={{ paddingTop: 24 }}>
           <section style={{ padding: "clamp(60px, 8vw, 120px) clamp(20px, 4vw, 60px)" }}>
             <div className="mx-auto" style={{ maxWidth: 720 }}>
               <h1 className="font-barlow-condensed font-extrabold uppercase" style={{ fontSize: 36, color: "var(--color-dark)" }}>
@@ -53,7 +53,7 @@ export default async function CheckoutPage() {
     <div className="flex flex-col w-full" style={{ background: "white", minHeight: "100vh" }}>
       <SmoothScroll />
       <Navbar />
-      <div className="relative z-[1]" style={{ paddingTop: 56, background: "white" }}>
+      <div className="relative z-[1]" style={{ paddingTop: 24, background: "white" }}>
         <CheckoutClient
           country={country}
           currency={currency}

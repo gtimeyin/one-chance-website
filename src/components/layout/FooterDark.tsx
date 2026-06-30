@@ -67,7 +67,7 @@ export default function FooterDark() {
             >
               ONE CHANCE
             </Link>
-            <p className="font-barlow-condensed" style={{ fontSize: 13, color: "rgba(255,255,255,0.5)", marginTop: 12, lineHeight: 1.6 }}>
+            <p className="font-barlow-condensed" style={{ fontSize: 15, color: "rgba(255,255,255,0.5)", marginTop: 12, lineHeight: 1.6 }}>
               Lorem ipsum dolor sit amet consectetur.<br />
               Tristique ac quis turpis nulla sagittis<br />
               scelerisque.
@@ -118,7 +118,7 @@ export default function FooterDark() {
             <div key={col.title}>
               <p
                 className="font-barlow-condensed font-semibold uppercase"
-                style={{ fontSize: 13, letterSpacing: "0.05em", color: "rgba(255,255,255,0.8)", marginBottom: 16 }}
+                style={{ fontSize: 15, letterSpacing: "0.05em", color: "rgba(255,255,255,0.8)", marginBottom: 16 }}
               >
                 {col.title}
               </p>

@@ -53,7 +53,7 @@ export default function ComicCard({ comic }: ComicCardProps) {
         <p
           className="font-barlow-condensed"
           style={{
-            fontSize: 14,
+            fontSize: 16,
             color: "var(--color-text-muted)",
             marginTop: 2,
           }}

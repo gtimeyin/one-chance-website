@@ -64,13 +64,13 @@ export default function ContactForm() {
             <div>
               <p
                 className="font-barlow-condensed font-bold"
-                style={{ fontSize: 14, color: "#121B19", marginBottom: 4 }}
+                style={{ fontSize: 16, color: "#121B19", marginBottom: 4 }}
               >
                 Email Address
               </p>
               <p
                 className="font-barlow-condensed"
-                style={{ fontSize: 14, color: "rgba(18, 27, 25, 0.6)" }}
+                style={{ fontSize: 16, color: "rgba(18, 27, 25, 0.6)" }}
               >
                 info@onechancegame.com
               </p>
@@ -79,13 +79,13 @@ export default function ContactForm() {
             <div>
               <p
                 className="font-barlow-condensed font-bold"
-                style={{ fontSize: 14, color: "#121B19", marginBottom: 4 }}
+                style={{ fontSize: 16, color: "#121B19", marginBottom: 4 }}
               >
                 Careers &amp; Internship
               </p>
               <p
                 className="font-barlow-condensed"
-                style={{ fontSize: 14, color: "rgba(18, 27, 25, 0.6)" }}
+                style={{ fontSize: 16, color: "rgba(18, 27, 25, 0.6)" }}
               >
                 careers@onechancegame.com
               </p>
@@ -94,13 +94,13 @@ export default function ContactForm() {
             <div>
               <p
                 className="font-barlow-condensed font-bold"
-                style={{ fontSize: 14, color: "#121B19", marginBottom: 4 }}
+                style={{ fontSize: 16, color: "#121B19", marginBottom: 4 }}
               >
                 Phone Number
               </p>
               <p
                 className="font-barlow-condensed"
-                style={{ fontSize: 14, color: "rgba(18, 27, 25, 0.6)" }}
+                style={{ fontSize: 16, color: "rgba(18, 27, 25, 0.6)" }}
               >
                 +234 903 111 4455
               </p>
@@ -110,7 +110,7 @@ export default function ContactForm() {
           <div>
             <p
               className="font-barlow-condensed font-bold"
-              style={{ fontSize: 14, color: "#121B19", marginBottom: 12 }}
+              style={{ fontSize: 16, color: "#121B19", marginBottom: 12 }}
             >
               Follow us
             </p>

@@ -87,7 +87,7 @@ export default function QuickStartGuide({ steps, boardImage }: QuickStartGuidePr
                 <p
                   className="font-barlow-condensed"
                   style={{
-                    fontSize: 14,
+                    fontSize: 16,
                     color: "rgba(0,0,0,0.6)",
                     lineHeight: 1.6,
                   }}

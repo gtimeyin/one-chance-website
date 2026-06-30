@@ -46,10 +46,10 @@ export default function ShopProductGrid({ products }: ShopProductGridProps) {
           <p
             className="font-barlow-condensed"
             style={{
-              fontSize: 14,
+              fontSize: 17,
               color: "var(--color-dark)",
               marginTop: 12,
-              maxWidth: 480,
+              maxWidth: 520,
               lineHeight: 1.5,
               opacity: 0.7,
             }}

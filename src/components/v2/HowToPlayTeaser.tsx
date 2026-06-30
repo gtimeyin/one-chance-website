@@ -156,7 +156,7 @@ export default function HowToPlayTeaser() {
                           transition={{ duration: 0.3 }}
                           className="font-barlow"
                           style={{
-                            fontSize: 14,
+                            fontSize: 16,
                             lineHeight: "20px",
                             color: "rgb(63, 71, 69)",
                           }}
@@ -266,7 +266,7 @@ export default function HowToPlayTeaser() {
                         animate={{ opacity: 1 }}
                         className="font-barlow"
                         style={{
-                          fontSize: 14,
+                          fontSize: 16,
                           lineHeight: "20px",
                           color: "rgb(63, 71, 69)",
                         }}

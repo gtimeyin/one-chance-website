@@ -12,10 +12,13 @@ export const metadata = {
 
 export default function RegisterPage() {
   return (
-    <div className="flex flex-col w-full" style={{ background: "white" }}>
+    <div className="flex flex-col w-full min-h-screen" style={{ background: "white" }}>
       <SmoothScroll />
       <Navbar />
-      <div className="relative z-[1]" style={{ paddingTop: 56, background: "white" }}>
+      <div
+        className="relative z-[1] flex flex-col"
+        style={{ paddingTop: 24, background: "white", minHeight: "calc(100vh - 96px)" }}
+      >
         <div style={{ padding: "0 clamp(20px, 4vw, 40px)" }}>
           <Breadcrumb
             items={[
@@ -26,8 +29,15 @@ export default function RegisterPage() {
         </div>
 
         <section
-          className="flex w-full flex-col items-center bg-white"
-          style={{ padding: "clamp(48px, 6vw, 96px) 24px" }}
+          className="flex w-full flex-1 flex-col items-center justify-center bg-white"
+          style={{
+            paddingTop: "clamp(24px, 4vw, 48px)",
+            paddingInline: 24,
+            // Heavier bottom padding offsets the header stack (top bar +
+            // breadcrumb) above the section, so justify-center lands the form
+            // on the viewport's optical centre, not below it.
+            paddingBottom: "calc(clamp(24px, 4vw, 48px) + 160px)",
+          }}
         >
           <div className="flex w-full max-w-[520px] flex-col items-center gap-8">
             <div className="flex flex-col items-center gap-2">

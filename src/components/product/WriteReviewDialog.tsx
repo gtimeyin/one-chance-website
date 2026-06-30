@@ -67,7 +67,7 @@ function ReviewForm({ productId, productName, onClose }: ReviewFormProps) {
               </h2>
               <p
                 className="font-barlow-condensed"
-                style={{ fontSize: 14, color: "var(--color-text-muted)", marginTop: 4 }}
+                style={{ fontSize: 16, color: "var(--color-text-muted)", marginTop: 4 }}
               >
                 Share your thoughts on {productName}
               </p>
@@ -90,7 +90,7 @@ function ReviewForm({ productId, productName, onClose }: ReviewFormProps) {
             <div
               className="font-barlow-condensed"
               style={{
-                fontSize: 14,
+                fontSize: 16,
                 padding: "10px 14px",
                 background: state.success ? "#E6F4EA" : "#FEE2E2",
                 color: state.success ? "#1B5E20" : "#991B1B",
@@ -133,7 +133,7 @@ function ReviewForm({ productId, productName, onClose }: ReviewFormProps) {
               />
 
               <div className="flex flex-col" style={{ gap: 6 }}>
-                <label className="font-barlow-condensed font-medium" style={{ fontSize: 13, color: "var(--color-dark)" }}>
+                <label className="font-barlow-condensed font-medium" style={{ fontSize: 15, color: "var(--color-dark)" }}>
                   Rating
                 </label>
                 <div className="flex items-center" style={{ gap: 6 }}>
@@ -159,14 +159,14 @@ function ReviewForm({ productId, productName, onClose }: ReviewFormProps) {
                 </div>
                 <input type="hidden" name="rating" value={rating} />
                 {state.errors?.rating?.[0] && (
-                  <span className="font-barlow-condensed" style={{ fontSize: 13, color: "#B91C1C" }}>
+                  <span className="font-barlow-condensed" style={{ fontSize: 15, color: "#B91C1C" }}>
                     {state.errors.rating[0]}
                   </span>
                 )}
               </div>
 
               <div className="flex flex-col" style={{ gap: 6 }}>
-                <label htmlFor="review" className="font-barlow-condensed font-medium" style={{ fontSize: 13, color: "var(--color-dark)" }}>
+                <label htmlFor="review" className="font-barlow-condensed font-medium" style={{ fontSize: 15, color: "var(--color-dark)" }}>
                   Review
                 </label>
                 <textarea
@@ -179,7 +179,7 @@ function ReviewForm({ productId, productName, onClose }: ReviewFormProps) {
                     padding: "10px 12px",
                     border: `1px solid ${state.errors?.review ? "#FCA5A5" : "var(--color-border-light)"}`,
                     borderRadius: 4,
-                    fontSize: 14,
+                    fontSize: 16,
                     color: "var(--color-dark)",
                     resize: "vertical",
                   }}
@@ -188,7 +188,7 @@ function ReviewForm({ productId, productName, onClose }: ReviewFormProps) {
                   maxLength={2000}
                 />
                 {state.errors?.review?.[0] && (
-                  <span className="font-barlow-condensed" style={{ fontSize: 13, color: "#B91C1C" }}>
+                  <span className="font-barlow-condensed" style={{ fontSize: 15, color: "#B91C1C" }}>
                     {state.errors.review[0]}
                   </span>
                 )}
@@ -202,7 +202,7 @@ function ReviewForm({ productId, productName, onClose }: ReviewFormProps) {
                   padding: "14px 24px",
                   background: pending ? "#E5E7EB" : "#FFD600",
                   color: "var(--color-dark)",
-                  fontSize: 14,
+                  fontSize: 16,
                   letterSpacing: "0.05em",
                   marginTop: 4,
                 }}
@@ -228,7 +228,7 @@ interface FieldProps {
 function Field({ label, name, type = "text", placeholder, helper, error, required }: FieldProps) {
   return (
     <div className="flex flex-col" style={{ gap: 6 }}>
-      <label htmlFor={name} className="font-barlow-condensed font-medium" style={{ fontSize: 13, color: "var(--color-dark)" }}>
+      <label htmlFor={name} className="font-barlow-condensed font-medium" style={{ fontSize: 15, color: "var(--color-dark)" }}>
         {label}
       </label>
       <input
@@ -242,7 +242,7 @@ function Field({ label, name, type = "text", placeholder, helper, error, require
           padding: "10px 12px",
           border: `1px solid ${error ? "#FCA5A5" : "var(--color-border-light)"}`,
           borderRadius: 4,
-          fontSize: 14,
+          fontSize: 16,
           color: "var(--color-dark)",
         }}
       />
@@ -252,7 +252,7 @@ function Field({ label, name, type = "text", placeholder, helper, error, require
         </span>
       )}
       {error && (
-        <span className="font-barlow-condensed" style={{ fontSize: 13, color: "#B91C1C" }}>
+        <span className="font-barlow-condensed" style={{ fontSize: 15, color: "#B91C1C" }}>
           {error}
         </span>
       )}

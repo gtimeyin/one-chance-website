@@ -15,16 +15,9 @@ import {
   FeatherSearch,
   FeatherShoppingBag,
   FeatherUser,
-  FeatherPackage,
-  FeatherLogOut,
   FeatherX,
-  FeatherFacebook,
-  FeatherInstagram,
-  FeatherTwitter,
-  FeatherLinkedin,
-  FeatherMusic,
-  FeatherYoutube,
 } from "@subframe/core";
+import { SocialIcon, type SocialName } from "@/components/icons/SocialIcons";
 
 const navLinks = [
   { label: "HOME", href: "/" },
@@ -38,6 +31,16 @@ const secondaryLinks = [
   { label: "Explore Olopa", href: "#" },
   { label: "Terms & Condition", href: "#" },
   { label: "Legal", href: "#" },
+];
+
+// TODO: replace "#" with real profile URLs once available.
+const socialLinks: { name: SocialName; label: string; href: string }[] = [
+  { name: "facebook", label: "Facebook", href: "#" },
+  { name: "instagram", label: "Instagram", href: "#" },
+  { name: "x", label: "X (Twitter)", href: "#" },
+  { name: "linkedin", label: "LinkedIn", href: "#" },
+  { name: "tiktok", label: "TikTok", href: "#" },
+  { name: "youtube", label: "YouTube", href: "#" },
 ];
 
 export default function Navbar() {
@@ -209,7 +212,7 @@ export default function Navbar() {
                   className="flex flex-col items-start gap-2 pt-8 mobile:px-0 mobile:py-0"
                 >
                   {/* Account */}
-                  <span className="font-barlow-condensed font-bold uppercase text-black-800 opacity-50 mb-2" style={{ fontSize: 14, letterSpacing: "0.05em" }}>
+                  <span className="font-barlow-condensed font-bold uppercase text-black-800 opacity-50 mb-2" style={{ fontSize: 16, letterSpacing: "0.05em" }}>
                     {isAuth && firstName ? `Hi, ${firstName}` : "Account"}
                   </span>
                   {isAuth ? (
@@ -217,26 +220,26 @@ export default function Navbar() {
                       <Link
                         href="/account"
                         onClick={() => setIsOpen(false)}
-                        className="flex items-center gap-2 font-barlow-condensed font-semibold text-black-950 no-underline"
+                        className="font-barlow-condensed font-semibold text-black-950 no-underline opacity-70 hover:opacity-100 transition-opacity duration-200"
                         style={{ textDecoration: "none", fontSize: 22, lineHeight: 1.3 }}
                       >
-                        <FeatherUser style={{ fontSize: 22 }} /> My Account
+                        My Account
                       </Link>
                       <Link
                         href="/account/orders"
                         onClick={() => setIsOpen(false)}
-                        className="flex items-center gap-2 font-barlow-condensed font-semibold text-black-950 no-underline"
+                        className="font-barlow-condensed font-semibold text-black-950 no-underline opacity-70 hover:opacity-100 transition-opacity duration-200"
                         style={{ textDecoration: "none", fontSize: 22, lineHeight: 1.3 }}
                       >
-                        <FeatherPackage style={{ fontSize: 22 }} /> My Orders
+                        My Orders
                       </Link>
                       <form action={logout} onSubmit={() => setIsOpen(false)}>
                         <button
                           type="submit"
-                          className="flex items-center gap-2 font-barlow-condensed font-semibold text-black-950 no-underline bg-transparent border-none cursor-pointer p-0"
+                          className="font-barlow-condensed font-semibold text-black-950 no-underline bg-transparent border-none cursor-pointer p-0 opacity-70 hover:opacity-100 transition-opacity duration-200"
                           style={{ fontSize: 22, lineHeight: 1.3 }}
                         >
-                          <FeatherLogOut style={{ fontSize: 22 }} /> Sign Out
+                          Sign Out
                         </button>
                       </form>
                     </>
@@ -245,15 +248,15 @@ export default function Navbar() {
                       <Link
                         href="/login"
                         onClick={() => setIsOpen(false)}
-                        className="flex items-center gap-2 font-barlow-condensed font-semibold text-black-950 no-underline"
+                        className="font-barlow-condensed font-semibold text-black-950 no-underline opacity-70 hover:opacity-100 transition-opacity duration-200"
                         style={{ textDecoration: "none", fontSize: 22, lineHeight: 1.3 }}
                       >
-                        <FeatherUser style={{ fontSize: 22 }} /> Sign In
+                        Sign In
                       </Link>
                       <Link
                         href="/register"
                         onClick={() => setIsOpen(false)}
-                        className="font-barlow-condensed font-semibold text-black-950 no-underline"
+                        className="font-barlow-condensed font-semibold text-black-950 no-underline opacity-70 hover:opacity-100 transition-opacity duration-200"
                         style={{ textDecoration: "none", fontSize: 22, lineHeight: 1.3 }}
                       >
                         Create Account
@@ -261,7 +264,7 @@ export default function Navbar() {
                     </>
                   )}
 
-                  <span className="font-barlow-condensed font-bold uppercase text-black-800 opacity-50 mt-6 mb-2" style={{ fontSize: 14, letterSpacing: "0.05em" }}>
+                  <span className="font-barlow-condensed font-bold uppercase text-black-800 opacity-50 mt-6 mb-2" style={{ fontSize: 16, letterSpacing: "0.05em" }}>
                     More
                   </span>
                   {secondaryLinks.map((link) => (
@@ -269,7 +272,7 @@ export default function Navbar() {
                       key={link.label}
                       href={link.href}
                       onClick={() => setIsOpen(false)}
-                      className="font-barlow-condensed font-semibold text-black-800 no-underline"
+                      className="font-barlow-condensed font-semibold text-black-800 no-underline opacity-70 hover:opacity-100 transition-opacity duration-200"
                       style={{ textDecoration: "none", fontSize: 22, lineHeight: 1.3 }}
                     >
                       {link.label}
@@ -287,34 +290,40 @@ export default function Navbar() {
               >
                 <div className="flex flex-col items-start gap-1">
                   <a
-                    href="tel:+2349027305417"
-                    className="font-barlow-condensed font-bold text-black-800 no-underline"
+                    href="tel:+2349035164629"
+                    className="font-barlow-condensed font-bold text-black-800 no-underline opacity-80 hover:opacity-100 transition-opacity duration-200"
                     style={{ fontSize: 18, textDecoration: "none" }}
                   >
-                    T: +234 902 730 5417
+                    T: +234 903 516 4629
                   </a>
                   <a
                     href="mailto:info@onechancegame.com"
-                    className="font-barlow-condensed font-bold text-black-800 no-underline"
+                    className="font-barlow-condensed font-bold text-black-800 no-underline opacity-80 hover:opacity-100 transition-opacity duration-200"
                     style={{ fontSize: 18, textDecoration: "none" }}
                   >
                     E: info@onechancegame.com
                   </a>
                 </div>
-                <div className="flex flex-col items-end gap-8 mobile:w-full mobile:items-start">
+                <div className="flex flex-col items-end gap-3 mobile:w-full mobile:items-start">
                   <div className="flex items-center gap-4">
-                    <FeatherFacebook className="font-['Barlow_Condensed'] text-[20px] font-[400] leading-[30px] text-default-font" />
-                    <FeatherInstagram className="font-['Barlow_Condensed'] text-[20px] font-[400] leading-[30px] text-default-font" />
-                    <FeatherTwitter className="font-['Barlow_Condensed'] text-[20px] font-[400] leading-[30px] text-default-font" />
-                    <FeatherLinkedin className="font-['Barlow_Condensed'] text-[20px] font-[400] leading-[30px] text-default-font" />
-                    <FeatherMusic className="font-['Barlow_Condensed'] text-[20px] font-[400] leading-[30px] text-default-font" />
-                    <FeatherYoutube className="font-['Barlow_Condensed'] text-[20px] font-[400] leading-[30px] text-default-font" />
+                    {socialLinks.map((s) => (
+                      <a
+                        key={s.name}
+                        href={s.href}
+                        aria-label={s.label}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-default-font opacity-80 hover:opacity-100 hover:scale-110 transition-all duration-200"
+                      >
+                        <SocialIcon name={s.name} size={20} />
+                      </a>
+                    ))}
                   </div>
                   <a
                     href="https://neuro6.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-barlow-condensed font-bold uppercase text-black-800 no-underline"
+                    className="font-barlow-condensed font-bold uppercase text-black-800 no-underline opacity-80 hover:opacity-100 transition-opacity duration-200"
                     style={{ fontSize: 12, letterSpacing: "0.05em", textDecoration: "none" }}
                   >
                     DESIGNED BY N6

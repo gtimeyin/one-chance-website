@@ -52,7 +52,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     <div className="flex flex-col w-full" style={{ background: "white", minHeight: "100vh" }}>
       <SmoothScroll />
       <Navbar />
-      <div className="relative z-[1]" style={{ paddingTop: 56, background: "white" }}>
+      <div className="relative z-[1]" style={{ paddingTop: 24, background: "white" }}>
         <div style={{ padding: "0 clamp(20px, 4vw, 40px)" }}>
           <Breadcrumb
             items={[
@@ -98,7 +98,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 type="submit"
                 className="font-barlow-condensed cursor-pointer border-none uppercase"
                 style={{
-                  fontSize: 14,
+                  fontSize: 16,
                   fontWeight: 700,
                   letterSpacing: "0.05em",
                   background: "var(--color-yellow)",
@@ -122,7 +122,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
               {query.trim() && (
                 <span
                   className="font-barlow-condensed"
-                  style={{ fontSize: 14, color: "var(--color-text-muted)" }}
+                  style={{ fontSize: 16, color: "var(--color-text-muted)" }}
                 >
                   {total} {total === 1 ? "match" : "matches"}
                 </span>
@@ -149,7 +149,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 </p>
                 <p
                   className="font-barlow-condensed"
-                  style={{ fontSize: 14, color: "var(--color-text-muted)" }}
+                  style={{ fontSize: 16, color: "var(--color-text-muted)" }}
                 >
                   Try a different keyword, or{" "}
                   <Link href="/shop" className="underline" style={{ color: "var(--color-dark)" }}>
@@ -194,7 +194,7 @@ function ResultSection({
         <h2
           className="font-barlow-condensed font-bold uppercase"
           style={{
-            fontSize: 14,
+            fontSize: 16,
             letterSpacing: "0.08em",
             color: "var(--color-text-muted)",
           }}
@@ -286,7 +286,7 @@ function ResultLink({ item }: { item: SearchItem }) {
         {item.description && (
           <span
             className="font-barlow-condensed"
-            style={{ fontSize: 14, color: "var(--color-text-muted)", lineHeight: 1.5 }}
+            style={{ fontSize: 16, color: "var(--color-text-muted)", lineHeight: 1.5 }}
           >
             {item.description}
           </span>

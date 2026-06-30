@@ -31,7 +31,7 @@ export default function NewsletterForm({ variant = "dark" }: NewsletterFormProps
           border: isDark ? "1px solid rgba(255,255,255,0.2)" : "1px solid var(--color-border-light)",
           borderRight: "none",
           padding: "14px 16px",
-          fontSize: 14,
+          fontSize: 16,
           color: isDark ? "white" : "var(--color-dark)",
           outline: "none",
         }}
@@ -44,7 +44,7 @@ export default function NewsletterForm({ variant = "dark" }: NewsletterFormProps
           background: isDark ? "white" : "var(--color-yellow)",
           color: "var(--color-dark)",
           padding: "14px 16px",
-          fontSize: 14,
+          fontSize: 16,
           fontWeight: 600,
           border: "none",
         }}

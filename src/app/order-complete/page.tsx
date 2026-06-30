@@ -49,7 +49,7 @@ export default async function OrderCompletePage({ searchParams }: OrderCompleteP
           />
         </>
       )}
-      <div className="relative z-[1]" style={{ paddingTop: 56, background: "white" }}>
+      <div className="relative z-[1]" style={{ paddingTop: 24, background: "white" }}>
         <section
           className="w-full"
           style={{ padding: "clamp(60px, 8vw, 120px) clamp(20px, 4vw, 60px)" }}
@@ -113,7 +113,7 @@ function OrderReceipt({
       >
         <h2
           className="font-barlow-condensed font-bold uppercase"
-          style={{ fontSize: 14, color: "var(--color-text-muted)", letterSpacing: "0.05em", marginBottom: 16 }}
+          style={{ fontSize: 16, color: "var(--color-text-muted)", letterSpacing: "0.05em", marginBottom: 16 }}
         >
           Order Summary
         </h2>
@@ -132,7 +132,7 @@ function OrderReceipt({
                 <span className="font-barlow-condensed font-bold" style={{ fontSize: 16, color: "var(--color-dark)" }}>
                   {item.name}
                 </span>
-                <span className="font-barlow-condensed" style={{ fontSize: 13, color: "var(--color-text-muted)" }}>
+                <span className="font-barlow-condensed" style={{ fontSize: 15, color: "var(--color-text-muted)" }}>
                   Qty {item.quantity}
                 </span>
               </div>
@@ -169,7 +169,7 @@ function OrderReceipt({
             padding: "14px 24px",
             background: "var(--color-yellow)",
             color: "var(--color-dark)",
-            fontSize: 14,
+            fontSize: 16,
             letterSpacing: "0.05em",
             textDecoration: "none",
           }}
@@ -184,7 +184,7 @@ function OrderReceipt({
             border: "1px solid var(--color-dark)",
             background: "white",
             color: "var(--color-dark)",
-            fontSize: 14,
+            fontSize: 16,
             letterSpacing: "0.05em",
             textDecoration: "none",
           }}
@@ -232,7 +232,7 @@ function NotFound() {
           padding: "12px 20px",
           background: "var(--color-yellow)",
           color: "var(--color-dark)",
-          fontSize: 14,
+          fontSize: 16,
           letterSpacing: "0.05em",
           textDecoration: "none",
         }}

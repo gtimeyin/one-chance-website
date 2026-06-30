@@ -67,7 +67,7 @@ export default function BlogCard({ post }: BlogCardProps) {
       </Link>
 
       {/* Description */}
-      <p className="font-barlow-condensed" style={{ fontSize: 13, color: "var(--color-text-muted)", lineHeight: 1.5 }}>
+      <p className="font-barlow-condensed" style={{ fontSize: 15, color: "var(--color-text-muted)", lineHeight: 1.5 }}>
         {post.description}
       </p>
 

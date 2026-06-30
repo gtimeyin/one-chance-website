@@ -171,7 +171,7 @@ export default function HowToPlay() {
                           transition={{ duration: 0.3 }}
                           className="font-barlow-condensed"
                           style={{
-                            fontSize: 14,
+                            fontSize: 16,
                             lineHeight: "20px",
                             color: "rgb(63, 71, 69)",
                           }}
@@ -304,7 +304,7 @@ export default function HowToPlay() {
                         animate={{ opacity: 1 }}
                         className="font-barlow-condensed"
                         style={{
-                          fontSize: 14,
+                          fontSize: 16,
                           lineHeight: "20px",
                           color: "rgb(63, 71, 69)",
                         }}

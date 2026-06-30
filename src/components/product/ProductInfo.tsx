@@ -54,7 +54,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
     <div className="flex flex-col" style={{ gap: 20 }}>
       {/* Tagline */}
       {tagline && (
-        <p className="font-barlow-condensed" style={{ fontSize: 13, color: "var(--color-text-muted)", letterSpacing: "0.02em" }}>
+        <p className="font-barlow-condensed" style={{ fontSize: 15, color: "var(--color-text-muted)", letterSpacing: "0.02em" }}>
           {tagline}
         </p>
       )}
@@ -68,18 +68,18 @@ export default function ProductInfo({ product }: ProductInfoProps) {
       {(age || players || playTime) && (
         <div className="flex items-center gap-2 flex-wrap">
           {age && (
-            <div className="px-3 py-1.5 rounded-md font-barlow-condensed font-medium" style={{ background: "#E1F2FF", color: "#4A5568", fontSize: 13 }}>
+            <div className="px-3 py-1.5 rounded-md font-barlow-condensed font-medium" style={{ background: "#E1F2FF", color: "#4A5568", fontSize: 15 }}>
               Age {age}
             </div>
           )}
           {players && (
-            <div className="px-3 py-1.5 rounded-md font-barlow-condensed font-medium flex items-center gap-1.5" style={{ background: "#E1F2FF", color: "#4A5568", fontSize: 13 }}>
+            <div className="px-3 py-1.5 rounded-md font-barlow-condensed font-medium flex items-center gap-1.5" style={{ background: "#E1F2FF", color: "#4A5568", fontSize: 15 }}>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
               {players}
             </div>
           )}
           {playTime && (
-            <div className="px-3 py-1.5 rounded-md font-barlow-condensed font-medium flex items-center gap-1.5" style={{ background: "#E1F2FF", color: "#4A5568", fontSize: 13 }}>
+            <div className="px-3 py-1.5 rounded-md font-barlow-condensed font-medium flex items-center gap-1.5" style={{ background: "#E1F2FF", color: "#4A5568", fontSize: 15 }}>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
               {playTime}
             </div>
@@ -91,7 +91,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
       {ratingCount > 0 && (
         <div className="flex items-center gap-3">
           <StarRating rating={ratingValue} size={18} />
-          <span className="font-barlow-condensed" style={{ fontSize: 13, color: "var(--color-text-muted)" }}>
+          <span className="font-barlow-condensed" style={{ fontSize: 15, color: "var(--color-text-muted)" }}>
             {ratingCount} {ratingCount === 1 ? "Review" : "Reviews"}
           </span>
         </div>

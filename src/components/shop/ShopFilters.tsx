@@ -74,7 +74,7 @@ export default function ShopFilters({
       <div className="flex items-center" style={{ gap: 12 }}>
         <span
           className="font-barlow-condensed"
-          style={{ fontSize: 14, color: "var(--color-text-muted)" }}
+          style={{ fontSize: 16, color: "var(--color-text-muted)" }}
         >
           Sort by
         </span>
@@ -112,7 +112,7 @@ function FilterPill({ label, count, active, onClick }: FilterPillProps) {
         border: `1px solid ${active ? "var(--color-dark)" : "var(--color-border-light)"}`,
         background: active ? "var(--color-dark)" : "white",
         color: active ? "white" : "var(--color-dark)",
-        fontSize: 14,
+        fontSize: 16,
         letterSpacing: "0.05em",
         gap: 8,
         borderRadius: 999,

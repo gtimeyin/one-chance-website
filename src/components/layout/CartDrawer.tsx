@@ -175,7 +175,7 @@ export default function CartDrawer({ isOpen }: CartDrawerProps) {
                       padding: "12px 24px",
                       background: "var(--color-yellow)",
                       color: "var(--color-dark)",
-                      fontSize: 14,
+                      fontSize: 16,
                       textDecoration: "none",
                     }}
                   >
@@ -217,7 +217,7 @@ export default function CartDrawer({ isOpen }: CartDrawerProps) {
                           <p
                             className="font-barlow-condensed font-semibold"
                             style={{
-                              fontSize: 14,
+                              fontSize: 16,
                               color: "var(--color-dark)",
                               lineHeight: "1.3",
                             }}
@@ -226,7 +226,7 @@ export default function CartDrawer({ isOpen }: CartDrawerProps) {
                           </p>
                           <p
                             className="font-barlow-condensed font-bold"
-                            style={{ fontSize: 14, color: "var(--color-dark)", marginTop: 4, minHeight: 18 }}
+                            style={{ fontSize: 16, color: "var(--color-dark)", marginTop: 4, minHeight: 18 }}
                           >
                             {priceFor(item.productId) === null ? (
                               <span
@@ -260,7 +260,7 @@ export default function CartDrawer({ isOpen }: CartDrawerProps) {
                             >
                               -
                             </button>
-                            <span className="font-barlow-condensed font-semibold" style={{ fontSize: 14, color: "var(--color-dark)" }}>
+                            <span className="font-barlow-condensed font-semibold" style={{ fontSize: 16, color: "var(--color-dark)" }}>
                               {item.quantity}
                             </span>
                             <button
@@ -319,7 +319,7 @@ export default function CartDrawer({ isOpen }: CartDrawerProps) {
                         <Link
                           href={`/shop/${cs.slug}`}
                           className="flex-1 font-barlow-condensed font-bold"
-                          style={{ fontSize: 13, color: "var(--color-dark)", textDecoration: "none", lineHeight: 1.3 }}
+                          style={{ fontSize: 15, color: "var(--color-dark)", textDecoration: "none", lineHeight: 1.3 }}
                           onClick={closeCart}
                         >
                           {cs.name}

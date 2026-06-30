@@ -162,7 +162,7 @@ export default function Footer() {
             transition={{ duration: 0.5, delay: 0.4 }}
             className="font-barlow-condensed"
             style={{
-              fontSize: 14,
+              fontSize: 16,
               color: "rgba(18, 27, 25, 0.5)",
             }}
           >

@@ -33,7 +33,7 @@ export default function Breadcrumb({ items }: BreadcrumbProps) {
               <Link
                 href={item.href}
                 style={{
-                  fontSize: 13,
+                  fontSize: 15,
                   fontWeight: 500,
                   color: "var(--color-text-muted)",
                   textDecoration: "none",
@@ -46,7 +46,7 @@ export default function Breadcrumb({ items }: BreadcrumbProps) {
             ) : (
               <span
                 style={{
-                  fontSize: 13,
+                  fontSize: 15,
                   fontWeight: 600,
                   color: "var(--color-dark)",
                   textTransform: "uppercase",

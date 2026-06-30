@@ -53,7 +53,7 @@ export default function NewsSection() {
               href="/updates"
               className="font-barlow-condensed font-semibold no-underline flex items-center gap-2"
               style={{
-                fontSize: 14,
+                fontSize: 16,
                 color: "rgb(18, 27, 25)",
                 textDecoration: "none",
                 padding: "10px 16px",

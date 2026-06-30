@@ -194,7 +194,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                       >
                         <span
                           className="font-barlow-condensed"
-                          style={{ fontSize: 14, color: "var(--color-text-muted)" }}
+                          style={{ fontSize: 16, color: "var(--color-text-muted)" }}
                         >
                           {totalMatches} {totalMatches === 1 ? "result" : "results"}
                         </span>
@@ -203,7 +203,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                           className="font-barlow-condensed flex cursor-pointer items-center border-none uppercase"
                           style={{
                             gap: 8,
-                            fontSize: 14,
+                            fontSize: 16,
                             fontWeight: 700,
                             color: "var(--color-dark)",
                             background: "var(--color-yellow)",
@@ -243,7 +243,7 @@ function ResultGroup({
         <h3
           className="font-barlow-condensed font-bold uppercase"
           style={{
-            fontSize: 13,
+            fontSize: 15,
             letterSpacing: "0.08em",
             color: "var(--color-text-muted)",
           }}
@@ -343,7 +343,7 @@ function ResultRow({
         {item.description && (
           <span
             className="font-barlow-condensed line-clamp-1"
-            style={{ fontSize: 13, color: "var(--color-text-muted)" }}
+            style={{ fontSize: 15, color: "var(--color-text-muted)" }}
           >
             {item.description}
           </span>
@@ -411,7 +411,7 @@ function NoResults({ query }: { query: string }) {
       </p>
       <p
         className="font-barlow-condensed"
-        style={{ fontSize: 14, color: "var(--color-text-muted)" }}
+        style={{ fontSize: 16, color: "var(--color-text-muted)" }}
       >
         Try a different keyword or browse the{" "}
         <Link

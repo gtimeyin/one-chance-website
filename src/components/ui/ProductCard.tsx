@@ -111,7 +111,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           href={`/shop/${product.slug}`}
           className="font-barlow-condensed font-medium no-underline block"
           style={{
-            fontSize: 14,
+            fontSize: 20,
             color: "var(--color-dark)",
             textDecoration: "none",
             lineHeight: 1.2,
@@ -123,7 +123,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <span
           className="font-barlow-condensed flex items-baseline"
           style={{
-            fontSize: 15,
+            fontSize: 21,
             color: "var(--color-dark)",
             marginTop: 4,
             fontWeight: 400,
@@ -133,7 +133,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           {onSale && (
             <span
               style={{
-                fontSize: 13,
+                fontSize: 17,
                 color: "var(--color-text-muted)",
                 textDecoration: "line-through",
               }}

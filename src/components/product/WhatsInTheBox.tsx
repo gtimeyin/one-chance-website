@@ -87,7 +87,7 @@ export default function WhatsInTheBox({ items }: WhatsInTheBoxProps) {
                   key={i}
                   className="flex items-center gap-3 font-barlow-condensed"
                   style={{
-                    fontSize: 15,
+                    fontSize: 17,
                     color: "var(--color-dark)",
                     paddingBottom: 12,
                     borderBottom: "1px solid var(--color-border-light)",

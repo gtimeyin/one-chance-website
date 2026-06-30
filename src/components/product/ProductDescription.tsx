@@ -72,7 +72,7 @@ export default function ProductDescription({ product }: ProductDescriptionProps)
             <div className="grid grid-cols-2 gap-y-10 gap-x-8">
               {info.map((item) => (
                 <div key={item.label}>
-                  <p className="font-barlow-condensed font-medium uppercase" style={{ fontSize: 13, color: "rgba(0,0,0,0.4)", marginBottom: 8, letterSpacing: "0.05em" }}>
+                  <p className="font-barlow-condensed font-medium uppercase" style={{ fontSize: 15, color: "rgba(0,0,0,0.4)", marginBottom: 8, letterSpacing: "0.05em" }}>
                     {item.label}
                   </p>
                   <p className="font-barlow-condensed font-bold" style={{ fontSize: 20, color: "var(--color-dark)" }}>

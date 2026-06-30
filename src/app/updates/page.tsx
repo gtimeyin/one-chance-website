@@ -78,7 +78,7 @@ export default function UpdatesPage() {
     <div className="flex flex-col w-full" style={{ background: "white" }}>
       <SmoothScroll />
       <Navbar />
-      <div className="relative z-[1]" style={{ paddingTop: 56, background: "white" }}>
+      <div className="relative z-[1]" style={{ paddingTop: 24, background: "white" }}>
         <div style={{ padding: "0 clamp(20px, 4vw, 60px)" }}>
           <Breadcrumb
             items={[
@@ -190,7 +190,7 @@ export default function UpdatesPage() {
               DON&apos;T MISS AN<br />UPDATE
             </h2>
             <div>
-              <p className="font-barlow-condensed" style={{ fontSize: 14, color: "var(--color-text-muted)", marginBottom: 12 }}>
+              <p className="font-barlow-condensed" style={{ fontSize: 16, color: "var(--color-text-muted)", marginBottom: 12 }}>
                 Subscribe to our newsletter
               </p>
               <NewsletterForm variant="light" />

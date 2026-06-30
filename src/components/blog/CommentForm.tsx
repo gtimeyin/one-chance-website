@@ -28,7 +28,7 @@ export default function CommentForm() {
           padding: 16,
           border: "1px solid var(--color-border-light)",
           background: "white",
-          fontSize: 14,
+          fontSize: 16,
           color: "var(--color-dark)",
           outline: "none",
           minHeight: 120,
@@ -47,7 +47,7 @@ export default function CommentForm() {
             padding: 14,
             border: "1px solid var(--color-border-light)",
             background: "white",
-            fontSize: 14,
+            fontSize: 16,
             color: "var(--color-dark)",
             outline: "none",
           }}
@@ -63,7 +63,7 @@ export default function CommentForm() {
             padding: 14,
             border: "1px solid var(--color-border-light)",
             background: "white",
-            fontSize: 14,
+            fontSize: 16,
             color: "var(--color-dark)",
             outline: "none",
           }}

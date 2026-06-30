@@ -293,7 +293,7 @@ export default function CheckoutClient({
               padding: "12px 20px",
               background: "var(--color-yellow)",
               color: "var(--color-dark)",
-              fontSize: 14,
+              fontSize: 16,
               letterSpacing: "0.05em",
               border: "none",
             }}
@@ -404,7 +404,7 @@ function AddressAndShipping({
             background: "var(--color-light-bg)",
             border: "1px solid var(--color-border-light)",
             borderRadius: 4,
-            fontSize: 14,
+            fontSize: 16,
             color: "var(--color-dark)",
           }}
         >
@@ -462,7 +462,7 @@ function AddressAndShipping({
                     border: `1px solid ${active ? "var(--color-dark)" : "var(--color-border-light)"}`,
                     background: active ? "#FFFBE6" : "white",
                     color: "var(--color-dark)",
-                    fontSize: 13,
+                    fontSize: 15,
                     letterSpacing: "0.05em",
                     borderRadius: 4,
                   }}
@@ -478,7 +478,7 @@ function AddressAndShipping({
       {error && (
         <p
           className="font-barlow-condensed"
-          style={{ fontSize: 14, color: "#B91C1C", padding: "10px 14px", background: "#FEE2E2", borderRadius: 4 }}
+          style={{ fontSize: 16, color: "#B91C1C", padding: "10px 14px", background: "#FEE2E2", borderRadius: 4 }}
         >
           {error}
         </p>
@@ -592,7 +592,7 @@ function PaymentForm({ sessionId, router }: { sessionId: string; router: ReturnT
       {error && (
         <p
           className="font-barlow-condensed"
-          style={{ fontSize: 14, color: "#B91C1C", padding: "10px 14px", background: "#FEE2E2", borderRadius: 4 }}
+          style={{ fontSize: 16, color: "#B91C1C", padding: "10px 14px", background: "#FEE2E2", borderRadius: 4 }}
         >
           {error}
         </p>
@@ -648,7 +648,7 @@ function CheckoutSummary({ items, subtotal, total, currency, repricing }: Checko
       <div className="flex items-center justify-between">
         <h2
           className="font-barlow-condensed font-bold uppercase"
-          style={{ fontSize: 14, color: "var(--color-text-muted)", letterSpacing: "0.05em" }}
+          style={{ fontSize: 16, color: "var(--color-text-muted)", letterSpacing: "0.05em" }}
         >
           Order Summary
         </h2>
@@ -672,7 +672,7 @@ function CheckoutSummary({ items, subtotal, total, currency, repricing }: Checko
               />
             ) : null}
             <div className="flex-1 flex flex-col" style={{ gap: 2 }}>
-              <span className="font-barlow-condensed font-bold" style={{ fontSize: 15, color: "var(--color-dark)" }}>
+              <span className="font-barlow-condensed font-bold" style={{ fontSize: 17, color: "var(--color-dark)" }}>
                 {item.name}
               </span>
               <span className="font-barlow-condensed" style={{ fontSize: 12, color: "var(--color-text-muted)" }}>
@@ -705,7 +705,7 @@ function CheckoutSummary({ items, subtotal, total, currency, repricing }: Checko
                   <span
                     className="font-barlow-condensed font-bold"
                     style={{
-                      fontSize: 14,
+                      fontSize: 16,
                       color: item.regularPrice !== null && item.regularPrice > item.price ? "#B91C1C" : "var(--color-dark)",
                     }}
                   >
@@ -756,7 +756,7 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
   return (
     <h2
       className="font-barlow-condensed font-bold uppercase"
-      style={{ fontSize: 14, color: "var(--color-text-muted)", letterSpacing: "0.05em" }}
+      style={{ fontSize: 16, color: "var(--color-text-muted)", letterSpacing: "0.05em" }}
     >
       {children}
     </h2>
@@ -776,7 +776,7 @@ function CountryField({ value, onChange }: { value: string; onChange: (v: string
   const countries = supportedCountries();
   return (
     <div className="flex flex-col" style={{ gap: 6 }}>
-      <label htmlFor="f-country" className="font-barlow-condensed" style={{ fontSize: 13, color: "var(--color-dark)" }}>
+      <label htmlFor="f-country" className="font-barlow-condensed" style={{ fontSize: 15, color: "var(--color-dark)" }}>
         Country
       </label>
       <select
@@ -789,7 +789,7 @@ function CountryField({ value, onChange }: { value: string; onChange: (v: string
           padding: "12px 14px",
           border: "1px solid var(--color-border-light)",
           borderRadius: 4,
-          fontSize: 14,
+          fontSize: 16,
           color: "var(--color-dark)",
           background: "white",
         }}
@@ -808,7 +808,7 @@ function Field({ label, type = "text", value, onChange, required, maxLength }: F
   const id = `f-${label.replace(/\s+/g, "-").toLowerCase()}`;
   return (
     <div className="flex flex-col" style={{ gap: 6 }}>
-      <label htmlFor={id} className="font-barlow-condensed" style={{ fontSize: 13, color: "var(--color-dark)" }}>
+      <label htmlFor={id} className="font-barlow-condensed" style={{ fontSize: 15, color: "var(--color-dark)" }}>
         {label}
       </label>
       <input
@@ -823,7 +823,7 @@ function Field({ label, type = "text", value, onChange, required, maxLength }: F
           padding: "12px 14px",
           border: "1px solid var(--color-border-light)",
           borderRadius: 4,
-          fontSize: 14,
+          fontSize: 16,
           color: "var(--color-dark)",
         }}
       />
