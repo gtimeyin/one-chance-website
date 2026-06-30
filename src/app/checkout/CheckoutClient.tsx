@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { loadStripe, type Stripe } from "@stripe/stripe-js";
 import {
@@ -31,6 +32,9 @@ interface CheckoutClientProps {
   country: string;
   currency: string;
   publishableKey: string;
+  initialEmail?: string;
+  initialFirstName?: string;
+  isAuthenticated?: boolean;
 }
 
 interface AddressState {
@@ -46,14 +50,21 @@ interface AddressState {
   country: string;
 }
 
-export default function CheckoutClient({ country, currency: initialCurrency, publishableKey }: CheckoutClientProps) {
+export default function CheckoutClient({
+  country,
+  currency: initialCurrency,
+  publishableKey,
+  initialEmail = "",
+  initialFirstName = "",
+  isAuthenticated = false,
+}: CheckoutClientProps) {
   const items = useCart((s) => s.items);
   const router = useRouter();
 
   const [address, setAddress] = useState<AddressState>({
-    first_name: "",
+    first_name: initialFirstName,
     last_name: "",
-    email: "",
+    email: initialEmail,
     phone: "",
     address_1: "",
     address_2: "",
@@ -76,20 +87,22 @@ export default function CheckoutClient({ country, currency: initialCurrency, pub
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Effective unit price for each cart line, falling back to the cart-store
-  // value (set at add-to-cart time) until the reprice API has responded.
-  function unitPriceFor(productId: number, fallback: number): number {
-    return repricedPrices[productId]?.price ?? fallback;
+  // The cart's `i.price` was captured in whatever currency was active when
+  // the item was added — it's not safe to use after a country switch. We
+  // intentionally don't fall back to it; the order summary skeletons until
+  // the live reprice arrives, and the submit button is gated below.
+  function unitPriceFor(productId: number): number | null {
+    return repricedPrices[productId]?.price ?? null;
   }
   function saleInfoFor(productId: number): { regular_price: number; on_sale: boolean } | null {
     const r = repricedPrices[productId];
     if (!r || !r.on_sale || r.regular_price <= r.price) return null;
     return { regular_price: r.regular_price, on_sale: true };
   }
-  const subtotal = items.reduce(
-    (sum, i) => sum + unitPriceFor(i.productId, i.price) * i.quantity,
-    0,
-  );
+  const allLinesPriced = items.every((i) => repricedPrices[i.productId] != null);
+  const subtotal = allLinesPriced
+    ? items.reduce((sum, i) => sum + (unitPriceFor(i.productId) ?? 0) * i.quantity, 0)
+    : null;
 
   useEffect(() => {
     // Keep the chosen provider valid as the currency changes (e.g. user
@@ -312,7 +325,9 @@ export default function CheckoutClient({ country, currency: initialCurrency, pub
               availableProviders={availableProviders}
               onSubmit={handleStartPayment}
               submitting={submitting}
+              priceReady={allLinesPriced && !repricing}
               error={error}
+              isAuthenticated={isAuthenticated}
             />
           ) : (
             <PaymentStep
@@ -331,7 +346,7 @@ export default function CheckoutClient({ country, currency: initialCurrency, pub
               id: i.id,
               name: i.name,
               quantity: i.quantity,
-              price: unitPriceFor(i.productId, i.price),
+              price: unitPriceFor(i.productId),
               regularPrice: sale?.regular_price ?? null,
               image: i.image,
             };
@@ -354,7 +369,9 @@ interface AddressAndShippingProps {
   availableProviders: Provider[];
   onSubmit: () => void;
   submitting: boolean;
+  priceReady: boolean;
   error: string | null;
+  isAuthenticated: boolean;
 }
 
 function AddressAndShipping({
@@ -365,7 +382,9 @@ function AddressAndShipping({
   availableProviders,
   onSubmit,
   submitting,
+  priceReady,
   error,
+  isAuthenticated,
 }: AddressAndShippingProps) {
   return (
     <form
@@ -376,6 +395,30 @@ function AddressAndShipping({
       className="flex flex-col"
       style={{ gap: 24 }}
     >
+      {!isAuthenticated && (
+        <div
+          className="font-barlow-condensed flex flex-wrap items-center justify-between"
+          style={{
+            gap: 8,
+            padding: "12px 16px",
+            background: "var(--color-light-bg)",
+            border: "1px solid var(--color-border-light)",
+            borderRadius: 4,
+            fontSize: 14,
+            color: "var(--color-dark)",
+          }}
+        >
+          <span>You&apos;re checking out as a guest — no account needed.</span>
+          <Link
+            href="/login?redirect=/checkout"
+            className="font-bold underline"
+            style={{ color: "var(--color-dark)" }}
+          >
+            Have an account? Sign in
+          </Link>
+        </div>
+      )}
+
       <section className="flex flex-col" style={{ gap: 14 }}>
         <SectionHeading>Contact</SectionHeading>
         <Field label="Email" type="email" value={address.email} onChange={(v) => setField("email", v)} required />
@@ -443,24 +486,26 @@ function AddressAndShipping({
 
       <button
         type="submit"
-        disabled={submitting}
+        disabled={submitting || !priceReady}
         className="font-barlow-condensed font-bold uppercase cursor-pointer border-none"
         style={{
           padding: "16px 24px",
-          background: submitting ? "#E5E7EB" : "#FFD600",
+          background: submitting || !priceReady ? "#E5E7EB" : "#FFD600",
           color: "var(--color-dark)",
           fontSize: 16,
           letterSpacing: "0.05em",
-          cursor: submitting ? "default" : "pointer",
+          cursor: submitting || !priceReady ? "default" : "pointer",
         }}
       >
         {submitting
           ? provider === "paystack"
             ? "Opening Paystack…"
             : "Starting…"
-          : provider === "paystack"
-            ? "Pay with Paystack"
-            : "Continue to payment"}
+          : !priceReady
+            ? "Updating prices…"
+            : provider === "paystack"
+              ? "Pay with Paystack"
+              : "Continue to payment"}
       </button>
     </form>
   );
@@ -576,12 +621,12 @@ interface CheckoutSummaryProps {
     id: number;
     name: string;
     quantity: number;
-    price: number;
+    price: number | null;          // null while reprice is loading for this line
     regularPrice: number | null;
     image: string;
   }[];
-  subtotal: number;
-  total: number;
+  subtotal: number | null;          // null while any line is still unpriced
+  total: number | null;
   currency: string;
   repricing?: boolean;
 }
@@ -635,31 +680,54 @@ function CheckoutSummary({ items, subtotal, total, currency, repricing }: Checko
               </span>
             </div>
             <div className="flex flex-col items-end">
-              {item.regularPrice !== null && item.regularPrice > item.price && (
+              {item.price === null ? (
                 <span
+                  aria-hidden
                   className="font-barlow-condensed"
-                  style={{ fontSize: 12, color: "var(--color-text-muted)", textDecoration: "line-through" }}
-                >
-                  {formatPrice(item.regularPrice * item.quantity, currency)}
-                </span>
+                  style={{
+                    display: "inline-block",
+                    width: 64,
+                    height: 14,
+                    background: "var(--color-border-light)",
+                    borderRadius: 3,
+                  }}
+                />
+              ) : (
+                <>
+                  {item.regularPrice !== null && item.regularPrice > item.price && (
+                    <span
+                      className="font-barlow-condensed"
+                      style={{ fontSize: 12, color: "var(--color-text-muted)", textDecoration: "line-through" }}
+                    >
+                      {formatPrice(item.regularPrice * item.quantity, currency)}
+                    </span>
+                  )}
+                  <span
+                    className="font-barlow-condensed font-bold"
+                    style={{
+                      fontSize: 14,
+                      color: item.regularPrice !== null && item.regularPrice > item.price ? "#B91C1C" : "var(--color-dark)",
+                    }}
+                  >
+                    {formatPrice(item.price * item.quantity, currency)}
+                  </span>
+                </>
               )}
-              <span
-                className="font-barlow-condensed font-bold"
-                style={{
-                  fontSize: 14,
-                  color: item.regularPrice !== null && item.regularPrice > item.price ? "#B91C1C" : "var(--color-dark)",
-                }}
-              >
-                {formatPrice(item.price * item.quantity, currency)}
-              </span>
             </div>
           </div>
         ))}
       </div>
       <div style={{ height: 1, background: "var(--color-border-light)" }} />
       <div className="flex flex-col" style={{ gap: 8 }}>
-        <SummaryRow label="Subtotal" value={formatPrice(subtotal, currency)} />
-        <SummaryRow label="Total" value={formatPrice(total, currency)} bold />
+        <SummaryRow
+          label="Subtotal"
+          value={subtotal === null ? "—" : formatPrice(subtotal, currency)}
+        />
+        <SummaryRow
+          label="Total"
+          value={total === null ? "—" : formatPrice(total, currency)}
+          bold
+        />
       </div>
     </aside>
   );

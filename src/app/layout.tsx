@@ -6,7 +6,9 @@ import ReferralCodeCapture from "@/components/referral/ReferralCodeCapture";
 import AnalyticsLoader from "@/components/analytics/AnalyticsLoader";
 import CookieConsent from "@/components/analytics/CookieConsent";
 import { CurrencyProvider } from "@/components/CurrencyProvider";
+import { AuthProvider } from "@/components/AuthProvider";
 import { getActiveCurrency } from "@/lib/currency.server";
+import { getOptionalSession } from "@/lib/dal";
 import { siteUrl } from "@/lib/site";
 import { Suspense } from "react";
 import "./globals.css";
@@ -78,7 +80,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const currency = await getActiveCurrency();
+  const [currency, session] = await Promise.all([
+    getActiveCurrency(),
+    getOptionalSession(),
+  ]);
+  const auth = {
+    isAuth: Boolean(session),
+    firstName: session?.firstName ?? null,
+  };
   return (
     <html lang="en" className={barlowCondensed.variable}>
       <head>
@@ -90,7 +99,9 @@ export default async function RootLayout({
         <Suspense>
           <ReferralCodeCapture />
         </Suspense>
-        <CurrencyProvider currency={currency}>{children}</CurrencyProvider>
+        <AuthProvider auth={auth}>
+          <CurrencyProvider currency={currency}>{children}</CurrencyProvider>
+        </AuthProvider>
         <AgentationProvider />
         <CookieConsent />
       </body>

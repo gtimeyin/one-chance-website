@@ -55,7 +55,15 @@ export async function login(
   }
 
   await createSession(customer.id, customer.email, customer.first_name);
-  redirect("/account");
+
+  // Honour a same-origin relative redirect (e.g. ?redirect=/checkout). Reject
+  // anything that isn't a simple in-app path to avoid open-redirect abuse.
+  const rawRedirect = formData.get("redirectTo");
+  const redirectTo =
+    typeof rawRedirect === "string" && rawRedirect.startsWith("/") && !rawRedirect.startsWith("//")
+      ? rawRedirect
+      : "/account";
+  redirect(redirectTo);
 }
 
 export async function register(

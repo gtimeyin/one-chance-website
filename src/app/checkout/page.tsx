@@ -5,6 +5,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 import CheckoutClient from "./CheckoutClient";
 import { getActiveCountry } from "@/lib/currency.server";
 import { currencyForCountry } from "@/lib/currency";
+import { getOptionalSession } from "@/lib/dal";
 import { isStripeConfigured } from "@/lib/stripe";
 import { isSupabaseConfigured } from "@/lib/supabase";
 
@@ -42,7 +43,10 @@ export default async function CheckoutPage() {
     redirect("/shop");
   }
 
-  const country = await getActiveCountry();
+  const [country, session] = await Promise.all([
+    getActiveCountry(),
+    getOptionalSession(),
+  ]);
   const currency = currencyForCountry(country);
 
   return (
@@ -54,6 +58,9 @@ export default async function CheckoutPage() {
           country={country}
           currency={currency}
           publishableKey={publishableKey}
+          initialEmail={session?.email ?? ""}
+          initialFirstName={session?.firstName ?? ""}
+          isAuthenticated={Boolean(session)}
         />
       </div>
       <FooterShop reveal />

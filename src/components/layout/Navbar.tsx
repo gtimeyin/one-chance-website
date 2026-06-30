@@ -3,8 +3,10 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useCart } from "@/store/cart";
+import { useAuth } from "@/components/AuthProvider";
+import { logout } from "@/app/actions/auth";
 import CartDrawer from "./CartDrawer";
 import SearchOverlay from "./SearchOverlay";
 import { Button } from "@/ui/components/Button";
@@ -12,6 +14,9 @@ import {
   FeatherMenu,
   FeatherSearch,
   FeatherShoppingBag,
+  FeatherUser,
+  FeatherPackage,
+  FeatherLogOut,
   FeatherX,
   FeatherFacebook,
   FeatherInstagram,
@@ -37,6 +42,8 @@ const secondaryLinks = [
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { isAuth, firstName } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
@@ -112,6 +119,14 @@ export default function Navbar() {
           Menu
         </Button>
         <div className="flex items-start gap-2">
+          <Button
+            variant="white"
+            size="small"
+            icon={<FeatherUser />}
+            onClick={() => router.push(isAuth ? "/account" : "/login")}
+            aria-label={isAuth ? "My account" : "Sign in"}
+            title={isAuth ? "My account" : "Sign in"}
+          />
           <Button
             variant="white"
             size="small"
@@ -203,6 +218,61 @@ export default function Navbar() {
                   transition={{ delay: 0.3, duration: 0.4 }}
                   className="flex flex-col items-start gap-1 pt-8 mobile:px-0 mobile:py-0"
                 >
+                  {/* Account */}
+                  <span className="text-caption-bold font-caption-bold uppercase text-black-800 opacity-50 mb-2">
+                    {isAuth && firstName ? `Hi, ${firstName}` : "Account"}
+                  </span>
+                  {isAuth ? (
+                    <>
+                      <Link
+                        href="/account"
+                        onClick={() => setIsOpen(false)}
+                        className="flex items-center gap-2 text-[16px] leading-[24px] font-heading-medium-default text-black-950 no-underline"
+                        style={{ textDecoration: "none" }}
+                      >
+                        <FeatherUser className="text-[18px]" /> My Account
+                      </Link>
+                      <Link
+                        href="/account/orders"
+                        onClick={() => setIsOpen(false)}
+                        className="flex items-center gap-2 text-[16px] leading-[24px] font-heading-medium-default text-black-950 no-underline"
+                        style={{ textDecoration: "none" }}
+                      >
+                        <FeatherPackage className="text-[18px]" /> My Orders
+                      </Link>
+                      <form action={logout} onSubmit={() => setIsOpen(false)}>
+                        <button
+                          type="submit"
+                          className="flex items-center gap-2 text-[16px] leading-[24px] font-heading-medium-default text-black-950 no-underline bg-transparent border-none cursor-pointer p-0"
+                        >
+                          <FeatherLogOut className="text-[18px]" /> Sign Out
+                        </button>
+                      </form>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        href="/login"
+                        onClick={() => setIsOpen(false)}
+                        className="flex items-center gap-2 text-[16px] leading-[24px] font-heading-medium-default text-black-950 no-underline"
+                        style={{ textDecoration: "none" }}
+                      >
+                        <FeatherUser className="text-[18px]" /> Sign In
+                      </Link>
+                      <Link
+                        href="/register"
+                        onClick={() => setIsOpen(false)}
+                        className="text-[16px] leading-[24px] font-heading-medium-default text-black-950 no-underline"
+                        style={{ textDecoration: "none" }}
+                      >
+                        Create Account
+                      </Link>
+                    </>
+                  )}
+
+                  <span className="text-caption-bold font-caption-bold uppercase text-black-800 opacity-50 mt-6 mb-2">
+                    More
+                  </span>
                   {secondaryLinks.map((link) => (
                     <Link
                       key={link.label}
