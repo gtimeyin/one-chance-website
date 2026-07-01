@@ -3,6 +3,7 @@ import { getCustomerById } from "@/lib/woocommerce";
 import { getUserAvatar } from "@/lib/avatars";
 import ProfileForm from "@/components/account/ProfileForm";
 import AvatarPicker from "@/components/account/AvatarPicker";
+import ChangePasswordForm from "@/components/account/ChangePasswordForm";
 
 export default async function EditProfilePage() {
   const session = await verifySession();
@@ -23,6 +24,12 @@ export default async function EditProfilePage() {
           lastName={customer?.last_name || ""}
           email={customer?.email || session.email}
         />
+      </div>
+      <div className="border-t border-neutral-200 pt-6 flex flex-col gap-4">
+        <h2 className="font-['Barlow_Condensed'] text-[28px] font-[800] leading-[1.1] text-neutral-800 uppercase -tracking-[0.02em]">
+          CHANGE PASSWORD
+        </h2>
+        <ChangePasswordForm />
       </div>
     </div>
   );

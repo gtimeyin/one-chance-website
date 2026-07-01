@@ -5,12 +5,18 @@ import {
   verifyWordPressCredentials,
   getCustomerByEmail,
   createCustomer,
+  updateCustomer,
 } from "@/lib/woocommerce";
 import {
   LoginFormSchema,
   RegisterFormSchema,
+  ForgotPasswordSchema,
+  ResetPasswordSchema,
   type FormState,
 } from "@/lib/auth-definitions";
+import { createResetToken, consumeResetToken } from "@/lib/password-reset";
+import { sendEmail } from "@/lib/email";
+import { siteUrl } from "@/lib/site";
 import { redirect } from "next/navigation";
 import {
   getReferralCodeByCode,
@@ -151,4 +157,81 @@ export async function register(
 export async function logout(): Promise<void> {
   await deleteSession();
   redirect("/login");
+}
+
+// Always returns the same generic success message whether or not the email
+// maps to an account — this prevents using the form to enumerate registered
+// emails. The reset email is only sent when a matching customer exists.
+export async function requestPasswordReset(
+  _state: FormState,
+  formData: FormData
+): Promise<FormState> {
+  const parsed = ForgotPasswordSchema.safeParse({ email: formData.get("email") });
+  if (!parsed.success) {
+    return { errors: parsed.error.flatten().fieldErrors };
+  }
+  const { email } = parsed.data;
+
+  // Rate limit per-email and per-IP so this can't be used to spam inboxes or
+  // probe for accounts at scale.
+  const ip = (await headers()).get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  const emailRl = rateLimit(`reset-req:${email.toLowerCase()}`, 3, 15 * 60 * 1000);
+  const ipRl = rateLimit(`reset-req-ip:${ip}`, 10, 15 * 60 * 1000);
+
+  const genericOk: FormState = {
+    success: true,
+    message: "If an account exists for that email, we've sent a reset link.",
+  };
+
+  if (!emailRl.allowed || !ipRl.allowed) {
+    // Silently succeed to the user; we simply don't send another email.
+    return genericOk;
+  }
+
+  const customer = await getCustomerByEmail(email);
+  if (customer) {
+    const token = await createResetToken(customer.id, customer.email);
+    if (token) {
+      const link = `${siteUrl}/reset?token=${encodeURIComponent(token)}`;
+      await sendEmail({
+        to: customer.email,
+        subject: "Reset your One Chance password",
+        html: `<p>Hi${customer.first_name ? " " + customer.first_name : ""},</p>
+<p>We received a request to reset your One Chance password. This link is valid for 1 hour and can be used once:</p>
+<p><a href="${link}">Reset your password</a></p>
+<p>If you didn't request this, you can safely ignore this email — your password won't change.</p>`,
+      });
+    }
+  }
+
+  return genericOk;
+}
+
+export async function resetPassword(
+  _state: FormState,
+  formData: FormData
+): Promise<FormState> {
+  const parsed = ResetPasswordSchema.safeParse({
+    token: formData.get("token"),
+    password: formData.get("password"),
+    confirmPassword: formData.get("confirmPassword"),
+  });
+  if (!parsed.success) {
+    return { errors: parsed.error.flatten().fieldErrors };
+  }
+  const { token, password } = parsed.data;
+
+  // Validate + single-use-consume the token before touching the password.
+  const claim = await consumeResetToken(token);
+  if (!claim) {
+    return { message: "This reset link is invalid or has expired. Please request a new one." };
+  }
+
+  try {
+    await updateCustomer(claim.wooCustomerId, { password });
+  } catch {
+    return { message: "Could not reset your password. Please try again." };
+  }
+
+  redirect("/login?reset=1");
 }

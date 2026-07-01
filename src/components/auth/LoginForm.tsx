@@ -9,12 +9,23 @@ import type { FormState } from "@/lib/auth-definitions";
 
 const initialState: FormState = {};
 
-export default function LoginForm({ redirectTo }: { redirectTo?: string }) {
+export default function LoginForm({
+  redirectTo,
+  justReset,
+}: {
+  redirectTo?: string;
+  justReset?: boolean;
+}) {
   const [state, formAction, pending] = useActionState(login, initialState);
 
   return (
     <form action={formAction} className="flex flex-col gap-5 w-full">
       {redirectTo && <input type="hidden" name="redirectTo" value={redirectTo} />}
+      {justReset && !state.message && (
+        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded text-[14px] font-['Barlow']">
+          Your password has been reset. Please sign in with your new password.
+        </div>
+      )}
       {state.message && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded text-[14px] font-['Barlow']">
           {state.message}
@@ -42,6 +53,13 @@ export default function LoginForm({ redirectTo }: { redirectTo?: string }) {
       {state.errors?.password && (
         <span className="text-red-600 text-[13px] font-['Barlow'] -mt-3">{state.errors.password[0]}</span>
       )}
+
+      <Link
+        href="/forgot"
+        className="font-['Barlow'] text-[13px] text-neutral-500 hover:text-neutral-700 underline -mt-2 self-end"
+      >
+        Forgot password?
+      </Link>
 
       <Button
         variant="brand-primary"

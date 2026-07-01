@@ -381,6 +381,7 @@ export async function updateCustomer(
     first_name: string;
     last_name: string;
     email: string;
+    password: string;
     billing: Partial<WooAddress>;
     shipping: Partial<WooAddress>;
   }>

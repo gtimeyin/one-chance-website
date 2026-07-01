@@ -2,23 +2,22 @@ import Navbar from "@/components/layout/Navbar";
 import Breadcrumb from "@/components/layout/Breadcrumb";
 import FooterShop from "@/components/layout/FooterShop";
 import SmoothScroll from "@/components/SmoothScroll";
-import LoginForm from "@/components/auth/LoginForm";
+import ResetPasswordForm from "@/components/auth/ResetPasswordForm";
+import Link from "next/link";
 
 export const metadata = {
-  title: "Sign In",
-  description: "Sign in to your One Chance account.",
+  title: "Set New Password",
+  description: "Set a new password for your One Chance account.",
   robots: { index: false, follow: true },
 };
 
-export default async function LoginPage({
+export default async function ResetPasswordPage({
   searchParams,
 }: {
-  searchParams: Promise<{ redirect?: string; reset?: string }>;
+  searchParams: Promise<{ token?: string }>;
 }) {
-  const { redirect, reset } = await searchParams;
-  const redirectTo =
-    redirect && redirect.startsWith("/") && !redirect.startsWith("//") ? redirect : undefined;
-  const justReset = reset === "1";
+  const { token } = await searchParams;
+
   return (
     <div className="flex flex-col w-full min-h-screen" style={{ background: "white" }}>
       <SmoothScroll />
@@ -31,7 +30,8 @@ export default async function LoginPage({
           <Breadcrumb
             items={[
               { label: "Home", href: "/" },
-              { label: "Sign In" },
+              { label: "Sign In", href: "/login" },
+              { label: "Set New Password" },
             ]}
           />
         </div>
@@ -41,22 +41,29 @@ export default async function LoginPage({
           style={{
             paddingTop: "clamp(24px, 4vw, 48px)",
             paddingInline: 24,
-            // Heavier bottom padding offsets the header stack (top bar +
-            // breadcrumb) above the section, so justify-center lands the form
-            // on the viewport's optical centre, not below it.
             paddingBottom: "calc(clamp(24px, 4vw, 48px) + 160px)",
           }}
         >
           <div className="flex w-full max-w-[440px] flex-col items-center gap-8">
             <div className="flex flex-col items-center gap-2">
               <h1 className="font-['Barlow_Condensed'] text-[48px] mobile:text-[36px] font-[800] leading-[1.1] text-neutral-800 uppercase -tracking-[0.02em]">
-                SIGN IN
+                SET NEW PASSWORD
               </h1>
               <p className="font-['Barlow_Condensed'] text-[16px] text-neutral-500 text-center">
-                Access your account, orders, and more
+                Choose a new password for your account
               </p>
             </div>
-            <LoginForm redirectTo={redirectTo} justReset={justReset} />
+            {token ? (
+              <ResetPasswordForm token={token} />
+            ) : (
+              <div className="w-full bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded text-[14px] font-['Barlow'] text-center">
+                This reset link is missing or invalid.{" "}
+                <Link href="/forgot" className="underline font-[600]">
+                  Request a new one
+                </Link>
+                .
+              </div>
+            )}
           </div>
         </section>
       </div>

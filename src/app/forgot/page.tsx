@@ -2,23 +2,15 @@ import Navbar from "@/components/layout/Navbar";
 import Breadcrumb from "@/components/layout/Breadcrumb";
 import FooterShop from "@/components/layout/FooterShop";
 import SmoothScroll from "@/components/SmoothScroll";
-import LoginForm from "@/components/auth/LoginForm";
+import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm";
 
 export const metadata = {
-  title: "Sign In",
-  description: "Sign in to your One Chance account.",
+  title: "Reset Password",
+  description: "Reset your One Chance account password.",
   robots: { index: false, follow: true },
 };
 
-export default async function LoginPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ redirect?: string; reset?: string }>;
-}) {
-  const { redirect, reset } = await searchParams;
-  const redirectTo =
-    redirect && redirect.startsWith("/") && !redirect.startsWith("//") ? redirect : undefined;
-  const justReset = reset === "1";
+export default function ForgotPasswordPage() {
   return (
     <div className="flex flex-col w-full min-h-screen" style={{ background: "white" }}>
       <SmoothScroll />
@@ -31,7 +23,8 @@ export default async function LoginPage({
           <Breadcrumb
             items={[
               { label: "Home", href: "/" },
-              { label: "Sign In" },
+              { label: "Sign In", href: "/login" },
+              { label: "Reset Password" },
             ]}
           />
         </div>
@@ -41,22 +34,19 @@ export default async function LoginPage({
           style={{
             paddingTop: "clamp(24px, 4vw, 48px)",
             paddingInline: 24,
-            // Heavier bottom padding offsets the header stack (top bar +
-            // breadcrumb) above the section, so justify-center lands the form
-            // on the viewport's optical centre, not below it.
             paddingBottom: "calc(clamp(24px, 4vw, 48px) + 160px)",
           }}
         >
           <div className="flex w-full max-w-[440px] flex-col items-center gap-8">
             <div className="flex flex-col items-center gap-2">
               <h1 className="font-['Barlow_Condensed'] text-[48px] mobile:text-[36px] font-[800] leading-[1.1] text-neutral-800 uppercase -tracking-[0.02em]">
-                SIGN IN
+                RESET PASSWORD
               </h1>
               <p className="font-['Barlow_Condensed'] text-[16px] text-neutral-500 text-center">
-                Access your account, orders, and more
+                We&apos;ll email you a link to set a new password
               </p>
             </div>
-            <LoginForm redirectTo={redirectTo} justReset={justReset} />
+            <ForgotPasswordForm />
           </div>
         </section>
       </div>

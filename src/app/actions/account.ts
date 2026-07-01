@@ -1,10 +1,11 @@
 "use server";
 
 import { verifySession } from "@/lib/dal";
-import { updateCustomer } from "@/lib/woocommerce";
+import { updateCustomer, verifyWordPressCredentials } from "@/lib/woocommerce";
 import {
   ProfileUpdateSchema,
   AddressSchema,
+  ChangePasswordSchema,
   type FormState,
 } from "@/lib/auth-definitions";
 import { revalidatePath, updateTag } from "next/cache";
@@ -102,6 +103,36 @@ export async function updateShippingAddress(
     return { success: true, message: "Shipping address updated" };
   } catch {
     return { message: "Failed to update shipping address." };
+  }
+}
+
+export async function changePassword(
+  _state: FormState,
+  formData: FormData
+): Promise<FormState> {
+  const session = await verifySession();
+
+  const parsed = ChangePasswordSchema.safeParse({
+    currentPassword: formData.get("currentPassword"),
+    newPassword: formData.get("newPassword"),
+    confirmPassword: formData.get("confirmPassword"),
+  });
+  if (!parsed.success) {
+    return { errors: parsed.error.flatten().fieldErrors };
+  }
+
+  // Re-verify the current password against WordPress before allowing a change,
+  // so a hijacked session (or an unattended browser) can't silently rotate it.
+  const wpUser = await verifyWordPressCredentials(session.email, parsed.data.currentPassword);
+  if (!wpUser) {
+    return { errors: { currentPassword: ["Current password is incorrect"] } };
+  }
+
+  try {
+    await updateCustomer(session.customerId, { password: parsed.data.newPassword });
+    return { success: true, message: "Password updated successfully" };
+  } catch {
+    return { message: "Failed to update password. Please try again." };
   }
 }
 
