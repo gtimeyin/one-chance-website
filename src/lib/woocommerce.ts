@@ -320,8 +320,11 @@ export async function getCustomerByEmail(email: string): Promise<WooCustomer | n
   if (!client) return null;
 
   try {
+    // role: "all" so we match every WordPress user by email, not just those
+    // with the "customer" role. Otherwise admins/shop-managers/subscribers —
+    // valid WP accounts — return nothing here and can never log in.
     const response = await timed("GET customers?email=", () =>
-      client.get("customers", { email, per_page: 1 })
+      client.get("customers", { email, per_page: 1, role: "all" })
     );
     return response.data[0] || null;
   } catch (error) {

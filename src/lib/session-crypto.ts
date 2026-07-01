@@ -1,7 +1,15 @@
 import { SignJWT, jwtVerify } from "jose";
 import type { SessionPayload } from "./auth-definitions";
 
+// Fail closed: if SESSION_SECRET is missing or too short, refuse to run rather
+// than silently signing every session JWT with the string "undefined" (a
+// guessable key that would let anyone forge a session for any customerId).
 const secretKey = process.env.SESSION_SECRET;
+if (!secretKey || secretKey.length < 32) {
+  throw new Error(
+    "SESSION_SECRET is missing or too short (need >= 32 chars). Refusing to start with a weak session-signing key."
+  );
+}
 const encodedKey = new TextEncoder().encode(secretKey);
 
 export async function encrypt(payload: SessionPayload): Promise<string> {

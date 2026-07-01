@@ -8,11 +8,15 @@ export default async function OrderDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  await verifySession();
+  const session = await verifySession();
   const { id } = await params;
   const order = await getOrderById(parseInt(id, 10));
 
-  if (!order) notFound();
+  // Ownership check: verifySession only proves the visitor is logged in as
+  // *some* customer. Without this, any logged-in user could read any order's
+  // PII by walking sequential ids (/account/orders/1, /2, ...). Treat a
+  // missing order and someone else's order identically — notFound().
+  if (!order || order.customer_id !== session.customerId) notFound();
 
   return (
     <div className="flex flex-col gap-8">
