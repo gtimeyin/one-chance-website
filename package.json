@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "seed:products": "node --env-file=.env.local scripts/seed-product-content.mjs"
+    "seed:products": "node --env-file=.env.local scripts/seed-product-content.mjs",
+    "email:test": "node --env-file=.env.local scripts/email-test.mjs"
   },
   "dependencies": {
     "@lottielab/lottie-player": "^1.1.3",
