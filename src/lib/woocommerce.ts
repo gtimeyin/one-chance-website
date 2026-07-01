@@ -449,6 +449,16 @@ export async function getOrderById(orderId: number): Promise<WooOrder | null> {
 
 // ─── WordPress Authentication ────────────────────────────────────
 
+// Pull a named member's scalar value out of an XML-RPC <struct> response.
+function extractXmlRpcMember(xml: string, name: string): string | null {
+  const re = new RegExp(
+    `<name>${name}</name>\\s*<value>\\s*<(?:string|int|i4|base64)>([\\s\\S]*?)</(?:string|int|i4|base64)>`,
+    "i"
+  );
+  const m = xml.match(re);
+  return m ? m[1] : null;
+}
+
 export async function verifyWordPressCredentials(
   email: string,
   password: string
@@ -460,14 +470,17 @@ export async function verifyWordPressCredentials(
   if (password.length > 1000 || password.length === 0) return null;
 
   try {
-    // Use XML-RPC to verify credentials (works without Application Passwords)
-    // Base64-encode credentials to avoid any XML injection regardless of input content
+    // Use XML-RPC to verify credentials (works without Application Passwords).
+    // wp.getProfile both authenticates AND returns the authenticated user's own
+    // profile, so we can bind the session to the *real* identity (canonical
+    // email + user id) instead of trusting that the submitted string maps to a
+    // single account. Base64-encode credentials to avoid any XML injection.
     const emailB64 = Buffer.from(email, "utf-8").toString("base64");
     const passB64 = Buffer.from(password, "utf-8").toString("base64");
 
-    const xmlBody = `<?xml version="1.0"?><methodCall><methodName>wp.getUsersBlogs</methodName><params><param><value><base64>${emailB64}</base64></value></param><param><value><base64>${passB64}</base64></value></param></params></methodCall>`;
+    const xmlBody = `<?xml version="1.0"?><methodCall><methodName>wp.getProfile</methodName><params><param><value><int>1</int></value></param><param><value><base64>${emailB64}</base64></value></param><param><value><base64>${passB64}</base64></value></param></params></methodCall>`;
 
-    const response = await timed("POST xmlrpc.php (wp.getUsersBlogs)", () =>
+    const response = await timed("POST xmlrpc.php (wp.getProfile)", () =>
       fetch(`${wpUrl}/xmlrpc.php`, {
         method: "POST",
         headers: { "Content-Type": "text/xml" },
@@ -482,7 +495,16 @@ export async function verifyWordPressCredentials(
     // XML-RPC returns <fault> on auth failure
     if (text.includes("faultCode")) return null;
 
-    return { wpUserId: 0, email };
+    // Bind to the authenticated principal. Fail closed if the response shape is
+    // unexpected rather than falling back to the submitted email.
+    const canonicalEmail = extractXmlRpcMember(text, "email");
+    if (!canonicalEmail) return null;
+    const userIdStr = extractXmlRpcMember(text, "user_id");
+
+    return {
+      wpUserId: userIdStr ? parseInt(userIdStr, 10) : 0,
+      email: canonicalEmail.trim().toLowerCase(),
+    };
   } catch (error) {
     log.error("Error verifying WordPress credentials", error);
     return null;

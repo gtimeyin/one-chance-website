@@ -36,21 +36,33 @@ export async function login(
 
   const { email, password } = parsed.data;
 
-  // Rate limit: 5 login attempts per email per 15 minutes
+  // Rate limit two ways: per-email (targeted guessing) and per-IP (spray across
+  // many accounts). On Vercel the first x-forwarded-for hop is the
+  // platform-set client IP, so it's safe to key on. Both are checked before we
+  // touch the backend.
   const rl = rateLimit(`login:${email.toLowerCase()}`, 5, 15 * 60 * 1000);
   if (!rl.allowed) {
     const minutes = Math.ceil(rl.retryAfterMs / 60000);
     return { message: `Too many login attempts. Try again in ${minutes} minute${minutes > 1 ? "s" : ""}.` };
   }
+  const ip = (await headers()).get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  const ipRl = rateLimit(`login-ip:${ip}`, 30, 15 * 60 * 1000);
+  if (!ipRl.allowed) {
+    const minutes = Math.ceil(ipRl.retryAfterMs / 60000);
+    return { message: `Too many login attempts. Try again in ${minutes} minute${minutes > 1 ? "s" : ""}.` };
+  }
 
-  // Run WP credential verification and Woo customer lookup in parallel —
-  // both are required for success, neither depends on the other.
-  const [wpUser, customer] = await Promise.all([
-    verifyWordPressCredentials(email, password),
-    getCustomerByEmail(email),
-  ]);
-  if (!wpUser || !customer) {
+  // Verify the password first; verifyWordPressCredentials returns the
+  // *authenticated* account's canonical email. Look the customer up by that
+  // (not the raw submitted string) and confirm they are the same account, so a
+  // username/email collision can't bind the session to a different customer.
+  const wpUser = await verifyWordPressCredentials(email, password);
+  if (!wpUser) {
     // Generic message to prevent email enumeration
+    return { message: "Invalid email or password" };
+  }
+  const customer = await getCustomerByEmail(wpUser.email);
+  if (!customer || customer.email.trim().toLowerCase() !== wpUser.email) {
     return { message: "Invalid email or password" };
   }
 

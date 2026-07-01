@@ -324,30 +324,23 @@ export async function addCreditLedgerEntry(
   const supabase = getSupabaseClient();
   if (!supabase) return null;
 
-  // Get current balance
-  const summary = await getCustomerCreditSummary(wooCustomerId);
-  const currentBalance = summary?.current_balance ?? 0;
-  const balanceAfter = currentBalance + amount;
-
-  const { data, error } = await supabase
-    .from("credit_ledger")
-    .insert({
-      woo_customer_id: wooCustomerId,
-      amount,
-      type,
-      reference_id: referenceId || null,
-      description: description || null,
-      balance_after: balanceAfter,
-    })
-    .select()
-    .single();
+  // Compute balance_after atomically in the DB (advisory lock) so concurrent
+  // credits for the same customer can't write a stale balance_after.
+  const { data, error } = await supabase.rpc("add_credits", {
+    p_customer_id: wooCustomerId,
+    p_amount: amount,
+    p_type: type,
+    p_reference_id: referenceId || null,
+    p_description: description || null,
+  });
 
   if (error) {
     log.error("Failed to add credit ledger entry", error);
     return null;
   }
 
-  return data as CreditLedgerEntry;
+  const row = Array.isArray(data) ? data[0] : data;
+  return (row as CreditLedgerEntry) || null;
 }
 
 export async function getCreditLedger(

@@ -9,7 +9,7 @@ export const RegisterFormSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
   email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
   confirmPassword: z.string().min(1, "Please confirm your password"),
   referralCode: z.string().regex(/^OC-[A-F0-9]{8}$/, "Invalid referral code format").optional().or(z.literal("")),
 }).refine((data) => data.password === data.confirmPassword, {
