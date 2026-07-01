@@ -1,9 +1,9 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import TestimonialCard from "@/components/ui/TestimonialCard";
-import WriteReviewDialog from "./WriteReviewDialog";
+import WriteReviewForm from "./WriteReviewDialog";
 import { stripHtml } from "@/lib/utils";
 import type { WooReview } from "@/lib/woocommerce-shared";
 
@@ -50,24 +50,56 @@ export default function TestimonialsSection({
           </h2>
           <button
             type="button"
-            onClick={() => setOpen(true)}
+            onClick={() => setOpen((o) => !o)}
+            aria-expanded={open}
             className="font-barlow-condensed font-bold uppercase cursor-pointer flex items-center gap-2"
             style={{
               padding: "10px 20px",
               border: "1px solid var(--color-dark)",
-              background: "white",
-              color: "var(--color-dark)",
+              background: open ? "var(--color-dark)" : "white",
+              color: open ? "white" : "var(--color-dark)",
               fontSize: 12,
               letterSpacing: "0.05em",
+              transition: "background 200ms, color 200ms",
             }}
           >
-            WRITE A REVIEW
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            {open ? "CLOSE" : "WRITE A REVIEW"}
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              style={{
+                transform: open ? "rotate(90deg)" : "rotate(0deg)",
+                transition: "transform 200ms",
+              }}
+            >
               <line x1="7" y1="17" x2="17" y2="7" />
               <polyline points="7 7 17 7 17 17" />
             </svg>
           </button>
         </motion.div>
+
+        <AnimatePresence initial={false}>
+          {open && (
+            <motion.div
+              key="review-form"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+              style={{ overflow: "hidden", marginBottom: 40 }}
+            >
+              <WriteReviewForm
+                productId={productId}
+                productName={productName}
+                onClose={() => setOpen(false)}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {testimonials.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 20 }}>
@@ -100,12 +132,6 @@ export default function TestimonialsSection({
         )}
       </div>
 
-      <WriteReviewDialog
-        productId={productId}
-        productName={productName}
-        open={open}
-        onOpenChange={setOpen}
-      />
     </section>
   );
 }

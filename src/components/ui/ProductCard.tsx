@@ -128,7 +128,8 @@ export default function ProductCard({ product }: ProductCardProps) {
       <div className="flex flex-col relative" style={{ padding: "16px 0 24px" }}>
         <Link
           href={`/shop/${product.slug}`}
-          className="font-barlow-condensed font-medium no-underline block uppercase"
+          className="font-barlow-condensed font-medium no-underline block uppercase truncate"
+          title={product.name}
           style={{
             fontSize: 20,
             color: "var(--color-dark)",
