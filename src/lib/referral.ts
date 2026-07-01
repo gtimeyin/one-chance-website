@@ -468,6 +468,22 @@ export async function createWithdrawalRequest(
   return data as WithdrawalRequest;
 }
 
+// Compensating rollback: remove a withdrawal request whose debit failed, so a
+// pending request is never left behind without a matching ledger debit.
+export async function deleteWithdrawalRequest(id: string): Promise<void> {
+  const supabase = getSupabaseClient();
+  if (!supabase) return;
+
+  const { error } = await supabase
+    .from("withdrawal_requests")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    log.error("Failed to roll back withdrawal request", error);
+  }
+}
+
 export async function getWithdrawalRequests(
   wooCustomerId: number
 ): Promise<WithdrawalRequest[]> {

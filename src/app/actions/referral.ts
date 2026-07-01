@@ -9,6 +9,7 @@ import {
   getReferralNetwork,
   getWithdrawalRequests,
   createWithdrawalRequest,
+  deleteWithdrawalRequest,
   atomicWithdraw,
   getReferralsByReferrer,
 } from "@/lib/referral";
@@ -85,7 +86,7 @@ export async function requestWithdrawal(
         ? "Cash withdrawal request"
         : "Store credit withdrawal";
 
-  // Create withdrawal request first (to get reference_id)
+  // Create the withdrawal request first so the debit can reference its id.
   const request = await createWithdrawalRequest(
     session.customerId,
     amount,
@@ -97,7 +98,10 @@ export async function requestWithdrawal(
     return { message: "Failed to create withdrawal request. Please try again." };
   }
 
-  // Atomic balance check + debit (prevents race conditions)
+  // Atomic balance check + debit (prevents race conditions). If it fails
+  // (insufficient balance, or a transient error) roll back the request we just
+  // created — otherwise a pending request with no matching ledger debit would
+  // be left behind and could be paid out manually without deducting balance.
   const result = await atomicWithdraw(
     session.customerId,
     amount,
@@ -107,6 +111,7 @@ export async function requestWithdrawal(
   );
 
   if (!result.success) {
+    await deleteWithdrawalRequest(request.id);
     return { message: result.error || "Insufficient balance for this withdrawal." };
   }
 
