@@ -10,7 +10,7 @@ interface ComicCardProps {
 
 export default function ComicCard({ comic }: ComicCardProps) {
   return (
-    <Link href={`/updates/${comic.slug}`} className="flex flex-col no-underline" style={{ gap: 12, textDecoration: "none" }}>
+    <Link href={`/comics/${comic.slug}`} className="flex flex-col no-underline" style={{ gap: 12, textDecoration: "none" }}>
       {/* Image */}
       <div className="relative" style={{ aspectRatio: "4/3", background: "var(--color-light-bg)", overflow: "hidden" }}>
         <Image

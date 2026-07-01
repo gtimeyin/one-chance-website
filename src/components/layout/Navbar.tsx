@@ -24,6 +24,7 @@ const navLinks = [
   { label: "SHOP", href: "/shop" },
   { label: "RULES", href: "/rules" },
   { label: "UPDATES", href: "/updates" },
+  { label: "VIDEOS", href: "/videos" },
   { label: "CONTACT US", href: "/contact" },
 ];
 
@@ -40,7 +41,7 @@ const socialLinks: { name: SocialName; label: string; href: string }[] = [
   { name: "x", label: "X (Twitter)", href: "#" },
   { name: "linkedin", label: "LinkedIn", href: "#" },
   { name: "tiktok", label: "TikTok", href: "#" },
-  { name: "youtube", label: "YouTube", href: "#" },
+  { name: "youtube", label: "YouTube", href: "https://www.youtube.com/@onechancegameYT" },
 ];
 
 export default function Navbar() {
@@ -116,17 +117,17 @@ export default function Navbar() {
           <Button
             variant="white"
             size="small"
-            icon={<FeatherUser />}
-            onClick={() => router.push(isAuth ? "/account" : "/login")}
-            aria-label={isAuth ? "My account" : "Sign in"}
-            title={isAuth ? "My account" : "Sign in"}
+            icon={<FeatherSearch />}
+            onClick={() => setIsSearchOpen(true)}
+            aria-label="Open search"
           />
           <Button
             variant="white"
             size="small"
-            icon={<FeatherSearch />}
-            onClick={() => setIsSearchOpen(true)}
-            aria-label="Open search"
+            icon={<FeatherUser />}
+            onClick={() => router.push(isAuth ? "/account" : "/login")}
+            aria-label={isAuth ? "My account" : "Sign in"}
+            title={isAuth ? "My account" : "Sign in"}
           />
           <div className="relative isolate">
             <Button

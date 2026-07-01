@@ -1,0 +1,641 @@
+/**
+ * YVP Sales Booster - Admin Styles
+ */
+
+/* Zones Table (WooCommerce Settings) */
+.yvp-zones-table {
+    margin-top: 10px;
+}
+
+.yvp-zones-table th,
+.yvp-zones-table td {
+    padding: 10px 12px;
+}
+
+.yvp-status {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.yvp-status-active {
+    background: #d4edda;
+    color: #155724;
+}
+
+.yvp-status-inactive {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+#yvp-zone-form-wrapper {
+    border-radius: 4px;
+}
+
+#yvp-zone-form-wrapper h3 {
+    margin-top: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* General Admin Styles */
+.yvp-admin-wrap {
+    max-width: 1200px;
+}
+
+.yvp-admin-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+
+.yvp-admin-header h1 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.yvp-admin-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+.yvp-admin-tabs .nav-tab {
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #555;
+    border: 1px solid transparent;
+    border-bottom: none;
+    background: transparent;
+    margin-bottom: -1px;
+}
+
+.yvp-admin-tabs .nav-tab:hover {
+    color: #23282d;
+}
+
+.yvp-admin-tabs .nav-tab-active {
+    background: #fff;
+    border-color: #ccc;
+    color: #23282d;
+}
+
+/* Tab Content */
+.yvp-tab-content {
+    display: none;
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+.yvp-tab-content.active {
+    display: block;
+}
+
+/* Cards */
+.yvp-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.yvp-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.yvp-card-header h2 {
+    margin: 0;
+    font-size: 16px;
+}
+
+/* WooCommerce Product Panels */
+#yvp_bundle_data,
+#yvp_zones_data,
+#yvp_fbt_data {
+    padding: 20px;
+}
+
+#yvp_bundle_data h4,
+#yvp_zones_data h4,
+#yvp_fbt_data h4 {
+    margin: 0 0 10px 0;
+    padding: 0;
+    font-size: 14px;
+    color: #23282d;
+}
+
+#yvp_bundle_data .description,
+#yvp_zones_data .description,
+#yvp_fbt_data .description {
+    margin-bottom: 15px;
+    color: #666;
+    font-style: italic;
+}
+
+/* Bundle Panel */
+.yvp-bundle-items {
+    margin-bottom: 20px;
+}
+
+.yvp-bundle-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 15px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.yvp-bundle-item .product-select {
+    flex: 1;
+    min-width: 300px;
+}
+
+.yvp-bundle-item .quantity-input {
+    width: 80px;
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.yvp-bundle-item .remove-item {
+    color: #a00;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.yvp-bundle-item .remove-item:hover {
+    color: #dc3232;
+}
+
+.yvp-add-bundle-item,
+.yvp-add-fbt-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: #f7f7f7;
+    border: 1px solid #0073aa;
+    border-radius: 4px;
+    color: #0073aa;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.yvp-add-bundle-item:hover,
+.yvp-add-fbt-item:hover {
+    background: #0073aa;
+    color: #fff;
+}
+
+.yvp-add-bundle-item .dashicons,
+.yvp-add-fbt-item .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+.yvp-pricing-options {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 4px;
+    margin-top: 20px;
+}
+
+.yvp-pricing-options h4 {
+    margin: 0 0 15px 0 !important;
+}
+
+.yvp-pricing-options p.form-field {
+    margin-bottom: 10px;
+}
+
+.yvp-pricing-options label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+.yvp-pricing-options label input[type="radio"] {
+    margin: 0;
+}
+
+.yvp-pricing-options .description {
+    color: #666;
+    font-size: 12px;
+    font-style: normal;
+    margin-left: 24px;
+}
+
+/* Zone Pricing Table - Product Panel */
+#yvp_zones_data table.widefat {
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    margin-top: 15px;
+}
+
+#yvp_zones_data table.widefat th {
+    background: #f9f9f9;
+    padding: 12px 15px;
+    font-weight: 600;
+    font-size: 13px;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+#yvp_zones_data table.widefat td {
+    padding: 12px 15px;
+    vertical-align: middle;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+#yvp_zones_data table.widefat tr:last-child td {
+    border-bottom: none;
+}
+
+#yvp_zones_data table.widefat .zone-name {
+    font-weight: 600;
+    color: #23282d;
+    min-width: 120px;
+}
+
+#yvp_zones_data table.widefat select {
+    width: 140px;
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+}
+
+#yvp_zones_data table.widefat input[type="number"] {
+    width: 120px;
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#yvp_zones_data table.widefat input::placeholder {
+    color: #999;
+    font-size: 12px;
+}
+
+/* FBT Panel */
+.yvp-fbt-products {
+    margin-bottom: 20px;
+}
+
+.yvp-fbt-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 15px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.yvp-fbt-item .product-select {
+    flex: 1;
+    min-width: 300px;
+}
+
+.yvp-fbt-item .quantity-input {
+    width: 80px;
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.yvp-fbt-item .remove-item {
+    color: #a00;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+/* Tables - Admin Page */
+.yvp-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+}
+
+.yvp-table th,
+.yvp-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.yvp-table th {
+    background: #f9f9f9;
+    font-weight: 600;
+    font-size: 13px;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.yvp-table tbody tr:hover {
+    background: #fafafa;
+}
+
+.yvp-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Status Badges */
+.yvp-status {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.yvp-status-active {
+    background: #d4edda;
+    color: #155724;
+}
+
+.yvp-status-inactive {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Form Styles */
+.yvp-form-row {
+    margin-bottom: 18px;
+}
+
+.yvp-form-row label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 13px;
+    color: #23282d;
+}
+
+.yvp-form-row input[type="text"],
+.yvp-form-row input[type="number"],
+.yvp-form-row select,
+.yvp-form-row textarea {
+    width: 100%;
+    max-width: 400px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.yvp-form-row input:focus,
+.yvp-form-row select:focus,
+.yvp-form-row textarea:focus {
+    border-color: #0073aa;
+    outline: none;
+    box-shadow: 0 0 0 1px #0073aa;
+}
+
+.yvp-form-row .description {
+    color: #666;
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+/* Inline Form Grid */
+.yvp-form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+/* Buttons */
+.yvp-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.yvp-btn-primary {
+    background: #0073aa;
+    color: #fff;
+}
+
+.yvp-btn-primary:hover {
+    background: #005a87;
+    color: #fff;
+}
+
+.yvp-btn-secondary {
+    background: #f7f7f7;
+    color: #555;
+    border: 1px solid #ccc;
+}
+
+.yvp-btn-secondary:hover {
+    background: #eee;
+    color: #333;
+}
+
+.yvp-btn-danger {
+    background: #dc3232;
+    color: #fff;
+}
+
+.yvp-btn-danger:hover {
+    background: #a02222;
+}
+
+/* Modal */
+.yvp-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 100000;
+    align-items: center;
+    justify-content: center;
+}
+
+.yvp-modal-overlay.active {
+    display: flex;
+}
+
+.yvp-modal {
+    background: #fff;
+    border-radius: 8px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 85vh;
+    overflow: auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.yvp-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 24px;
+    border-bottom: 1px solid #eee;
+    background: #fafafa;
+}
+
+.yvp-modal-header h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.yvp-modal-close {
+    font-size: 28px;
+    cursor: pointer;
+    color: #999;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.yvp-modal-close:hover {
+    color: #333;
+}
+
+.yvp-modal-body {
+    padding: 24px;
+}
+
+.yvp-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 18px 24px;
+    border-top: 1px solid #eee;
+    background: #fafafa;
+}
+
+/* Select2 Overrides */
+.yvp-bundle-item .select2-container,
+.yvp-fbt-item .select2-container {
+    min-width: 300px;
+}
+
+.select2-container--default .select2-selection--multiple,
+.select2-container--default .select2-selection--single {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    min-height: 36px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 34px;
+    padding-left: 12px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 34px;
+}
+
+/* Modal Select2 styling */
+.yvp-modal .select2-container {
+    width: 100% !important;
+}
+
+.yvp-modal .select2-container--default .select2-selection--multiple {
+    min-height: 42px;
+    padding: 4px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+}
+
+/* Country selection badges/tags */
+.yvp-modal .select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background: #0073aa;
+    border: none;
+    border-radius: 3px;
+    color: #fff;
+    padding: 4px 8px;
+    margin: 3px 4px 3px 0;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.yvp-modal .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    color: rgba(255, 255, 255, 0.7);
+    margin-right: 6px;
+    font-size: 14px;
+}
+
+.yvp-modal .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+    color: #fff;
+}
+
+/* Search input inside multi-select */
+.yvp-modal .select2-container--default .select2-search--inline .select2-search__field {
+    margin-top: 6px;
+    font-size: 13px;
+}
+
+.yvp-modal .select2-container--default .select2-search--inline .select2-search__field::placeholder {
+    color: #999;
+}
+
+/* Responsive */
+@media screen and (max-width: 782px) {
+
+    .yvp-bundle-item,
+    .yvp-fbt-item {
+        flex-wrap: wrap;
+    }
+
+    .yvp-bundle-item .product-select,
+    .yvp-fbt-item .product-select {
+        min-width: 100%;
+        width: 100%;
+    }
+
+    #yvp_zones_data table.widefat {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .yvp-admin-tabs {
+        flex-wrap: wrap;
+    }
+
+    .yvp-admin-tabs .nav-tab {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+}

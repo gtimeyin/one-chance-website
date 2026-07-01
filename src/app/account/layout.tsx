@@ -29,7 +29,17 @@ export default async function AccountLayout({
     <div className="flex flex-col w-full" style={{ background: "white" }}>
       <SmoothScroll />
       <Navbar />
-      <div className="relative z-[1]" style={{ paddingTop: 24, background: "white" }}>
+      <div
+        className="relative z-[1] flex flex-col"
+        style={{
+          paddingTop: 24,
+          background: "white",
+          // Ensure the content wrapper is tall enough to fully cover the
+          // sticky reveal footer on initial page load. Only when the user
+          // scrolls past the end of this block does the footer come into view.
+          minHeight: "100dvh",
+        }}
+      >
         <div style={{ padding: "0 clamp(20px, 4vw, 40px)" }}>
           <Breadcrumb
             items={[
@@ -40,7 +50,7 @@ export default async function AccountLayout({
         </div>
 
         <section
-          className="flex w-full justify-center bg-white"
+          className="flex w-full flex-1 justify-center bg-white"
           style={{ padding: "clamp(32px, 4vw, 64px) clamp(20px, 4vw, 40px)" }}
         >
           <div className="flex w-full max-w-[1024px] gap-10 mobile:flex-col mobile:gap-6">

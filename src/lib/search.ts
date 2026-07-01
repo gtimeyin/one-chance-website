@@ -1,5 +1,5 @@
 import type { WooProduct } from "./woocommerce";
-import { blogPosts, comics, announcements } from "./blog";
+import { blogPosts, announcements } from "./blog";
 import { faqs } from "./faqs";
 
 export type SearchItemType =
@@ -58,16 +58,9 @@ const blogItems: SearchItem[] = blogPosts.map((b) => ({
   keywords: `${b.title} ${b.description} ${b.category} ${stripHtml(b.content)}`.toLowerCase(),
 }));
 
-const comicItems: SearchItem[] = comics.map((c) => ({
-  id: `comic-${c.slug}`,
-  type: "comic",
-  title: c.title,
-  description: `${c.episode} — ${c.subtitle}`,
-  href: `/updates/${c.slug}`,
-  image: c.image,
-  category: "Comic",
-  keywords: `${c.title} ${c.subtitle} ${c.episode}`.toLowerCase(),
-}));
+// Comics moved to Supabase — they're indexed via the /api/search/products
+// endpoint alongside products, not from this static list.
+const comicItems: SearchItem[] = [];
 
 const announcementItems: SearchItem[] = announcements.map((a) => ({
   id: `announcement-${a.slug}`,

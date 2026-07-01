@@ -46,6 +46,9 @@ export default async function AccountDashboard() {
           <p className="font-['Barlow'] text-[16px] text-neutral-500">
             Manage your account, view orders, and update your details.
           </p>
+          <p className="font-['Barlow'] text-[12px] text-neutral-400" title="Your WooCommerce customer ID">
+            Customer ID: <span className="font-mono select-all">{session.customerId}</span>
+          </p>
         </div>
       </div>
 

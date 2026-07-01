@@ -15,6 +15,7 @@ const staticPaths: Array<{ path: string; priority: number; changeFrequency: Meta
   { path: "/contact", priority: 0.5, changeFrequency: "yearly" },
   { path: "/shipping", priority: 0.4, changeFrequency: "yearly" },
   { path: "/updates", priority: 0.6, changeFrequency: "weekly" },
+  { path: "/videos", priority: 0.6, changeFrequency: "weekly" },
   { path: "/privacy", priority: 0.2, changeFrequency: "yearly" },
   { path: "/terms", priority: 0.2, changeFrequency: "yearly" },
 ];
