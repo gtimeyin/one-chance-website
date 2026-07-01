@@ -156,7 +156,102 @@ export default function CheckoutClient({
     };
   }, [address.country, items]);
 
-  const total = subtotal;
+  const [referralCode, setReferralCode] = useState("");
+  const [appliedReferral, setAppliedReferral] = useState<
+    { code: string; discount: number; percent: number } | null
+  >(null);
+  const [referralStatus, setReferralStatus] = useState<
+    { kind: "error" | "info"; message: string } | null
+  >(null);
+  const [applyingReferral, setApplyingReferral] = useState(false);
+
+  const referralDiscount = appliedReferral?.discount ?? 0;
+  const total = subtotal === null ? null : Math.max(0, subtotal - referralDiscount);
+
+  // Re-validate whenever the cart or country changes: subtotal moves →
+  // discount moves. Clears the applied code if the server rejects it now
+  // (e.g. cart went empty).
+  useEffect(() => {
+    if (!appliedReferral || subtotal === null) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/checkout/apply-referral", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            code: appliedReferral.code,
+            country: address.country.trim().toUpperCase(),
+            cart: items.map((i) => ({ productId: i.productId, quantity: i.quantity })),
+          }),
+        });
+        const data = await res.json();
+        if (cancelled) return;
+        if (data.valid) {
+          setAppliedReferral({
+            code: data.code,
+            discount: data.discount,
+            percent: data.percent,
+          });
+        } else {
+          setAppliedReferral(null);
+          setReferralStatus({ kind: "error", message: data.message ?? "Referral no longer applies." });
+        }
+      } catch {
+        /* keep the current discount — network glitch */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subtotal, address.country]);
+
+  async function applyReferral() {
+    setReferralStatus(null);
+    const code = referralCode.trim();
+    if (!code) {
+      setReferralStatus({ kind: "error", message: "Enter a referral code." });
+      return;
+    }
+    setApplyingReferral(true);
+    try {
+      const res = await fetch("/api/checkout/apply-referral", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          code,
+          country: address.country.trim().toUpperCase(),
+          cart: items.map((i) => ({ productId: i.productId, quantity: i.quantity })),
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setReferralStatus({ kind: "error", message: data?.error ?? "Couldn't validate that code." });
+        return;
+      }
+      if (!data.valid) {
+        setReferralStatus({ kind: "error", message: data.message ?? "That code isn't usable." });
+        return;
+      }
+      setAppliedReferral({ code: data.code, discount: data.discount, percent: data.percent });
+      setReferralCode(data.code);
+      setReferralStatus({
+        kind: "info",
+        message: `${data.percent}% off applied.`,
+      });
+    } catch {
+      setReferralStatus({ kind: "error", message: "Network error — try again." });
+    } finally {
+      setApplyingReferral(false);
+    }
+  }
+
+  function removeReferral() {
+    setAppliedReferral(null);
+    setReferralCode("");
+    setReferralStatus(null);
+  }
 
   function field(key: keyof AddressState, value: string) {
     setAddress((a) => ({ ...a, [key]: value }));
@@ -195,6 +290,7 @@ export default function CheckoutClient({
         country: address.country.trim().toUpperCase(),
         phone: address.phone.trim(),
       },
+      referralCode: appliedReferral?.code,
     };
   }
 
@@ -328,6 +424,14 @@ export default function CheckoutClient({
               priceReady={allLinesPriced && !repricing}
               error={error}
               isAuthenticated={isAuthenticated}
+              referralCode={referralCode}
+              setReferralCode={setReferralCode}
+              appliedReferral={appliedReferral}
+              referralStatus={referralStatus}
+              applyingReferral={applyingReferral}
+              onApplyReferral={applyReferral}
+              onRemoveReferral={removeReferral}
+              currency={currency}
             />
           ) : (
             <PaymentStep
@@ -355,6 +459,9 @@ export default function CheckoutClient({
           total={total}
           currency={currency}
           repricing={repricing}
+          referralDiscount={referralDiscount}
+          referralCode={appliedReferral?.code ?? null}
+          referralPercent={appliedReferral?.percent ?? null}
         />
       </div>
     </section>
@@ -372,6 +479,14 @@ interface AddressAndShippingProps {
   priceReady: boolean;
   error: string | null;
   isAuthenticated: boolean;
+  referralCode: string;
+  setReferralCode: (v: string) => void;
+  appliedReferral: { code: string; discount: number; percent: number } | null;
+  referralStatus: { kind: "error" | "info"; message: string } | null;
+  applyingReferral: boolean;
+  onApplyReferral: () => void;
+  onRemoveReferral: () => void;
+  currency: string;
 }
 
 function AddressAndShipping({
@@ -385,6 +500,14 @@ function AddressAndShipping({
   priceReady,
   error,
   isAuthenticated,
+  referralCode,
+  setReferralCode,
+  appliedReferral,
+  referralStatus,
+  applyingReferral,
+  onApplyReferral,
+  onRemoveReferral,
+  currency,
 }: AddressAndShippingProps) {
   return (
     <form
@@ -441,6 +564,107 @@ function AddressAndShipping({
           <Field label="Postcode" value={address.postcode} onChange={(v) => setField("postcode", v)} />
           <CountryField value={address.country} onChange={(v) => setField("country", v)} />
         </div>
+      </section>
+
+      <section className="flex flex-col" style={{ gap: 10 }}>
+        <SectionHeading>Referral code (optional)</SectionHeading>
+        {appliedReferral ? (
+          <div
+            className="flex flex-wrap items-center justify-between"
+            style={{
+              gap: 12,
+              padding: "12px 16px",
+              background: "#E6F4EA",
+              border: "1px solid #A5D6A7",
+              borderRadius: 4,
+            }}
+          >
+            <div className="flex flex-col" style={{ gap: 2, minWidth: 0 }}>
+              <span
+                className="font-barlow-condensed font-bold"
+                style={{ fontSize: 15, color: "#1B5E20", letterSpacing: "0.02em" }}
+              >
+                {appliedReferral.code} · {appliedReferral.percent}% off
+              </span>
+              <span className="font-barlow-body" style={{ fontSize: 14, color: "#1B5E20" }}>
+                Discount: −{formatPrice(appliedReferral.discount, currency)}
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={onRemoveReferral}
+              className="font-barlow-condensed font-bold uppercase cursor-pointer bg-transparent"
+              style={{
+                padding: "8px 12px",
+                color: "#1B5E20",
+                fontSize: 12,
+                letterSpacing: "0.06em",
+                border: "1px solid #A5D6A7",
+                borderRadius: 4,
+              }}
+            >
+              Remove
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="flex" style={{ gap: 8 }}>
+              <input
+                type="text"
+                value={referralCode}
+                onChange={(e) => setReferralCode(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    onApplyReferral();
+                  }
+                }}
+                placeholder="e.g. OC-A3K7X9B2"
+                autoComplete="off"
+                spellCheck={false}
+                className="font-barlow-body flex-1"
+                style={{
+                  padding: "12px 14px",
+                  border: "1px solid var(--color-border-light)",
+                  fontSize: 16,
+                  color: "var(--color-dark)",
+                  borderRadius: 4,
+                  textTransform: "uppercase",
+                }}
+              />
+              <button
+                type="button"
+                onClick={onApplyReferral}
+                disabled={applyingReferral || !referralCode.trim()}
+                className="font-barlow-condensed font-bold uppercase cursor-pointer border-none disabled:opacity-40 disabled:cursor-not-allowed"
+                style={{
+                  padding: "12px 20px",
+                  background: "var(--color-dark)",
+                  color: "white",
+                  fontSize: 13,
+                  letterSpacing: "0.06em",
+                  borderRadius: 4,
+                }}
+              >
+                {applyingReferral ? "Checking…" : "Apply"}
+              </button>
+            </div>
+            {referralStatus && (
+              <p
+                className="font-barlow-body"
+                style={{
+                  fontSize: 13,
+                  padding: "8px 12px",
+                  borderRadius: 4,
+                  background: referralStatus.kind === "error" ? "#FEE2E2" : "#E6F4EA",
+                  color: referralStatus.kind === "error" ? "#991B1B" : "#1B5E20",
+                }}
+              >
+                {referralStatus.message}
+              </p>
+            )}
+          </>
+        )}
       </section>
 
       {availableProviders.length > 1 && (
@@ -629,9 +853,21 @@ interface CheckoutSummaryProps {
   total: number | null;
   currency: string;
   repricing?: boolean;
+  referralDiscount?: number;
+  referralCode?: string | null;
+  referralPercent?: number | null;
 }
 
-function CheckoutSummary({ items, subtotal, total, currency, repricing }: CheckoutSummaryProps) {
+function CheckoutSummary({
+  items,
+  subtotal,
+  total,
+  currency,
+  repricing,
+  referralDiscount = 0,
+  referralCode,
+  referralPercent,
+}: CheckoutSummaryProps) {
   return (
     <aside
       className="flex flex-col h-fit"
@@ -723,6 +959,13 @@ function CheckoutSummary({ items, subtotal, total, currency, repricing }: Checko
           label="Subtotal"
           value={subtotal === null ? "—" : formatPrice(subtotal, currency)}
         />
+        {referralDiscount > 0 && referralCode && (
+          <SummaryRow
+            label={`Referral ${referralPercent ? `(${referralPercent}%)` : ""} · ${referralCode}`}
+            value={`−${formatPrice(referralDiscount, currency)}`}
+            accent
+          />
+        )}
         <SummaryRow
           label="Total"
           value={total === null ? "—" : formatPrice(total, currency)}
@@ -733,18 +976,37 @@ function CheckoutSummary({ items, subtotal, total, currency, repricing }: Checko
   );
 }
 
-function SummaryRow({ label, value, bold }: { label: string; value: string; bold?: boolean }) {
+function SummaryRow({
+  label,
+  value,
+  bold,
+  accent,
+}: {
+  label: string;
+  value: string;
+  bold?: boolean;
+  accent?: boolean;
+}) {
+  const color = accent
+    ? "#1B5E20"
+    : bold
+      ? "var(--color-dark)"
+      : "var(--color-text-muted)";
   return (
     <div className="flex items-center justify-between">
       <span
-        className="font-barlow-condensed"
-        style={{ fontSize: bold ? 16 : 14, color: bold ? "var(--color-dark)" : "var(--color-text-muted)", fontWeight: bold ? 700 : 400 }}
+        className="font-barlow-condensed truncate"
+        style={{ fontSize: bold ? 16 : 14, color, fontWeight: bold || accent ? 700 : 400, maxWidth: "70%" }}
       >
         {label}
       </span>
       <span
         className="font-barlow-condensed"
-        style={{ fontSize: bold ? 20 : 14, color: "var(--color-dark)", fontWeight: bold ? 700 : 500 }}
+        style={{
+          fontSize: bold ? 20 : 14,
+          color: accent ? "#1B5E20" : "var(--color-dark)",
+          fontWeight: bold || accent ? 700 : 500,
+        }}
       >
         {value}
       </span>

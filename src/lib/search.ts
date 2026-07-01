@@ -1,5 +1,5 @@
 import type { WooProduct } from "./woocommerce";
-import { blogPosts, announcements } from "./blog";
+import { announcements, type BlogPost } from "./blog";
 import { faqs } from "./faqs";
 
 export type SearchItemType =
@@ -47,16 +47,20 @@ export function productToSearchItem(p: WooProduct): SearchItem {
   };
 }
 
-const blogItems: SearchItem[] = blogPosts.map((b) => ({
-  id: `post-${b.slug}`,
-  type: "post",
-  title: b.title,
-  description: b.description,
-  href: `/updates/${b.slug}`,
-  image: b.image,
-  category: b.category,
-  keywords: `${b.title} ${b.description} ${b.category} ${stripHtml(b.content)}`.toLowerCase(),
-}));
+// Blog posts moved to WordPress — indexed dynamically via the
+// /api/search/products endpoint, not from this static list.
+export function postToSearchItem(b: BlogPost): SearchItem {
+  return {
+    id: `post-${b.slug}`,
+    type: "post",
+    title: b.title,
+    description: b.description,
+    href: `/updates/${b.slug}`,
+    image: b.image,
+    category: b.category,
+    keywords: `${b.title} ${b.description} ${b.category} ${stripHtml(b.content)}`.toLowerCase(),
+  };
+}
 
 // Comics moved to Supabase — they're indexed via the /api/search/products
 // endpoint alongside products, not from this static list.
@@ -177,7 +181,6 @@ const pageItems: SearchItem[] = [
 ];
 
 export const staticSearchItems: SearchItem[] = [
-  ...blogItems,
   ...comicItems,
   ...announcementItems,
   ...faqItems,

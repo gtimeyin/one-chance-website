@@ -10,7 +10,7 @@ import AnnouncementCard from "@/components/ui/AnnouncementCard";
 import NewsletterForm from "@/components/ui/NewsletterForm";
 import FooterShop from "@/components/layout/FooterShop";
 import SmoothScroll from "@/components/SmoothScroll";
-import { blogPosts, announcements, type Comic } from "@/lib/blog";
+import { announcements, type Comic, type BlogPost } from "@/lib/blog";
 import Link from "next/link";
 
 function SectionHeader({
@@ -66,7 +66,7 @@ function SectionHeader({
   );
 }
 
-export default function UpdatesContent({ comics }: { comics: Comic[] }) {
+export default function UpdatesContent({ comics, blogPosts }: { comics: Comic[]; blogPosts: BlogPost[] }) {
   const blogRef = useRef(null);
   const blogInView = useInView(blogRef, { once: true, margin: "-50px" });
   const comicsRef = useRef(null);

@@ -1,17 +1,20 @@
 import { getProducts } from "@/lib/woocommerce";
 import { listComics } from "@/lib/comics-data";
-import { productToSearchItem, type SearchItem } from "@/lib/search";
+import { getBlogPosts } from "@/lib/wordpress";
+import { productToSearchItem, postToSearchItem, type SearchItem } from "@/lib/search";
 
 export const revalidate = 300;
 
 export async function GET() {
-  const [products, comics] = await Promise.all([
+  const [products, comics, posts] = await Promise.all([
     getProducts({ per_page: 100 }),
     listComics(),
+    getBlogPosts(),
   ]);
 
   const items: SearchItem[] = [
     ...products.map(productToSearchItem),
+    ...posts.map(postToSearchItem),
     ...comics.map((c) => ({
       id: `comic-${c.slug}`,
       type: "comic" as const,

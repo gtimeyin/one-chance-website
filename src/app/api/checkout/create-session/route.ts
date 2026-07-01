@@ -10,6 +10,7 @@ import {
 import { getStripeClient, toMinorUnits } from "@/lib/stripe";
 import { rateLimit } from "@/lib/rate-limit";
 import { decrypt } from "@/lib/session-crypto";
+import { validateReferralCodeForCheckout } from "@/lib/referral";
 import { createLogger } from "@/lib/logger";
 
 const log = createLogger("checkout/create-session");
@@ -39,6 +40,7 @@ const BodySchema = z.object({
   email: z.string().trim().email().max(254),
   cart: z.array(CartLineSchema).min(1).max(50),
   shippingAddress: AddressSchema,
+  referralCode: z.string().trim().max(64).optional(),
 });
 
 export async function POST(request: Request) {
@@ -66,7 +68,7 @@ export async function POST(request: Request) {
       { status: 400 },
     );
   }
-  const { email, cart, shippingAddress } = parsed.data;
+  const { email, cart, shippingAddress, referralCode } = parsed.data;
 
   // Server-authoritative pricing. The client's displayed prices are derived
   // from the same source, so they should match what the user saw — but if
@@ -82,14 +84,36 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Could not price cart" }, { status: 500 });
   }
 
-  const amount = priced.subtotal;
-  if (amount <= 0) {
-    return NextResponse.json({ error: "Amount must be > 0" }, { status: 400 });
-  }
-
   const cookieStore = await cookies();
   const session = await decrypt(cookieStore.get("session")?.value);
   const customerId = session?.customerId ?? null;
+
+  // Validate & apply the referral discount if one was provided. Fail closed:
+  // if the user passed a code that no longer validates (e.g. they used it on
+  // a prior order between the preview and submit), reject the checkout so
+  // they see the reason rather than silently drop the discount.
+  let referralDiscount = 0;
+  let acceptedReferralCode: string | undefined;
+  if (referralCode) {
+    const referralResult = await validateReferralCodeForCheckout({
+      code: referralCode,
+      buyerCustomerId: customerId,
+      subtotal: priced.subtotal,
+    });
+    if (!referralResult.valid) {
+      return NextResponse.json(
+        { error: referralResult.message || "Referral code is not valid.", code: "referral_invalid" },
+        { status: 400 },
+      );
+    }
+    referralDiscount = referralResult.discount;
+    acceptedReferralCode = referralResult.code;
+  }
+
+  const amount = Math.max(0, priced.subtotal - referralDiscount);
+  if (amount <= 0) {
+    return NextResponse.json({ error: "Amount must be > 0" }, { status: 400 });
+  }
 
   const checkoutSession = await createCheckoutSession({
     customerId,
@@ -116,6 +140,12 @@ export async function POST(request: Request) {
       automatic_payment_methods: { enabled: true },
       metadata: {
         checkout_session_id: checkoutSession.id,
+        ...(acceptedReferralCode
+          ? {
+              referral_code: acceptedReferralCode,
+              referral_discount: String(referralDiscount),
+            }
+          : {}),
       },
       shipping: {
         name: `${shippingAddress.first_name} ${shippingAddress.last_name}`,
@@ -141,6 +171,9 @@ export async function POST(request: Request) {
       sessionId: checkoutSession.id,
       clientSecret: intent.client_secret,
       amount,
+      subtotal: priced.subtotal,
+      referralDiscount,
+      referralCode: acceptedReferralCode,
       currency: priced.currency,
     });
   } catch (error) {

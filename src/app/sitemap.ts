@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { siteUrl } from "@/lib/site";
 import { getProducts } from "@/lib/woocommerce";
-import { blogPosts } from "@/lib/blog";
+import { getBlogPosts } from "@/lib/wordpress";
 
 export const revalidate = 3600;
 
@@ -40,6 +40,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
+  const blogPosts = await getBlogPosts();
   const blogEntries: MetadataRoute.Sitemap = blogPosts.map((post) => ({
     url: `${siteUrl}/updates/${post.slug}`,
     lastModified: now,

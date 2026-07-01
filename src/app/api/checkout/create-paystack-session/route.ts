@@ -10,6 +10,7 @@ import {
 import { initializePaystackTransaction } from "@/lib/paystack";
 import { rateLimit } from "@/lib/rate-limit";
 import { decrypt } from "@/lib/session-crypto";
+import { validateReferralCodeForCheckout } from "@/lib/referral";
 import { createLogger } from "@/lib/logger";
 
 const log = createLogger("checkout/create-paystack-session");
@@ -36,6 +37,7 @@ const BodySchema = z.object({
   email: z.string().trim().email().max(254),
   cart: z.array(CartLineSchema).min(1).max(50),
   shippingAddress: AddressSchema,
+  referralCode: z.string().trim().max(64).optional(),
 });
 
 // Currencies Paystack accepts.
@@ -66,7 +68,7 @@ export async function POST(request: Request) {
       { status: 400 },
     );
   }
-  const { email, cart, shippingAddress } = parsed.data;
+  const { email, cart, shippingAddress, referralCode } = parsed.data;
 
   let priced;
   try {
@@ -86,14 +88,32 @@ export async function POST(request: Request) {
     );
   }
 
-  const amount = priced.subtotal;
-  if (amount <= 0) {
-    return NextResponse.json({ error: "Amount must be > 0" }, { status: 400 });
-  }
-
   const cookieStore = await cookies();
   const session = await decrypt(cookieStore.get("session")?.value);
   const customerId = session?.customerId ?? null;
+
+  let referralDiscount = 0;
+  let acceptedReferralCode: string | undefined;
+  if (referralCode) {
+    const referralResult = await validateReferralCodeForCheckout({
+      code: referralCode,
+      buyerCustomerId: customerId,
+      subtotal: priced.subtotal,
+    });
+    if (!referralResult.valid) {
+      return NextResponse.json(
+        { error: referralResult.message || "Referral code is not valid.", code: "referral_invalid" },
+        { status: 400 },
+      );
+    }
+    referralDiscount = referralResult.discount;
+    acceptedReferralCode = referralResult.code;
+  }
+
+  const amount = Math.max(0, priced.subtotal - referralDiscount);
+  if (amount <= 0) {
+    return NextResponse.json({ error: "Amount must be > 0" }, { status: 400 });
+  }
 
   const checkoutSession = await createCheckoutSession({
     customerId,
@@ -116,6 +136,12 @@ export async function POST(request: Request) {
       metadata: {
         checkout_session_id: checkoutSession.id,
         customer_id: customerId,
+        ...(acceptedReferralCode
+          ? {
+              referral_code: acceptedReferralCode,
+              referral_discount: referralDiscount,
+            }
+          : {}),
       },
     });
 
@@ -131,6 +157,9 @@ export async function POST(request: Request) {
       reference: init.reference,
       publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
       amount,
+      subtotal: priced.subtotal,
+      referralDiscount,
+      referralCode: acceptedReferralCode,
       currency: priced.currency,
     });
   } catch (error) {

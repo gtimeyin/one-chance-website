@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getBlogPost } from "@/lib/blog";
+import { getBlogPost } from "@/lib/wordpress";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -12,7 +12,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const post = await getBlogPost(slug);
 
   if (!post) return { title: "Post Not Found" };
 

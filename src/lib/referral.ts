@@ -19,6 +19,90 @@ const COMMISSION_PERCENT = parseFloat(
   process.env.REFERRAL_COMMISSION_PERCENT || "5"
 );
 
+const BUYER_DISCOUNT_PERCENT = parseFloat(
+  process.env.REFERRAL_BUYER_DISCOUNT_PERCENT || "10"
+);
+
+export interface BuyerReferralDiscount {
+  valid: boolean;
+  discount: number;      // major-unit amount subtracted from subtotal
+  percent: number;       // e.g. 10 for a 10% discount
+  code: string;          // canonical (uppercased) code that was accepted
+  referralCodeId?: string;
+  message?: string;      // human-readable reason if !valid
+}
+
+/**
+ * Validates a referral code at checkout and computes the buyer discount.
+ *
+ *  - Rejects self-referral (code owner === buyer's customer id)
+ *  - Rejects codes that don't exist or aren't active
+ *  - Rejects if the buyer has already received a referral discount on
+ *    a prior order (first-purchase-only)
+ *
+ * Called from both the "apply" preview endpoint AND the create-session
+ * endpoints, so the two agree on what discount is applied.
+ */
+export async function validateReferralCodeForCheckout(input: {
+  code: string;
+  buyerCustomerId: number | null;
+  subtotal: number;
+}): Promise<BuyerReferralDiscount> {
+  const raw = input.code.trim().toUpperCase();
+  const empty: BuyerReferralDiscount = {
+    valid: false,
+    discount: 0,
+    percent: BUYER_DISCOUNT_PERCENT,
+    code: raw,
+  };
+
+  if (!raw) return { ...empty, message: "Enter a referral code." };
+
+  const supabase = getSupabaseClient();
+  if (!supabase) return { ...empty, message: "Referrals are unavailable right now." };
+
+  const refCode = await getReferralCodeByCode(raw);
+  if (!refCode) return { ...empty, message: "That referral code doesn't exist." };
+  if (!refCode.is_active) return { ...empty, message: "That referral code is no longer active." };
+
+  if (input.buyerCustomerId && refCode.woo_customer_id === input.buyerCustomerId) {
+    return { ...empty, message: "You can't refer yourself." };
+  }
+
+  // First-purchase-only enforcement. If we know the buyer, look for any
+  // previous completed referral transaction; if we don't, we can't enforce
+  // this at preview time — the order-complete pipeline will still catch
+  // duplicates via referral_transactions.woo_order_id uniqueness.
+  if (input.buyerCustomerId) {
+    const referral = await getReferralByReferee(input.buyerCustomerId);
+    if (referral) {
+      const { data: prior } = await supabase
+        .from("referral_transactions")
+        .select("id, status")
+        .eq("referral_id", referral.id)
+        .not("status", "eq", "reversed")
+        .limit(1);
+      if (prior && prior.length > 0) {
+        return {
+          ...empty,
+          message: "You've already used a referral code on a previous order.",
+        };
+      }
+    }
+  }
+
+  const discount =
+    Math.round(input.subtotal * (BUYER_DISCOUNT_PERCENT / 100) * 100) / 100;
+
+  return {
+    valid: true,
+    discount,
+    percent: BUYER_DISCOUNT_PERCENT,
+    code: raw,
+    referralCodeId: refCode.id,
+  };
+}
+
 // ─── Referral Code Operations ────────────────────────────────────
 
 function generateCodeString(): string {

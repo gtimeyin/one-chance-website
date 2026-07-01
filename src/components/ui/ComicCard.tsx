@@ -42,10 +42,10 @@ export default function ComicCard({ comic }: ComicCardProps) {
         <p
           className="font-barlow-condensed font-extrabold uppercase"
           style={{
-            fontSize: 18,
+            fontSize: 22,
             color: "var(--color-dark)",
             letterSpacing: "-0.5px",
-            lineHeight: 1.2,
+            lineHeight: 1.15,
           }}
         >
           {comic.title}

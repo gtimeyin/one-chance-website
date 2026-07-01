@@ -245,28 +245,32 @@ export async function deletePanelAction(formData: FormData): Promise<void> {
   bust({ slug });
 }
 
-export async function movePanelAction(formData: FormData): Promise<void> {
+/**
+ * Persist a full panel ordering. Called from the client after a drag-to-reorder
+ * (or keyboard move). Validates that the payload is exactly the comic's panels
+ * before writing so a stale/tampered list can't drop or duplicate rows.
+ */
+export async function reorderPanelsAction(
+  comicId: string,
+  slug: string,
+  orderedIds: string[],
+): Promise<void> {
   await requireCreatorSession();
-  const comicId = String(formData.get("comicId") ?? "");
-  const panelId = String(formData.get("panelId") ?? "");
-  const direction = String(formData.get("direction") ?? "") as "up" | "down";
-  const slug = String(formData.get("slug") ?? "");
-  if (!comicId || !panelId || (direction !== "up" && direction !== "down")) {
-    throw new Error("Bad move payload");
-  }
+  if (!comicId || !Array.isArray(orderedIds) || orderedIds.length === 0) return;
 
   const comic = await getComicById(comicId);
   if (!comic) throw new Error("Comic not found");
 
-  const ids = comic.panels.map((p) => p.id);
-  const idx = ids.indexOf(panelId);
-  if (idx === -1) return;
-  const target = direction === "up" ? idx - 1 : idx + 1;
-  if (target < 0 || target >= ids.length) return;
+  const known = new Set(comic.panels.map((p) => p.id));
+  const unique = new Set(orderedIds);
+  if (
+    orderedIds.length !== known.size ||
+    unique.size !== orderedIds.length ||
+    !orderedIds.every((id) => known.has(id))
+  ) {
+    throw new Error("Reorder payload does not match the comic's panels");
+  }
 
-  const reordered = ids.slice();
-  [reordered[idx], reordered[target]] = [reordered[target], reordered[idx]];
-
-  await reorderPanels(reordered);
+  await reorderPanels(orderedIds);
   bust({ slug });
 }

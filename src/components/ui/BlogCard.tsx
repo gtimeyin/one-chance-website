@@ -56,10 +56,10 @@ export default function BlogCard({ post }: BlogCardProps) {
         href={`/updates/${post.slug}`}
         className="font-barlow-condensed font-extrabold uppercase no-underline"
         style={{
-          fontSize: 18,
+          fontSize: 22,
           color: "var(--color-dark)",
           textDecoration: "none",
-          lineHeight: 1.2,
+          lineHeight: 1.15,
           letterSpacing: "-0.5px",
         }}
       >

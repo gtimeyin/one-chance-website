@@ -1,4 +1,5 @@
 import { listComics } from "@/lib/comics-data";
+import { getBlogPosts } from "@/lib/wordpress";
 import type { Comic } from "@/lib/blog";
 import UpdatesContent from "./UpdatesContent";
 
@@ -9,7 +10,7 @@ export const metadata = {
 };
 
 export default async function UpdatesPage() {
-  const records = await listComics();
+  const [records, blogPosts] = await Promise.all([listComics(), getBlogPosts()]);
   const comics: Comic[] = records.map((c) => ({
     slug: c.slug,
     title: c.title,
@@ -23,5 +24,5 @@ export default async function UpdatesPage() {
     })),
   }));
 
-  return <UpdatesContent comics={comics} />;
+  return <UpdatesContent comics={comics} blogPosts={blogPosts} />;
 }
