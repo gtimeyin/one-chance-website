@@ -29,6 +29,14 @@ export interface CheckoutAddress {
   phone: string;
 }
 
+export interface GiftOptions {
+  isGift: boolean;
+  message?: string;      // personalised note, printed on a gift card
+  from?: string;         // "from" name
+  wrap?: boolean;        // add (free) gift wrapping
+  giftReceipt?: boolean; // omit prices on the packing slip
+}
+
 export interface CheckoutShippingMethod {
   zone_id: number;
   method_id: string;       // e.g. "flat_rate", "free_shipping"
@@ -52,7 +60,9 @@ export interface CheckoutSession {
   email: string;
   cart: CheckoutCartLine[];
   shipping_address: CheckoutAddress | null;
+  billing_address: CheckoutAddress | null;
   shipping_method: CheckoutShippingMethod | null;
+  gift_options: GiftOptions | null;
   currency: string;
   amount: number;
   status: CheckoutStatus;
@@ -152,7 +162,9 @@ export async function createCheckoutSession(input: {
   email: string;
   cart: CheckoutCartLine[];
   shippingAddress?: CheckoutAddress | null;
+  billingAddress?: CheckoutAddress | null;
   shippingMethod?: CheckoutShippingMethod | null;
+  giftOptions?: GiftOptions | null;
   currency: string;
   amount: number;
 }): Promise<CheckoutSession | null> {
@@ -166,7 +178,9 @@ export async function createCheckoutSession(input: {
       email: input.email,
       cart: input.cart,
       shipping_address: input.shippingAddress ?? null,
+      billing_address: input.billingAddress ?? null,
       shipping_method: input.shippingMethod ?? null,
+      gift_options: input.giftOptions ?? null,
       currency: input.currency,
       amount: input.amount,
       status: "started",

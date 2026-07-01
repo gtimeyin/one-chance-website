@@ -281,6 +281,7 @@ export interface CreateWooOrderInput {
   shipping: WooAddress;
   line_items: { product_id: number; quantity: number; variation_id?: number }[];
   shipping_lines?: { method_id: string; method_title: string; total: string }[];
+  customer_note?: string;
   meta_data?: { key: string; value: string | number | boolean }[];
 }
 

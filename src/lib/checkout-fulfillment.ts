@@ -123,36 +123,63 @@ async function createWooOrderForSession(
   paymentMethodTitle: string,
   providerRef: string,
 ) {
-  const addr = session.shipping_address!;
+  const shipAddr = session.shipping_address!;
+  // Billing defaults to the shipping address (single-address checkout). When
+  // the order ships to a different recipient, the buyer's billing address is
+  // stored separately.
+  const billAddr = session.billing_address ?? shipAddr;
   const provider = session.payment_provider!;
+  const gift = session.gift_options;
 
   const billing = {
-    first_name: addr.first_name,
-    last_name: addr.last_name,
+    first_name: billAddr.first_name,
+    last_name: billAddr.last_name,
     company: "",
-    address_1: addr.address_1,
-    address_2: addr.address_2 ?? "",
-    city: addr.city,
-    state: addr.state ?? "",
-    postcode: addr.postcode ?? "",
-    country: addr.country,
-    phone: addr.phone,
+    address_1: billAddr.address_1,
+    address_2: billAddr.address_2 ?? "",
+    city: billAddr.city,
+    state: billAddr.state ?? "",
+    postcode: billAddr.postcode ?? "",
+    country: billAddr.country,
+    phone: billAddr.phone,
     email: session.email,
   };
   const shipping = {
-    first_name: addr.first_name,
-    last_name: addr.last_name,
+    first_name: shipAddr.first_name,
+    last_name: shipAddr.last_name,
     company: "",
-    address_1: addr.address_1,
-    address_2: addr.address_2 ?? "",
-    city: addr.city,
-    state: addr.state ?? "",
-    postcode: addr.postcode ?? "",
-    country: addr.country,
-    phone: addr.phone,
+    address_1: shipAddr.address_1,
+    address_2: shipAddr.address_2 ?? "",
+    city: shipAddr.city,
+    state: shipAddr.state ?? "",
+    postcode: shipAddr.postcode ?? "",
+    country: shipAddr.country,
+    phone: shipAddr.phone,
   };
   const providerMetaKey =
     provider === "stripe" ? "_stripe_payment_intent_id" : "_paystack_reference";
+
+  const metaData: { key: string; value: string | number | boolean }[] = [
+    { key: "_oc_checkout_session_id", value: session.id },
+    { key: providerMetaKey, value: providerRef },
+  ];
+
+  // Attach gift options for fulfillment. The message goes into customer_note
+  // (native WC field, shown on the order); the rest are meta flags.
+  let customerNote: string | undefined;
+  if (gift?.isGift) {
+    metaData.push({ key: "_oc_is_gift", value: true });
+    if (gift.wrap) metaData.push({ key: "_oc_gift_wrap", value: true });
+    if (gift.giftReceipt) metaData.push({ key: "_oc_gift_receipt", value: true });
+    if (gift.from) metaData.push({ key: "_oc_gift_from", value: gift.from });
+
+    const parts: string[] = ["🎁 GIFT ORDER"];
+    if (gift.wrap) parts.push("Gift wrapping requested.");
+    if (gift.giftReceipt) parts.push("Gift receipt — do not show prices.");
+    if (gift.message) parts.push(`Message: "${gift.message}"`);
+    if (gift.from) parts.push(`From: ${gift.from}`);
+    customerNote = parts.join("\n");
+  }
 
   try {
     return await createWooOrder({
@@ -169,10 +196,8 @@ async function createWooOrderForSession(
         quantity: line.quantity,
         ...(line.variationId ? { variation_id: line.variationId } : {}),
       })),
-      meta_data: [
-        { key: "_oc_checkout_session_id", value: session.id },
-        { key: providerMetaKey, value: providerRef },
-      ],
+      ...(customerNote ? { customer_note: customerNote } : {}),
+      meta_data: metaData,
     });
   } catch (error) {
     log.error("Failed to create Woo order", error);

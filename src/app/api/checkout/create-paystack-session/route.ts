@@ -33,10 +33,20 @@ const AddressSchema = z.object({
   phone: z.string().trim().min(5).max(30),
 });
 
+const GiftOptionsSchema = z.object({
+  isGift: z.boolean(),
+  message: z.string().trim().max(500).optional(),
+  from: z.string().trim().max(100).optional(),
+  wrap: z.boolean().optional(),
+  giftReceipt: z.boolean().optional(),
+});
+
 const BodySchema = z.object({
   email: z.string().trim().email().max(254),
   cart: z.array(CartLineSchema).min(1).max(50),
   shippingAddress: AddressSchema,
+  billingAddress: AddressSchema.optional(),
+  giftOptions: GiftOptionsSchema.optional(),
   referralCode: z.string().trim().max(64).optional(),
 });
 
@@ -68,7 +78,7 @@ export async function POST(request: Request) {
       { status: 400 },
     );
   }
-  const { email, cart, shippingAddress, referralCode } = parsed.data;
+  const { email, cart, shippingAddress, billingAddress, giftOptions, referralCode } = parsed.data;
 
   let priced;
   try {
@@ -120,6 +130,8 @@ export async function POST(request: Request) {
     email,
     cart: priced.cart,
     shippingAddress,
+    billingAddress: giftOptions?.isGift ? billingAddress : undefined,
+    giftOptions: giftOptions?.isGift ? giftOptions : undefined,
     currency: priced.currency,
     amount,
   });
