@@ -5,6 +5,7 @@ import Breadcrumb from "@/components/layout/Breadcrumb";
 import ProductImageGallery from "@/components/product/ProductImageGallery";
 import ProductInfo from "@/components/product/ProductInfo";
 import WhatsInTheBox from "@/components/product/WhatsInTheBox";
+import BundleContents from "@/components/product/BundleContents";
 import VideoSection from "@/components/product/VideoSection";
 import QuickStartGuide, { type QuickStartStep } from "@/components/product/QuickStartGuide";
 import TestimonialsSection from "@/components/product/TestimonialsSection";
@@ -24,12 +25,14 @@ interface ProductDetailClientProps {
   product: WooProduct;
   relatedProducts: WooProduct[];
   reviews: WooReview[];
+  bundleItems?: WooProduct[];
 }
 
 export default function ProductDetailClient({
   product,
   relatedProducts,
   reviews,
+  bundleItems = [],
 }: ProductDetailClientProps) {
   const boxItems = getMetaJson<string[]>(product, "oc_box_items") ?? [];
   const videoUrl = getMetaValue(product, "oc_video_url");
@@ -70,6 +73,10 @@ export default function ProductDetailClient({
         </section>
 
         <ProductDescription product={product} />
+
+        {bundleItems.length > 0 && (
+          <BundleContents bundle={product} items={bundleItems} />
+        )}
 
         <WhatsInTheBox items={boxItems} />
         {videoUrl && <VideoSection videoUrl={videoUrl} headline={videoHeadline} />}

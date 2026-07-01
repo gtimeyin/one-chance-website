@@ -54,7 +54,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
     <div className="flex flex-col" style={{ gap: 20 }}>
       {/* Tagline */}
       {tagline && (
-        <p className="font-barlow-body" style={{ fontSize: 15, color: "var(--color-text-muted)", letterSpacing: "0.02em" }}>
+        <p className="font-barlow-body uppercase" style={{ fontSize: 15, color: "var(--color-text-muted)", letterSpacing: "0.08em" }}>
           {tagline}
         </p>
       )}

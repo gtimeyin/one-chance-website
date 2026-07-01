@@ -6,7 +6,7 @@ import { formatPrice, getImageSrc } from "@/lib/utils";
 import { useCart } from "@/store/cart";
 import { useCurrency } from "@/components/CurrencyProvider";
 import { trackAddToCart } from "@/lib/analytics";
-import type { WooProduct } from "@/lib/woocommerce-shared";
+import { bundleKind, getBundleChildIds, type WooProduct } from "@/lib/woocommerce-shared";
 
 interface ProductCardProps {
   product: WooProduct;
@@ -23,6 +23,8 @@ export default function ProductCard({ product }: ProductCardProps) {
   const discountPct = onSale
     ? Math.round(((regularPrice - activePrice) / regularPrice) * 100)
     : 0;
+  const kind = bundleKind(product);
+  const bundleCount = kind ? getBundleChildIds(product).length : 0;
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -64,22 +66,39 @@ export default function ProductCard({ product }: ProductCardProps) {
           className="object-cover group-hover:scale-105 transition-transform duration-500"
           sizes="(max-width: 768px) 100vw, 33vw"
         />
-        {onSale && (
-          <span
-            className="absolute font-barlow-condensed font-bold uppercase z-10"
-            style={{
-              top: 12,
-              left: 12,
-              padding: "4px 8px",
-              background: "var(--color-dark)",
-              color: "var(--color-yellow)",
-              fontSize: 11,
-              letterSpacing: "0.05em",
-            }}
-          >
-            {discountPct}% OFF
-          </span>
-        )}
+        <div
+          className="absolute z-10 flex flex-col items-start"
+          style={{ top: 12, left: 12, gap: 6 }}
+        >
+          {onSale && (
+            <span
+              className="font-barlow-condensed font-bold uppercase"
+              style={{
+                padding: "4px 8px",
+                background: "var(--color-dark)",
+                color: "var(--color-yellow)",
+                fontSize: 11,
+                letterSpacing: "0.05em",
+              }}
+            >
+              {discountPct}% OFF
+            </span>
+          )}
+          {kind && (
+            <span
+              className="font-barlow-condensed font-bold uppercase"
+              style={{
+                padding: "4px 8px",
+                background: "var(--color-yellow)",
+                color: "var(--color-dark)",
+                fontSize: 11,
+                letterSpacing: "0.05em",
+              }}
+            >
+              {bundleCount > 0 ? `BUNDLE · ${bundleCount} ITEMS` : "BUNDLE"}
+            </span>
+          )}
+        </div>
         {/* Star/bookmark icon - top right */}
         <button
           onClick={(e) => {

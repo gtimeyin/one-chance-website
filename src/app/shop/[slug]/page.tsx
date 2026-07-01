@@ -6,6 +6,7 @@ import {
   type WooProduct,
   type WooReview,
 } from "@/lib/woocommerce";
+import { getBundleChildIds } from "@/lib/woocommerce-shared";
 import { stripHtml, truncate, getImageSrc } from "@/lib/utils";
 import { getActiveCountry } from "@/lib/currency.server";
 import { currencyForCountry } from "@/lib/currency";
@@ -62,8 +63,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
     notFound();
   }
 
-  const relatedProducts = await getRelatedProducts(product, country);
-  const reviews = await getProductReviews(product.id);
+  const bundleChildIds = getBundleChildIds(product);
+  const [relatedProducts, reviews, bundleItems] = await Promise.all([
+    getRelatedProducts(product, country),
+    getProductReviews(product.id),
+    bundleChildIds.length > 0 ? getProductsByIds(bundleChildIds, country) : Promise.resolve<WooProduct[]>([]),
+  ]);
+  // Preserve the order the merchant configured in WooCommerce.
+  const orderedBundleItems = bundleChildIds
+    .map((id) => bundleItems.find((p) => p.id === id))
+    .filter((p): p is WooProduct => Boolean(p));
 
   return (
     <>
@@ -77,6 +86,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         product={product}
         relatedProducts={relatedProducts}
         reviews={reviews}
+        bundleItems={orderedBundleItems}
       />
     </>
   );
