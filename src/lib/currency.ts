@@ -13,7 +13,6 @@ export const BASE_CURRENCY = "USD";
  */
 export const ZONES: Record<string, { currency: string; countries: string[] }> = {
   nigeria: { currency: "NGN", countries: ["NG"] },
-  kenya: { currency: "KES", countries: ["KE"] },
   "united-kingdom": { currency: "GBP", countries: ["GB"] },
   "north-america": { currency: "USD", countries: ["US", "CA"] },
   europe: {
@@ -33,7 +32,6 @@ export const ZONES: Record<string, { currency: string; countries: string[] }> = 
 // you add it to a zone.
 export const COUNTRY_NAMES: Record<string, string> = {
   NG: "Nigeria",
-  KE: "Kenya",
   GB: "United Kingdom",
   US: "United States",
   CA: "Canada",
