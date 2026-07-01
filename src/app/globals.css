@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 @import "../ui/theme.css";
 
@@ -45,6 +45,8 @@
   --color-hero-blue: #68C5F2;
   --font-barlow: 'Barlow Condensed', sans-serif;
   --font-barlow-condensed: 'Barlow Condensed', sans-serif;
+  /* Regular (non-condensed) Barlow — the default for body copy. Headings stay condensed. */
+  --font-barlow-body: 'Barlow', sans-serif;
 }
 
 html {
@@ -66,7 +68,7 @@ html.lenis {
 body {
   background: rgb(38, 52, 53);
   color: rgb(207, 209, 208);
-  font-family: var(--font-barlow);
+  font-family: var(--font-barlow-body);
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
@@ -166,25 +168,25 @@ h1, h2, h3, h4, h5, h6, p, figure {
   line-height: 1.4;
 }
 .type-body-lg {
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: 'Barlow', sans-serif;
   font-size: clamp(16px, 1.4vw, 18px);
   font-weight: 400;
   line-height: 1.6;
 }
 .type-body {
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: 'Barlow', sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 1.55;
 }
 .type-body-sm {
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: 'Barlow', sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 1.5;
 }
 .type-caption {
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: 'Barlow', sans-serif;
   font-size: 12px;
   font-weight: 500;
   line-height: 1.4;

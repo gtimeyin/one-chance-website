@@ -537,7 +537,7 @@ export default function RulesContent() {
             </p>
             {searchResults!.length === 0 ? (
               <div className="text-center py-16">
-                <p className="font-['Barlow_Condensed'] font-[600]" style={{ fontSize: 18, color: "rgba(18,27,25,0.3)" }}>
+                <p className="font-['Barlow'] font-[600]" style={{ fontSize: 18, color: "rgba(18,27,25,0.3)" }}>
                   No rules found. Try a different search term.
                 </p>
               </div>
@@ -745,7 +745,7 @@ function OverviewTab() {
                   <h3 className="font-['Barlow_Condensed'] font-[700] uppercase" style={{ fontSize: 17, color: "var(--color-yellow)", marginBottom: 3, letterSpacing: "0.02em" }}>
                     {item.term}
                   </h3>
-                  <p className="font-['Barlow_Condensed']" style={{ fontSize: 15, lineHeight: 1.55, color: "rgba(255,255,255,0.78)" }}>
+                  <p className="font-['Barlow']" style={{ fontSize: 15, lineHeight: 1.55, color: "rgba(255,255,255,0.78)" }}>
                     {item.definition}
                   </p>
                 </div>
@@ -772,7 +772,7 @@ function SetupTab() {
                 <span className="font-['Barlow_Condensed'] font-[800] shrink-0" style={{ fontSize: 40, lineHeight: 0.9, color: "#5AD46F" }}>
                   {step.number}
                 </span>
-                <p className="font-['Barlow_Condensed']" style={{ fontSize: 16, lineHeight: 1.55, color: "rgba(255,255,255,0.88)", paddingTop: 4 }}>
+                <p className="font-['Barlow']" style={{ fontSize: 16, lineHeight: 1.55, color: "rgba(255,255,255,0.88)", paddingTop: 4 }}>
                   {step.text}
                 </p>
               </div>
@@ -806,7 +806,7 @@ function SetupTab() {
               </div>
             ))}
           </div>
-          <div className="font-['Barlow_Condensed']" style={{ background: "var(--color-dark)", padding: "20px 24px", borderLeft: "4px solid var(--color-yellow)" }}>
+          <div className="font-['Barlow']" style={{ background: "var(--color-dark)", padding: "20px 24px", borderLeft: "4px solid var(--color-yellow)" }}>
             <p style={{ fontSize: 16, lineHeight: 1.6, color: "rgba(255,255,255,0.9)" }}>
               <strong style={{ color: "var(--color-yellow)" }}>Failed all 3 tries?</strong> Go to SALARY and collect only
               N100k. Life isn&apos;t fair to everyone.
@@ -853,7 +853,7 @@ function TilesTab() {
                 >
                   {tile.short}
                 </span>
-                <p className="font-['Barlow_Condensed']" style={{ fontSize: 15, lineHeight: 1.6, color: "rgba(18,27,25,0.72)" }}>
+                <p className="font-['Barlow']" style={{ fontSize: 15, lineHeight: 1.6, color: "rgba(18,27,25,0.72)" }}>
                   {tile.text}
                 </p>
               </div>
@@ -866,7 +866,7 @@ function TilesTab() {
           <h3 className="font-['Barlow_Condensed'] font-[800] uppercase text-white mb-1" style={{ fontSize: 22 }}>
             🚌 Bus Stop Fare Table
           </h3>
-          <p className="font-['Barlow_Condensed'] mb-5" style={{ fontSize: 15, color: "rgba(255,255,255,0.55)" }}>
+          <p className="font-['Barlow'] mb-5" style={{ fontSize: 15, color: "rgba(255,255,255,0.55)" }}>
             What it costs to hop between Prison and Bonus. Own a car? You ride free.
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
@@ -908,7 +908,7 @@ function ModesTab() {
                   <span className="font-['Barlow_Condensed'] font-[600]" style={{ fontSize: 14, color: "rgba(18,27,25,0.5)", marginBottom: 12 }}>
                     {mode.subtitle}
                   </span>
-                  <p className="font-['Barlow_Condensed']" style={{ fontSize: 15, lineHeight: 1.65, color: "rgba(18,27,25,0.72)" }}>
+                  <p className="font-['Barlow']" style={{ fontSize: 15, lineHeight: 1.65, color: "rgba(18,27,25,0.72)" }}>
                     {mode.description}
                   </p>
                 </div>
@@ -957,7 +957,7 @@ function DisputesTab() {
                 {group.items.map((item, i) => (
                   <div
                     key={i}
-                    className="font-['Barlow_Condensed'] flex gap-3"
+                    className="font-['Barlow'] flex gap-3"
                     style={{ fontSize: 15, lineHeight: 1.55, color: "rgba(255,255,255,0.82)" }}
                   >
                     <span style={{ color: "#DF6961", fontWeight: 800, flexShrink: 0 }}>›</span>

@@ -87,7 +87,7 @@ export default function TestimonialsSection({
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.4, delay: 0.1 }}
-            className="font-barlow-condensed"
+            className="font-barlow-body"
             style={{
               fontSize: 16,
               color: "var(--color-text-muted)",

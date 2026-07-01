@@ -130,7 +130,7 @@ function BlogContent({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="font-barlow-condensed"
+              className="font-barlow-body"
               style={{
                 fontSize: 17,
                 color: "var(--color-text-muted)",

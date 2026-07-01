@@ -54,7 +54,7 @@ export default function Error({
               <h2 className="font-['Barlow_Condensed'] text-[24px] sm:text-[28px] font-[700] leading-[1.1] text-neutral-800 uppercase -tracking-[0.02em]">
                 Something Went Wrong
               </h2>
-              <p className="font-['Barlow_Condensed'] text-[16px] text-neutral-500 max-w-[420px]">
+              <p className="font-['Barlow'] text-[16px] text-neutral-500 max-w-[420px]">
                 We hit a bump. Try again, or head back home and we&apos;ll sort it out.
               </p>
               {error?.digest && (

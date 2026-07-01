@@ -33,7 +33,7 @@ export default function ProductImageGallery({ product }: ProductImageGalleryProp
           src={selectedImage.src}
           alt={selectedImage.alt || product.name}
           fill
-          className="object-contain"
+          className="object-cover"
           priority
           sizes="(max-width: 768px) 100vw, 50vw"
         />

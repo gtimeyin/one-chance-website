@@ -74,8 +74,7 @@ export default function FooterShop({ reveal = false }: { reveal?: boolean }) {
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="text-large-body-default font-large-body-default text-neutral-800 uppercase no-underline hover:text-neutral-950 transition-colors duration-200"
-                    style={{ textDecoration: "none" }}
+                    className="text-large-body-default font-['Barlow_Condensed'] text-neutral-800 uppercase no-underline underline-offset-[6px] decoration-[2px] transition-all duration-200 hover:text-neutral-950 hover:underline hover:translate-x-1"
                   >
                     {link.label}
                   </Link>
@@ -93,8 +92,7 @@ export default function FooterShop({ reveal = false }: { reveal?: boolean }) {
                   <a
                     key={link.label}
                     href={link.href}
-                    className="text-large-body-default font-large-body-default text-neutral-800 uppercase no-underline hover:text-neutral-950 transition-colors duration-200"
-                    style={{ textDecoration: "none" }}
+                    className="text-large-body-default font-['Barlow_Condensed'] text-neutral-800 uppercase no-underline underline-offset-[6px] decoration-[2px] transition-all duration-200 hover:text-neutral-950 hover:underline hover:translate-x-1"
                   >
                     {link.label}
                   </a>

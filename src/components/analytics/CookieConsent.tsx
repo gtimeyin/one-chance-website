@@ -25,7 +25,7 @@ export default function CookieConsent() {
     <div
       role="dialog"
       aria-label="Cookie consent"
-      className="fixed bottom-0 left-0 right-0 z-[100] font-barlow-condensed"
+      className="fixed bottom-0 left-0 right-0 z-[100] font-barlow-body"
       style={{
         background: "white",
         borderTop: "1px solid var(--color-border-light)",

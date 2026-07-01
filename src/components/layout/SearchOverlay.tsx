@@ -342,7 +342,7 @@ function ResultRow({
         </div>
         {item.description && (
           <span
-            className="font-barlow-condensed line-clamp-1"
+            className="font-barlow-body line-clamp-1"
             style={{ fontSize: 15, color: "var(--color-text-muted)" }}
           >
             {item.description}
@@ -372,14 +372,14 @@ function EmptyState({
         style={{ fontSize: 32, color: "var(--color-text-muted)" }}
       />
       <p
-        className="font-barlow-condensed"
+        className="font-barlow-body"
         style={{ fontSize: 16, color: "var(--color-text-muted)" }}
       >
         Start typing to search products, updates, comics, FAQs and more.
       </p>
       {loading && (
         <p
-          className="font-barlow-condensed"
+          className="font-barlow-body"
           style={{ fontSize: 12, color: "var(--color-text-muted)" }}
         >
           Loading product catalog…
@@ -387,7 +387,7 @@ function EmptyState({
       )}
       {error && (
         <p
-          className="font-barlow-condensed"
+          className="font-barlow-body"
           style={{ fontSize: 12, color: "var(--color-red)" }}
         >
           Couldn&apos;t load products — other results will still work.
@@ -410,7 +410,7 @@ function NoResults({ query }: { query: string }) {
         No results for &ldquo;{query}&rdquo;
       </p>
       <p
-        className="font-barlow-condensed"
+        className="font-barlow-body"
         style={{ fontSize: 16, color: "var(--color-text-muted)" }}
       >
         Try a different keyword or browse the{" "}

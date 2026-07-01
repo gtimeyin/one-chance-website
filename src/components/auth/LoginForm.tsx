@@ -16,7 +16,7 @@ export default function LoginForm({ redirectTo }: { redirectTo?: string }) {
     <form action={formAction} className="flex flex-col gap-5 w-full">
       {redirectTo && <input type="hidden" name="redirectTo" value={redirectTo} />}
       {state.message && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded text-[14px] font-['Barlow_Condensed']">
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded text-[14px] font-['Barlow']">
           {state.message}
         </div>
       )}
@@ -29,7 +29,7 @@ export default function LoginForm({ redirectTo }: { redirectTo?: string }) {
         />
       </TextField>
       {state.errors?.email && (
-        <span className="text-red-600 text-[13px] font-['Barlow_Condensed'] -mt-3">{state.errors.email[0]}</span>
+        <span className="text-red-600 text-[13px] font-['Barlow'] -mt-3">{state.errors.email[0]}</span>
       )}
 
       <TextField label="Password" error={!!state.errors?.password}>
@@ -40,7 +40,7 @@ export default function LoginForm({ redirectTo }: { redirectTo?: string }) {
         />
       </TextField>
       {state.errors?.password && (
-        <span className="text-red-600 text-[13px] font-['Barlow_Condensed'] -mt-3">{state.errors.password[0]}</span>
+        <span className="text-red-600 text-[13px] font-['Barlow'] -mt-3">{state.errors.password[0]}</span>
       )}
 
       <Button
@@ -52,7 +52,7 @@ export default function LoginForm({ redirectTo }: { redirectTo?: string }) {
         {pending ? "Signing in..." : "Sign In"}
       </Button>
 
-      <p className="font-['Barlow_Condensed'] text-[14px] text-neutral-500 text-center">
+      <p className="font-['Barlow'] text-[14px] text-neutral-500 text-center">
         Don&apos;t have an account?{" "}
         <Link href="/register" className="text-[#fccd21] font-[600] underline">
           Create one

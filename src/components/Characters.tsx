@@ -121,13 +121,13 @@ function CharacterOverlay({
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: 0.35 + pi * 0.1 }}
-                    className="font-['Barlow_Condensed'] text-[15px] leading-[1.7] text-white/85"
+                    className="font-['Barlow'] text-[15px] leading-[1.7] text-white/85"
                   >
                     {para}
                   </motion.p>
                 ))
               : (
-                <p className="font-['Barlow_Condensed'] text-[15px] leading-[1.7] text-white/85">
+                <p className="font-['Barlow'] text-[15px] leading-[1.7] text-white/85">
                   {char.description}
                 </p>
               )}

@@ -13,7 +13,7 @@ export default function ReferralNetwork({ nodes }: Props) {
         <span className="font-['Barlow_Condensed'] text-[20px] font-[700] text-neutral-800 uppercase">
           Your Network
         </span>
-        <p className="font-['Barlow_Condensed'] text-[14px] text-neutral-500">
+        <p className="font-['Barlow'] text-[14px] text-neutral-500">
           No referrals yet. Share your code to start building your network!
         </p>
       </div>

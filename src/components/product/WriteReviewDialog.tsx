@@ -66,7 +66,7 @@ function ReviewForm({ productId, productName, onClose }: ReviewFormProps) {
                 Write a Review
               </h2>
               <p
-                className="font-barlow-condensed"
+                className="font-barlow-body"
                 style={{ fontSize: 16, color: "var(--color-text-muted)", marginTop: 4 }}
               >
                 Share your thoughts on {productName}
@@ -88,7 +88,7 @@ function ReviewForm({ productId, productName, onClose }: ReviewFormProps) {
 
           {state.message && (
             <div
-              className="font-barlow-condensed"
+              className="font-barlow-body"
               style={{
                 fontSize: 16,
                 padding: "10px 14px",
@@ -159,7 +159,7 @@ function ReviewForm({ productId, productName, onClose }: ReviewFormProps) {
                 </div>
                 <input type="hidden" name="rating" value={rating} />
                 {state.errors?.rating?.[0] && (
-                  <span className="font-barlow-condensed" style={{ fontSize: 15, color: "#B91C1C" }}>
+                  <span className="font-barlow-body" style={{ fontSize: 15, color: "#B91C1C" }}>
                     {state.errors.rating[0]}
                   </span>
                 )}
@@ -174,7 +174,7 @@ function ReviewForm({ productId, productName, onClose }: ReviewFormProps) {
                   name="review"
                   rows={5}
                   placeholder="Tell us what you thought…"
-                  className="font-barlow-condensed"
+                  className="font-barlow-body"
                   style={{
                     padding: "10px 12px",
                     border: `1px solid ${state.errors?.review ? "#FCA5A5" : "var(--color-border-light)"}`,
@@ -188,7 +188,7 @@ function ReviewForm({ productId, productName, onClose }: ReviewFormProps) {
                   maxLength={2000}
                 />
                 {state.errors?.review?.[0] && (
-                  <span className="font-barlow-condensed" style={{ fontSize: 15, color: "#B91C1C" }}>
+                  <span className="font-barlow-body" style={{ fontSize: 15, color: "#B91C1C" }}>
                     {state.errors.review[0]}
                   </span>
                 )}
@@ -237,7 +237,7 @@ function Field({ label, name, type = "text", placeholder, helper, error, require
         type={type}
         placeholder={placeholder}
         required={required}
-        className="font-barlow-condensed"
+        className="font-barlow-body"
         style={{
           padding: "10px 12px",
           border: `1px solid ${error ? "#FCA5A5" : "var(--color-border-light)"}`,
@@ -247,12 +247,12 @@ function Field({ label, name, type = "text", placeholder, helper, error, require
         }}
       />
       {helper && !error && (
-        <span className="font-barlow-condensed" style={{ fontSize: 12, color: "var(--color-text-muted)" }}>
+        <span className="font-barlow-body" style={{ fontSize: 12, color: "var(--color-text-muted)" }}>
           {helper}
         </span>
       )}
       {error && (
-        <span className="font-barlow-condensed" style={{ fontSize: 15, color: "#B91C1C" }}>
+        <span className="font-barlow-body" style={{ fontSize: 15, color: "#B91C1C" }}>
           {error}
         </span>
       )}

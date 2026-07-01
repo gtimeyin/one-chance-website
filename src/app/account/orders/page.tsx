@@ -13,7 +13,7 @@ export default async function OrdersPage() {
       </h1>
 
       {orders.length === 0 ? (
-        <p className="font-['Barlow_Condensed'] text-[15px] text-neutral-500">
+        <p className="font-['Barlow'] text-[15px] text-neutral-500">
           You haven&apos;t placed any orders yet.{" "}
           <Link href="/shop" className="text-[#fccd21] font-[600] underline">
             Browse the shop

@@ -111,7 +111,7 @@ export default async function OrderDetailPage({
           <h3 className="font-['Barlow_Condensed'] text-[18px] font-[700] text-neutral-800 uppercase">
             Billing Address
           </h3>
-          <p className="font-['Barlow_Condensed'] text-[14px] text-neutral-600 leading-[1.6]">
+          <p className="font-['Barlow'] text-[14px] text-neutral-600 leading-[1.6]">
             {order.billing.first_name} {order.billing.last_name}<br />
             {order.billing.address_1}<br />
             {order.billing.address_2 && <>{order.billing.address_2}<br /></>}
@@ -123,7 +123,7 @@ export default async function OrderDetailPage({
           <h3 className="font-['Barlow_Condensed'] text-[18px] font-[700] text-neutral-800 uppercase">
             Shipping Address
           </h3>
-          <p className="font-['Barlow_Condensed'] text-[14px] text-neutral-600 leading-[1.6]">
+          <p className="font-['Barlow'] text-[14px] text-neutral-600 leading-[1.6]">
             {order.shipping.first_name} {order.shipping.last_name}<br />
             {order.shipping.address_1}<br />
             {order.shipping.address_2 && <>{order.shipping.address_2}<br /></>}

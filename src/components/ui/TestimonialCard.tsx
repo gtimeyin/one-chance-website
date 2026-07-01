@@ -22,7 +22,7 @@ export default function TestimonialCard({ name, rating, text }: TestimonialCardP
         </p>
         <StarRating rating={rating} size={14} />
       </div>
-      <p className="font-barlow-condensed" style={{ fontSize: 16, color: "var(--color-text-muted)", lineHeight: 1.6 }}>
+      <p className="font-barlow-body" style={{ fontSize: 16, color: "var(--color-text-muted)", lineHeight: 1.6 }}>
         {text}
       </p>
     </div>

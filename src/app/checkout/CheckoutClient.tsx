@@ -281,7 +281,7 @@ export default function CheckoutClient({
           <h1 className="type-h1 uppercase" style={{ color: "var(--color-dark)" }}>
             Your cart is empty
           </h1>
-          <p className="font-barlow-condensed" style={{ fontSize: 16, color: "var(--color-text-muted)", marginTop: 12 }}>
+          <p className="font-barlow-body" style={{ fontSize: 16, color: "var(--color-text-muted)", marginTop: 12 }}>
             Add something to your cart, then come back.
           </p>
           <button
@@ -397,7 +397,7 @@ function AddressAndShipping({
     >
       {!isAuthenticated && (
         <div
-          className="font-barlow-condensed flex flex-wrap items-center justify-between"
+          className="font-barlow-body flex flex-wrap items-center justify-between"
           style={{
             gap: 8,
             padding: "12px 16px",
@@ -477,7 +477,7 @@ function AddressAndShipping({
 
       {error && (
         <p
-          className="font-barlow-condensed"
+          className="font-barlow-body"
           style={{ fontSize: 16, color: "#B91C1C", padding: "10px 14px", background: "#FEE2E2", borderRadius: 4 }}
         >
           {error}
@@ -591,7 +591,7 @@ function PaymentForm({ sessionId, router }: { sessionId: string; router: ReturnT
       <PaymentElement />
       {error && (
         <p
-          className="font-barlow-condensed"
+          className="font-barlow-body"
           style={{ fontSize: 16, color: "#B91C1C", padding: "10px 14px", background: "#FEE2E2", borderRadius: 4 }}
         >
           {error}

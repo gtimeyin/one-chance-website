@@ -17,7 +17,7 @@ export default function ReferralCodeInput() {
         />
       </TextField>
       {referralCode && (
-        <span className="text-green-600 text-[13px] font-['Barlow_Condensed']">
+        <span className="text-green-600 text-[13px] font-['Barlow']">
           Referral code applied! You&apos;ll get a discount on your first purchase.
         </span>
       )}

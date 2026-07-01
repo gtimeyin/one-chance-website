@@ -43,7 +43,7 @@ export default async function AccountDashboard() {
           <h1 className="font-['Barlow_Condensed'] text-[40px] mobile:text-[28px] font-[800] leading-[1.1] text-neutral-800 uppercase -tracking-[0.02em]">
             WELCOME{customer ? `, ${customer.first_name.toUpperCase()}` : ""}
           </h1>
-          <p className="font-['Barlow_Condensed'] text-[16px] text-neutral-500">
+          <p className="font-['Barlow'] text-[16px] text-neutral-500">
             Manage your account, view orders, and update your details.
           </p>
         </div>
@@ -66,7 +66,7 @@ export default async function AccountDashboard() {
             <span className="font-['Barlow_Condensed'] text-[20px] font-[700] text-neutral-800 uppercase">
               {card.label}
             </span>
-            <span className="font-['Barlow_Condensed'] text-[14px] text-neutral-500">
+            <span className="font-['Barlow'] text-[14px] text-neutral-500">
               {card.desc}
             </span>
           </Link>
@@ -79,7 +79,7 @@ export default async function AccountDashboard() {
           RECENT ORDERS
         </h2>
         {orders.length === 0 ? (
-          <p className="font-['Barlow_Condensed'] text-[15px] text-neutral-500">
+          <p className="font-['Barlow'] text-[15px] text-neutral-500">
             No orders yet.{" "}
             <Link href="/shop" className="text-[#fccd21] font-[600] underline">
               Start shopping

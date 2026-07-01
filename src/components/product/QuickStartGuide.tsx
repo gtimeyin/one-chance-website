@@ -85,7 +85,7 @@ export default function QuickStartGuide({ steps, boardImage }: QuickStartGuidePr
                   {active.title}
                 </h3>
                 <p
-                  className="font-barlow-condensed"
+                  className="font-barlow-body"
                   style={{
                     fontSize: 16,
                     color: "rgba(0,0,0,0.6)",

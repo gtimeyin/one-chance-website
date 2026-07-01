@@ -54,7 +54,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
     <div className="flex flex-col" style={{ gap: 20 }}>
       {/* Tagline */}
       {tagline && (
-        <p className="font-barlow-condensed" style={{ fontSize: 15, color: "var(--color-text-muted)", letterSpacing: "0.02em" }}>
+        <p className="font-barlow-body" style={{ fontSize: 15, color: "var(--color-text-muted)", letterSpacing: "0.02em" }}>
           {tagline}
         </p>
       )}
@@ -144,7 +144,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
       {/* Short Description */}
       {product.short_description && (
         <div
-          className="font-barlow-condensed"
+          className="font-barlow-body"
           style={{ fontSize: 16, color: "#4A5568", lineHeight: 1.5, marginTop: 16, maxWidth: "45ch" }}
           dangerouslySetInnerHTML={{ __html: product.short_description }}
         />

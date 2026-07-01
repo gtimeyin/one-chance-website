@@ -61,7 +61,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           src={imageSrc}
           alt={product.name}
           fill
-          className="object-contain p-4 group-hover:scale-105 transition-transform duration-500"
+          className="object-cover group-hover:scale-105 transition-transform duration-500"
           sizes="(max-width: 768px) 100vw, 33vw"
         />
         {onSale && (
@@ -106,10 +106,10 @@ export default function ProductCard({ product }: ProductCardProps) {
       </Link>
 
       {/* Product info below image */}
-      <div className="flex flex-col relative" style={{ padding: "16px 0 8px" }}>
+      <div className="flex flex-col relative" style={{ padding: "16px 0 24px" }}>
         <Link
           href={`/shop/${product.slug}`}
-          className="font-barlow-condensed font-medium no-underline block"
+          className="font-barlow-condensed font-medium no-underline block uppercase"
           style={{
             fontSize: 20,
             color: "var(--color-dark)",

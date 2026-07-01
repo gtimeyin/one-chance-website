@@ -55,7 +55,7 @@ export default function ReferralCodeCard({ code, totalReferrals, totalEarned }: 
         <span className="font-['Barlow_Condensed'] text-[20px] font-[700] text-neutral-800 uppercase">
           Your Referral Code
         </span>
-        <span className="font-['Barlow_Condensed'] text-[14px] text-neutral-500">
+        <span className="font-['Barlow'] text-[14px] text-neutral-500">
           Share this code with friends. They get a discount, you earn credits.
         </span>
       </div>

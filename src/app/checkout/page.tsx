@@ -27,7 +27,7 @@ export default async function CheckoutPage() {
               <h1 className="font-barlow-condensed font-extrabold uppercase" style={{ fontSize: 36, color: "var(--color-dark)" }}>
                 Checkout unavailable
               </h1>
-              <p className="font-barlow-condensed" style={{ fontSize: 16, color: "var(--color-text-muted)", marginTop: 12 }}>
+              <p className="font-barlow-body" style={{ fontSize: 16, color: "var(--color-text-muted)", marginTop: 12 }}>
                 Payment is being set up. Please check back shortly.
               </p>
             </div>

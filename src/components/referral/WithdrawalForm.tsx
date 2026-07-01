@@ -22,7 +22,7 @@ export default function WithdrawalForm({ currentBalance }: Props) {
     <form action={formAction} className="flex flex-col gap-5">
       {state.message && (
         <div
-          className={`px-4 py-3 text-[14px] font-['Barlow_Condensed'] border ${
+          className={`px-4 py-3 text-[14px] font-['Barlow'] border ${
             state.success
               ? "bg-green-50 border-green-200 text-green-700"
               : "bg-red-50 border-red-200 text-red-700"
@@ -33,7 +33,7 @@ export default function WithdrawalForm({ currentBalance }: Props) {
       )}
 
       <div className="flex flex-col gap-1">
-        <span className="font-['Barlow_Condensed'] text-[14px] text-neutral-500">
+        <span className="font-['Barlow'] text-[14px] text-neutral-500">
           Available balance: <strong>${currentBalance.toFixed(2)}</strong>
         </span>
       </div>
@@ -50,7 +50,7 @@ export default function WithdrawalForm({ currentBalance }: Props) {
           />
         </TextField>
         {state.errors?.amount && (
-          <span className="text-red-600 text-[13px] font-['Barlow_Condensed']">
+          <span className="text-red-600 text-[13px] font-['Barlow']">
             {state.errors.amount[0]}
           </span>
         )}
@@ -93,7 +93,7 @@ export default function WithdrawalForm({ currentBalance }: Props) {
                 <span className="font-['Barlow_Condensed'] text-[14px] font-[600] text-neutral-800">
                   {option.label}
                 </span>
-                <span className="font-['Barlow_Condensed'] text-[13px] text-neutral-500">
+                <span className="font-['Barlow'] text-[13px] text-neutral-500">
                   {option.desc}
                 </span>
               </div>
@@ -101,7 +101,7 @@ export default function WithdrawalForm({ currentBalance }: Props) {
           ))}
         </div>
         {state.errors?.method && (
-          <span className="text-red-600 text-[13px] font-['Barlow_Condensed']">
+          <span className="text-red-600 text-[13px] font-['Barlow']">
             {state.errors.method[0]}
           </span>
         )}

@@ -81,7 +81,7 @@ export default function FAQs({
                 onOpenChange={(open) => setOpenIndex(open ? i : null)}
               >
                 <div className="flex w-full flex-col items-start gap-2 py-4">
-                  <span className="w-full font-['Barlow_Condensed'] text-[18px] font-[400] leading-[26px] text-[#a3a3a3]">
+                  <span className="w-full font-['Barlow'] text-[18px] font-[400] leading-[26px] text-[#a3a3a3]">
                     {faq.answer}
                   </span>
                 </div>

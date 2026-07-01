@@ -16,7 +16,7 @@ export default function RegisterForm() {
   return (
     <form action={formAction} className="flex flex-col gap-5 w-full">
       {state.message && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded text-[14px] font-['Barlow_Condensed']">
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded text-[14px] font-['Barlow']">
           {state.message}
         </div>
       )}
@@ -31,7 +31,7 @@ export default function RegisterForm() {
             />
           </TextField>
           {state.errors?.firstName && (
-            <span className="text-red-600 text-[13px] font-['Barlow_Condensed']">{state.errors.firstName[0]}</span>
+            <span className="text-red-600 text-[13px] font-['Barlow']">{state.errors.firstName[0]}</span>
           )}
         </div>
         <div className="flex-1 flex flex-col gap-1">
@@ -43,7 +43,7 @@ export default function RegisterForm() {
             />
           </TextField>
           {state.errors?.lastName && (
-            <span className="text-red-600 text-[13px] font-['Barlow_Condensed']">{state.errors.lastName[0]}</span>
+            <span className="text-red-600 text-[13px] font-['Barlow']">{state.errors.lastName[0]}</span>
           )}
         </div>
       </div>
@@ -56,7 +56,7 @@ export default function RegisterForm() {
         />
       </TextField>
       {state.errors?.email && (
-        <span className="text-red-600 text-[13px] font-['Barlow_Condensed'] -mt-3">{state.errors.email[0]}</span>
+        <span className="text-red-600 text-[13px] font-['Barlow'] -mt-3">{state.errors.email[0]}</span>
       )}
 
       <TextField label="Password" error={!!state.errors?.password}>
@@ -67,7 +67,7 @@ export default function RegisterForm() {
         />
       </TextField>
       {state.errors?.password && (
-        <span className="text-red-600 text-[13px] font-['Barlow_Condensed'] -mt-3">{state.errors.password[0]}</span>
+        <span className="text-red-600 text-[13px] font-['Barlow'] -mt-3">{state.errors.password[0]}</span>
       )}
 
       <TextField label="Confirm Password" error={!!state.errors?.confirmPassword}>
@@ -78,7 +78,7 @@ export default function RegisterForm() {
         />
       </TextField>
       {state.errors?.confirmPassword && (
-        <span className="text-red-600 text-[13px] font-['Barlow_Condensed'] -mt-3">{state.errors.confirmPassword[0]}</span>
+        <span className="text-red-600 text-[13px] font-['Barlow'] -mt-3">{state.errors.confirmPassword[0]}</span>
       )}
 
       <ReferralCodeInput />
@@ -92,7 +92,7 @@ export default function RegisterForm() {
         {pending ? "Creating account..." : "Create Account"}
       </Button>
 
-      <p className="font-['Barlow_Condensed'] text-[14px] text-neutral-500 text-center">
+      <p className="font-['Barlow'] text-[14px] text-neutral-500 text-center">
         Already have an account?{" "}
         <Link href="/login" className="text-[#fccd21] font-[600] underline">
           Sign in

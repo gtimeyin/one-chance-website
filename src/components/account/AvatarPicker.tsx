@@ -33,14 +33,14 @@ export default function AvatarPicker({ currentAvatarId }: Props) {
         <span className="font-['Barlow_Condensed'] text-[20px] font-[700] text-neutral-800 uppercase">
           Choose Your Character
         </span>
-        <span className="font-['Barlow_Condensed'] text-[14px] text-neutral-500">
+        <span className="font-['Barlow'] text-[14px] text-neutral-500">
           Select a One Chance character as your avatar
         </span>
       </div>
 
       {message && (
         <div
-          className={`px-4 py-2 text-[13px] font-['Barlow_Condensed'] ${
+          className={`px-4 py-2 text-[13px] font-['Barlow'] ${
             message.success
               ? "bg-green-50 border border-green-200 text-green-700"
               : "bg-red-50 border border-red-200 text-red-700"

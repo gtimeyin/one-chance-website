@@ -47,7 +47,7 @@ export default function ProductDescription({ product }: ProductDescriptionProps)
               Description
             </h2>
             <div
-              className="font-barlow-condensed"
+              className="font-barlow-body"
               style={{
                 fontSize: 18,
                 color: "rgba(0,0,0,0.7)",

@@ -165,10 +165,11 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[60] flex h-full w-full flex-col items-center justify-between bg-brand-yellow px-16 py-16 mobile:px-6 mobile:py-8"
+            className="fixed inset-0 z-[60] flex h-full w-full flex-col items-center bg-brand-yellow px-0 pt-6 pb-16 mobile:pt-6 mobile:pb-8"
           >
             <div className="flex w-full max-w-[1280px] grow shrink-0 basis-0 flex-col items-center justify-between">
-              {/* Top: Close button — matches the menu trigger (size + variant). */}
+              {/* Top: Close button — mirrors the menu trigger exactly (same size,
+                  variant, and position: flush to the 1280px container edge at 24px top). */}
               <div className="flex w-full flex-col items-start pb-4">
                 <Button
                   size="small"
@@ -180,7 +181,7 @@ export default function Navbar() {
               </div>
 
               {/* Middle: Nav links (fill width) + secondary (right) */}
-              <div className="flex w-full items-start justify-between gap-16 mobile:flex-col mobile:gap-12">
+              <div className="flex w-full items-start justify-between gap-16 px-16 mobile:flex-col mobile:gap-12 mobile:px-6">
                 <div className="mb-[12px] mt-[12px] flex flex-1 flex-col items-start gap-2">
                   {navLinks.map((link, i) => (
                     <motion.div
@@ -286,15 +287,15 @@ export default function Navbar() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4, duration: 0.4 }}
-                className="flex w-full items-end justify-between mobile:flex-col mobile:items-start mobile:gap-8"
+                className="flex w-full items-end justify-between px-16 mobile:flex-col mobile:items-start mobile:gap-8 mobile:px-6"
               >
                 <div className="flex flex-col items-start gap-1">
                   <a
-                    href="tel:+2349035164629"
+                    href="tel:+2349027305417"
                     className="font-barlow-condensed font-bold text-black-800 no-underline opacity-80 hover:opacity-100 transition-opacity duration-200"
                     style={{ fontSize: 18, textDecoration: "none" }}
                   >
-                    T: +234 903 516 4629
+                    T: +234 902 730 5417
                   </a>
                   <a
                     href="mailto:info@onechancegame.com"

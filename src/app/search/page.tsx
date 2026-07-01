@@ -131,7 +131,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
             {!query.trim() ? (
               <p
-                className="font-barlow-condensed"
+                className="font-barlow-body"
                 style={{ fontSize: 16, color: "var(--color-text-muted)" }}
               >
                 Enter a search term to find products, updates, comics, FAQs and pages.
@@ -148,7 +148,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                   No results for &ldquo;{query}&rdquo;
                 </p>
                 <p
-                  className="font-barlow-condensed"
+                  className="font-barlow-body"
                   style={{ fontSize: 16, color: "var(--color-text-muted)" }}
                 >
                   Try a different keyword, or{" "}
@@ -285,7 +285,7 @@ function ResultLink({ item }: { item: SearchItem }) {
         </div>
         {item.description && (
           <span
-            className="font-barlow-condensed"
+            className="font-barlow-body"
             style={{ fontSize: 16, color: "var(--color-text-muted)", lineHeight: 1.5 }}
           >
             {item.description}

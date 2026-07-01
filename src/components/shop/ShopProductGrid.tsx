@@ -25,7 +25,7 @@ export default function ShopProductGrid({ products }: ShopProductGridProps) {
       ref={ref}
       className="w-full"
       style={{
-        padding: "clamp(40px, 6vw, 80px) clamp(20px, 4vw, 60px)",
+        padding: "clamp(40px, 6vw, 80px) clamp(20px, 4vw, 60px) clamp(80px, 10vw, 140px)",
         background: "white",
       }}
     >
@@ -44,7 +44,7 @@ export default function ShopProductGrid({ products }: ShopProductGridProps) {
             SHOP ALL PRODUCTS
           </h2>
           <p
-            className="font-barlow-condensed"
+            className="font-barlow-body"
             style={{
               fontSize: 17,
               color: "var(--color-dark)",
@@ -103,7 +103,7 @@ export default function ShopProductGrid({ products }: ShopProductGridProps) {
             style={{ padding: "80px 0" }}
           >
             <p
-              className="font-barlow-condensed"
+              className="font-barlow-body"
               style={{ fontSize: 18, color: "var(--color-text-muted)" }}
             >
               Products coming soon...

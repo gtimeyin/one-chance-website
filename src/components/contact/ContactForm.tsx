@@ -48,7 +48,7 @@ export default function ContactForm() {
           style={{ flex: "0 0 auto", gap: 32 }}
         >
           <p
-            className="font-barlow-condensed"
+            className="font-barlow-body"
             style={{
               fontSize: 18,
               lineHeight: "28px",

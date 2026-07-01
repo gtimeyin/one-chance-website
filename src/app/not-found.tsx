@@ -46,7 +46,7 @@ export default function NotFound() {
               <h2 className="font-['Barlow_Condensed'] text-[32px] sm:text-[40px] font-[800] leading-[1.1] text-neutral-800 uppercase -tracking-[0.02em]">
                 Page Not Found
               </h2>
-              <p className="font-['Barlow_Condensed'] text-[16px] text-neutral-500 max-w-[420px]">
+              <p className="font-['Barlow'] text-[16px] text-neutral-500 max-w-[420px]">
                 One chance! The page you&apos;re looking for doesn&apos;t exist or has been moved.
               </p>
             </div>

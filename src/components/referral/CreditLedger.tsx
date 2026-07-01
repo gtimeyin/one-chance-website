@@ -39,7 +39,7 @@ export default function CreditLedger({ entries }: Props) {
         <span className="font-['Barlow_Condensed'] text-[20px] font-[700] text-neutral-800 uppercase">
           Recent Activity
         </span>
-        <p className="font-['Barlow_Condensed'] text-[14px] text-neutral-500">
+        <p className="font-['Barlow'] text-[14px] text-neutral-500">
           No transactions yet. Start sharing your referral code!
         </p>
       </div>
@@ -96,7 +96,7 @@ export default function CreditLedger({ entries }: Props) {
                   {typeLabel(entry.type)}
                 </span>
               </span>
-              <span className="mobile:hidden flex-1 font-['Barlow_Condensed'] text-[13px] text-neutral-600 truncate">
+              <span className="mobile:hidden flex-1 font-['Barlow'] text-[13px] text-neutral-600 truncate">
                 {entry.description || "-"}
               </span>
               <span
@@ -121,7 +121,7 @@ export default function CreditLedger({ entries }: Props) {
                 </span>
               </div>
               {entry.description && (
-                <span className="hidden mobile:block font-['Barlow_Condensed'] text-[13px] text-neutral-700">
+                <span className="hidden mobile:block font-['Barlow'] text-[13px] text-neutral-700">
                   {entry.description}
                 </span>
               )}

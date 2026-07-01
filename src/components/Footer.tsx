@@ -42,7 +42,7 @@ export default function Footer() {
             {"Thanks for\nexploring"}
           </h2>
           <p
-            className="font-barlow-condensed"
+            className="font-barlow-body"
             style={{
               fontSize: 16,
               lineHeight: "24px",

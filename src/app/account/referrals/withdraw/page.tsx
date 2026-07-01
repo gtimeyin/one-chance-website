@@ -28,14 +28,14 @@ export default async function WithdrawPage() {
         <h1 className="font-['Barlow_Condensed'] text-[40px] mobile:text-[28px] font-[800] leading-[1.1] text-neutral-800 uppercase -tracking-[0.02em]">
           WITHDRAW CREDITS
         </h1>
-        <p className="font-['Barlow_Condensed'] text-[16px] text-neutral-500">
+        <p className="font-['Barlow'] text-[16px] text-neutral-500">
           Choose how you&apos;d like to use your earned credits.
         </p>
       </div>
 
       {balance <= 0 ? (
         <div className="p-6 border border-neutral-200">
-          <p className="font-['Barlow_Condensed'] text-[15px] text-neutral-500">
+          <p className="font-['Barlow'] text-[15px] text-neutral-500">
             You don&apos;t have any credits to withdraw yet. Keep sharing your referral code!
           </p>
         </div>

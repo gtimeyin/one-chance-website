@@ -221,7 +221,7 @@ function NotFound() {
       <h1 className="type-h2 uppercase" style={{ color: "var(--color-dark)" }}>
         Order not found
       </h1>
-      <p className="font-barlow-condensed" style={{ fontSize: 16, color: "var(--color-text-muted)", maxWidth: 420 }}>
+      <p className="font-barlow-body" style={{ fontSize: 16, color: "var(--color-text-muted)", maxWidth: 420 }}>
         We couldn&apos;t find that order. If you just completed a purchase and landed here in error, check your email for a confirmation receipt.
       </p>
       <Link
