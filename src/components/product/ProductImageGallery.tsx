@@ -23,8 +23,8 @@ export default function ProductImageGallery({ product }: ProductImageGalleryProp
       <div
         className="relative w-full"
         style={{
-          flex: 1,
-          minHeight: 300,
+          aspectRatio: "1 / 1",
+          minHeight: 400,
           background: "var(--color-yellow)",
           overflow: "hidden",
         }}
