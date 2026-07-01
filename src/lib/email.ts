@@ -1,14 +1,46 @@
 import "server-only";
+import nodemailer, { type Transporter } from "nodemailer";
 import { createLogger } from "@/lib/logger";
 
 const log = createLogger("email");
 
-// Transactional email via Resend's HTTP API (https://resend.com). Set
-// RESEND_API_KEY and EMAIL_FROM (e.g. "One Chance <no-reply@onechancegame.com>")
-// in the environment. If unconfigured, sending is a no-op that returns false so
-// callers can degrade gracefully rather than crash.
+// Transactional email over SMTP. Reuses any mailbox/SMTP server you already
+// run — set these in the environment:
+//   SMTP_HOST   e.g. smtp.zoho.com / mail.yourhost.com
+//   SMTP_PORT   465 (implicit TLS) or 587 (STARTTLS)
+//   SMTP_USER   the mailbox login
+//   SMTP_PASS   the mailbox / app password
+//   EMAIL_FROM  e.g. "One Chance <no-reply@onechancegame.com>"
+//   SMTP_SECURE optional "true"/"false"; defaults to true when port is 465
+// If unconfigured, sending is a no-op that returns false so callers degrade
+// gracefully rather than crash.
 export function isEmailConfigured(): boolean {
-  return Boolean(process.env.RESEND_API_KEY && process.env.EMAIL_FROM);
+  return Boolean(
+    process.env.SMTP_HOST &&
+      process.env.SMTP_PORT &&
+      process.env.SMTP_USER &&
+      process.env.SMTP_PASS &&
+      process.env.EMAIL_FROM
+  );
+}
+
+let transporter: Transporter | null = null;
+
+function getTransporter(): Transporter | null {
+  if (!isEmailConfigured()) return null;
+  if (transporter) return transporter;
+
+  const port = parseInt(process.env.SMTP_PORT as string, 10);
+  const secure =
+    process.env.SMTP_SECURE != null ? process.env.SMTP_SECURE === "true" : port === 465;
+
+  transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port,
+    secure,
+    auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
+  });
+  return transporter;
 }
 
 export async function sendEmail(opts: {
@@ -16,31 +48,22 @@ export async function sendEmail(opts: {
   subject: string;
   html: string;
 }): Promise<boolean> {
-  const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.EMAIL_FROM;
-
-  if (!apiKey || !from) {
-    log.warn("Email not configured (RESEND_API_KEY / EMAIL_FROM) — skipping send");
+  const tx = getTransporter();
+  if (!tx) {
+    log.warn("Email not configured (SMTP_* / EMAIL_FROM) — skipping send");
     return false;
   }
 
   try {
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ from, to: opts.to, subject: opts.subject, html: opts.html }),
+    await tx.sendMail({
+      from: process.env.EMAIL_FROM,
+      to: opts.to,
+      subject: opts.subject,
+      html: opts.html,
     });
-
-    if (!res.ok) {
-      log.error("Email send failed", { status: res.status });
-      return false;
-    }
     return true;
   } catch (error) {
-    log.error("Email send threw", error);
+    log.error("Email send failed", error);
     return false;
   }
 }
