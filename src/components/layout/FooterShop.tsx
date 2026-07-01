@@ -15,10 +15,17 @@ const discoverLinks = [
 ];
 
 const socialLinks = [
-  { label: "Twitter (X)", href: "#" },
-  { label: "Instagram", href: "#" },
-  { label: "Facebook", href: "#" },
-  { label: "Tiktok", href: "#" },
+  { label: "Twitter (X)", href: "https://x.com/onechancegame" },
+  { label: "Instagram", href: "https://www.instagram.com/onechancegame" },
+  { label: "Facebook", href: "https://www.facebook.com/onechancegame" },
+  { label: "Tiktok", href: "https://www.tiktok.com/@onechancegame" },
+];
+
+const legalLinks = [
+  { label: "FAQ", href: "/faq" },
+  { label: "Shipping", href: "/shipping" },
+  { label: "Terms & Conditions", href: "/terms" },
+  { label: "Privacy Policy", href: "/privacy" },
 ];
 
 export default function FooterShop({ reveal = false }: { reveal?: boolean }) {
@@ -92,6 +99,8 @@ export default function FooterShop({ reveal = false }: { reveal?: boolean }) {
                   <a
                     key={link.label}
                     href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="text-large-body-default font-['Barlow_Condensed'] text-neutral-800 uppercase no-underline underline-offset-[6px] decoration-[2px] transition-all duration-200 hover:text-neutral-950 hover:underline hover:translate-x-1"
                   >
                     {link.label}
@@ -143,10 +152,23 @@ export default function FooterShop({ reveal = false }: { reveal?: boolean }) {
             </div>
           </motion.div>
 
-          {/* Copyright */}
-          <span className="text-body font-body text-default-font">
-            2026 © DIVISIONS AFRICA. ALL RIGHTS RESERVED
-          </span>
+          {/* Bottom bar: legal links + copyright */}
+          <div className="flex w-full flex-col items-start gap-4 border-t border-solid border-neutral-500 pt-6 md:flex-row md:items-center md:justify-between">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+              {legalLinks.map((link) => (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="text-body font-['Barlow_Condensed'] text-neutral-800 uppercase no-underline underline-offset-[6px] decoration-[2px] transition-all duration-200 hover:text-neutral-950 hover:underline"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+            <span className="text-body font-body text-default-font">
+              2026 © DIVISIONS AFRICA. ALL RIGHTS RESERVED
+            </span>
+          </div>
         </div>
       </div>
     </footer>

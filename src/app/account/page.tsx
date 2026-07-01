@@ -1,6 +1,7 @@
 import { verifySession } from "@/lib/dal";
 import { getCustomerById, getCustomerOrders } from "@/lib/woocommerce";
 import { getUserAvatar, getAvatarById } from "@/lib/avatars";
+import { isCurrentUserCreator } from "@/lib/comics-data";
 import SignupTracker from "@/components/analytics/SignupTracker";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,10 +9,11 @@ import { Suspense } from "react";
 
 export default async function AccountDashboard() {
   const session = await verifySession();
-  const [customer, orders, avatarId] = await Promise.all([
+  const [customer, orders, avatarId, isCreator] = await Promise.all([
     getCustomerById(session.customerId),
     getCustomerOrders(session.customerId, { per_page: 3 }),
     getUserAvatar(session.customerId),
+    isCurrentUserCreator(),
   ]);
   const avatar = getAvatarById(avatarId);
 
@@ -59,6 +61,9 @@ export default async function AccountDashboard() {
           { label: "Addresses", desc: "Manage shipping & billing", href: "/account/addresses" },
           { label: "Referrals", desc: "Earn credits by referring friends", href: "/account/referrals" },
           { label: "Account Details", desc: "Update your profile", href: "/account/edit" },
+          ...(isCreator
+            ? [{ label: "Comics", desc: "Upload and manage comic episodes", href: "/account/admin/comics", creator: true as const }]
+            : []),
         ].map((card) => (
           <Link
             key={card.href}
@@ -66,9 +71,25 @@ export default async function AccountDashboard() {
             className="flex flex-col gap-2 p-5 border border-neutral-200 hover:border-neutral-400 transition-colors no-underline"
             style={{ textDecoration: "none" }}
           >
-            <span className="font-['Barlow_Condensed'] text-[20px] font-[700] text-neutral-800 uppercase">
-              {card.label}
-            </span>
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="font-['Barlow_Condensed'] text-[20px] font-[700] text-neutral-800 uppercase">
+                {card.label}
+              </span>
+              {"creator" in card && card.creator && (
+                <span
+                  className="font-['Barlow_Condensed'] font-[700] uppercase"
+                  style={{
+                    fontSize: 9,
+                    letterSpacing: "0.06em",
+                    padding: "2px 6px",
+                    background: "var(--color-yellow)",
+                    color: "var(--color-dark)",
+                  }}
+                >
+                  Creator
+                </span>
+              )}
+            </div>
             <span className="font-['Barlow'] text-[14px] text-neutral-500">
               {card.desc}
             </span>

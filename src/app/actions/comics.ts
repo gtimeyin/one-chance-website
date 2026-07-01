@@ -184,6 +184,48 @@ export async function addPanelsAction(
   }
 }
 
+/**
+ * Single-file panel upload. Called once per file by the client so the UI can
+ * show per-file progress and surface per-file errors independently.
+ */
+export async function addSinglePanelAction(
+  formData: FormData,
+): Promise<{ success: true } | { success: false; message: string }> {
+  try {
+    await requireCreatorSession();
+  } catch (e) {
+    return { success: false, message: (e as Error).message };
+  }
+
+  const id = String(formData.get("comicId") ?? "");
+  if (!id) return { success: false, message: "Missing comic id." };
+  const comic = await getComicById(id);
+  if (!comic) return { success: false, message: "Comic not found." };
+
+  const file = formData.get("file");
+  if (!(file instanceof File) || file.size === 0) {
+    return { success: false, message: "No file provided." };
+  }
+  if (!file.type.startsWith("image/")) {
+    return { success: false, message: `Not an image: ${file.name}` };
+  }
+
+  const nextSort = comic.panels.reduce((max, p) => Math.max(max, p.sort_order), -1) + 1;
+
+  try {
+    const url = await uploadComicImage({ file, slug: comic.slug, folder: "panels" });
+    await addPanel(id, { src: url, sortOrder: nextSort });
+    bust(comic);
+    return { success: true };
+  } catch (e) {
+    log.error("addSinglePanelAction failed", e);
+    return {
+      success: false,
+      message: (e as Error).message || "Upload failed.",
+    };
+  }
+}
+
 export async function updatePanelCaption(formData: FormData): Promise<void> {
   await requireCreatorSession();
   const panelId = String(formData.get("panelId") ?? "");

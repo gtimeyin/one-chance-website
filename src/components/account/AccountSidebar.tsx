@@ -5,7 +5,13 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { logout } from "@/app/actions/auth";
 
-const navItems = [
+interface NavItem {
+  label: string;
+  href: string;
+  creator?: boolean;
+}
+
+const baseNavItems: NavItem[] = [
   { label: "Dashboard", href: "/account" },
   { label: "Orders", href: "/account/orders" },
   { label: "Addresses", href: "/account/addresses" },
@@ -13,14 +19,23 @@ const navItems = [
   { label: "Account Details", href: "/account/edit" },
 ];
 
+const creatorNavItems: NavItem[] = [
+  { label: "Comics", href: "/account/admin/comics", creator: true },
+];
+
 export default function AccountSidebar({
   avatarSrc,
   avatarName,
+  isCreator = false,
 }: {
   avatarSrc: string;
   avatarName: string;
+  isCreator?: boolean;
 }) {
   const pathname = usePathname();
+  const navItems: NavItem[] = isCreator
+    ? [...baseNavItems, ...creatorNavItems]
+    : baseNavItems;
 
   return (
     <nav
@@ -65,14 +80,28 @@ export default function AccountSidebar({
           <Link
             key={item.href}
             href={item.href}
-            className={`font-['Barlow_Condensed'] text-[15px] font-[500] px-4 py-3 no-underline transition-colors duration-200 mobile:shrink-0 mobile:whitespace-nowrap mobile:py-2 mobile:px-3 mobile:rounded-full mobile:border ${
+            className={`font-['Barlow_Condensed'] text-[15px] font-[500] px-4 py-3 no-underline transition-colors duration-200 mobile:shrink-0 mobile:whitespace-nowrap mobile:py-2 mobile:px-3 mobile:rounded-full mobile:border flex items-center gap-2 ${
               isActive
                 ? "text-neutral-900 bg-neutral-100 font-[600] mobile:border-neutral-900"
                 : "text-neutral-500 hover:text-neutral-800 hover:bg-neutral-50 mobile:border-neutral-200"
             }`}
             style={{ textDecoration: "none" }}
           >
-            {item.label}
+            <span>{item.label}</span>
+            {item.creator && (
+              <span
+                className="font-['Barlow_Condensed'] font-[700] uppercase"
+                style={{
+                  fontSize: 9,
+                  letterSpacing: "0.06em",
+                  padding: "2px 6px",
+                  background: "var(--color-yellow)",
+                  color: "var(--color-dark)",
+                }}
+              >
+                Creator
+              </span>
+            )}
           </Link>
         );
       })}

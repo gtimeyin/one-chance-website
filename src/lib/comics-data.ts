@@ -139,38 +139,57 @@ export async function getComicById(id: string): Promise<ComicRecord | null> {
 export async function isCurrentUserCreator(): Promise<boolean> {
   const session = await getOptionalSession();
   if (!session) return false;
-  return isCreator(session.customerId);
+  return isCreator(session.customerId, session.email);
 }
 
-async function isCreator(customerId: number): Promise<boolean> {
-  // Env-var allowlist bootstrap: comma-separated customer IDs in
-  // COMIC_CREATOR_CUSTOMER_IDS get creator access without needing a row in
-  // the comic_creators table. Useful for granting yourself access on day 1.
+async function isCreator(customerId: number, email: string | undefined): Promise<boolean> {
+  // Env-var allowlist bootstrap: comma-separated ids and/or emails in
+  // COMIC_CREATOR_CUSTOMER_IDS get creator access without needing a DB row.
+  // Useful for granting yourself access on day 1 or in dev.
+  const emailLower = email?.trim().toLowerCase() ?? "";
   const envAllowlist = (process.env.COMIC_CREATOR_CUSTOMER_IDS || "")
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
-  if (envAllowlist.includes(String(customerId))) return true;
+  for (const entry of envAllowlist) {
+    if (entry.includes("@") && entry.toLowerCase() === emailLower) return true;
+    if (entry === String(customerId)) return true;
+  }
 
   const client = getSupabaseClient();
   if (!client) return false;
-  const { data, error } = await client
+
+  // Try customer_id first (cheaper — indexed column).
+  const { data: byId, error: idErr } = await client
     .from("comic_creators")
     .select("customer_id")
     .eq("customer_id", customerId)
     .maybeSingle();
-  if (error) {
-    log.error("isCreator lookup failed", error);
+  if (idErr) {
+    log.error("isCreator by customer_id lookup failed", idErr);
     return false;
   }
-  return Boolean(data);
+  if (byId) return true;
+
+  // Fall back to email match (case-insensitive).
+  if (!emailLower) return false;
+  const { data: byEmail, error: emailErr } = await client
+    .from("comic_creators")
+    .select("email")
+    .ilike("email", emailLower)
+    .maybeSingle();
+  if (emailErr) {
+    log.error("isCreator by email lookup failed", emailErr);
+    return false;
+  }
+  return Boolean(byEmail);
 }
 
 /** Ensures the current session belongs to a permitted comic creator.
  *  Redirects to /login if unauthenticated, or throws otherwise. */
 export async function requireCreatorSession() {
   const session = await verifySession();
-  if (!(await isCreator(session.customerId))) {
+  if (!(await isCreator(session.customerId, session.email))) {
     throw new Error("Not authorized: you don't have comic-creator access.");
   }
   return session;

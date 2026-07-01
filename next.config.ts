@@ -16,6 +16,17 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Server-action uploads (comic panels, product art) can easily exceed the
+  // 1MB default. 25MB gives plenty of headroom for a batch of ~5 panels.
+  // Two limits stack here: the server-action body limit AND the proxy buffer
+  // limit (defaults to 10MB) — bump both, else the proxy truncates first and
+  // multipart parsing dies with "Unexpected end of form".
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "25mb",
+    },
+    proxyClientMaxBodySize: "25mb",
+  },
   images: {
     remotePatterns: [
       {

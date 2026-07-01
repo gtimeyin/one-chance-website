@@ -5,6 +5,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 import AccountSidebar from "@/components/account/AccountSidebar";
 import { getOptionalSession } from "@/lib/dal";
 import { getUserAvatar, getAvatarById } from "@/lib/avatars";
+import { isCurrentUserCreator } from "@/lib/comics-data";
 
 export const metadata = {
   title: "My Account - One Chance Board Game",
@@ -19,11 +20,16 @@ export default async function AccountLayout({
   const session = await getOptionalSession();
   let avatarSrc = "/loader/2bobo.png";
   let avatarName = "Avatar";
+  let isCreator = false;
   if (session) {
-    const avatarId = await getUserAvatar(session.customerId);
+    const [avatarId, creatorFlag] = await Promise.all([
+      getUserAvatar(session.customerId),
+      isCurrentUserCreator(),
+    ]);
     const avatar = getAvatarById(avatarId);
     avatarSrc = avatar.src;
     avatarName = avatar.name;
+    isCreator = creatorFlag;
   }
   return (
     <div className="flex flex-col w-full" style={{ background: "white" }}>
@@ -54,7 +60,7 @@ export default async function AccountLayout({
           style={{ padding: "clamp(32px, 4vw, 64px) clamp(20px, 4vw, 40px)" }}
         >
           <div className="flex w-full max-w-[1024px] gap-10 mobile:flex-col mobile:gap-6">
-            <AccountSidebar avatarSrc={avatarSrc} avatarName={avatarName} />
+            <AccountSidebar avatarSrc={avatarSrc} avatarName={avatarName} isCreator={isCreator} />
             <main className="flex-1 min-w-0">{children}</main>
           </div>
         </section>

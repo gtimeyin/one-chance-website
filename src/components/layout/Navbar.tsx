@@ -29,18 +29,17 @@ const navLinks = [
 ];
 
 const secondaryLinks = [
-  { label: "Explore Olopa", href: "#" },
-  { label: "Terms & Condition", href: "#" },
-  { label: "Legal", href: "#" },
+  { label: "Explore Olopa", href: "/characters" },
+  { label: "Terms & Condition", href: "/terms" },
+  { label: "Legal", href: "/privacy" },
 ];
 
-// TODO: replace "#" with real profile URLs once available.
 const socialLinks: { name: SocialName; label: string; href: string }[] = [
-  { name: "facebook", label: "Facebook", href: "#" },
-  { name: "instagram", label: "Instagram", href: "#" },
-  { name: "x", label: "X (Twitter)", href: "#" },
-  { name: "linkedin", label: "LinkedIn", href: "#" },
-  { name: "tiktok", label: "TikTok", href: "#" },
+  { name: "facebook", label: "Facebook", href: "https://www.facebook.com/onechancegame" },
+  { name: "instagram", label: "Instagram", href: "https://www.instagram.com/onechancegame" },
+  { name: "x", label: "X (Twitter)", href: "https://x.com/onechancegame" },
+  { name: "linkedin", label: "LinkedIn", href: "https://www.linkedin.com/company/onechancegame" },
+  { name: "tiktok", label: "TikTok", href: "https://www.tiktok.com/@onechancegame" },
   { name: "youtube", label: "YouTube", href: "https://www.youtube.com/@onechancegameYT" },
 ];
 
@@ -292,11 +291,11 @@ export default function Navbar() {
               >
                 <div className="flex flex-col items-start gap-1">
                   <a
-                    href="tel:+2349027305417"
+                    href="tel:+2349035164629"
                     className="font-barlow-condensed font-bold text-black-800 no-underline opacity-80 hover:opacity-100 transition-opacity duration-200"
                     style={{ fontSize: 18, textDecoration: "none" }}
                   >
-                    T: +234 902 730 5417
+                    T: +234 903 516 4629
                   </a>
                   <a
                     href="mailto:info@onechancegame.com"
