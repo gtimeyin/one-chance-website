@@ -67,7 +67,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           sizes="(max-width: 768px) 100vw, 33vw"
         />
         <div
-          className="absolute z-10 flex flex-col items-start"
+          className="absolute z-10 flex flex-row flex-wrap items-start"
           style={{ top: 12, left: 12, gap: 6 }}
         >
           {onSale && (
@@ -168,9 +168,10 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Cart/bag icon - positioned at bottom right of the card info area */}
         <button
           onClick={handleAddToCart}
-          className="absolute right-0 bottom-2 cursor-pointer bg-transparent border-none flex items-center justify-center"
-          style={{ padding: 4 }}
+          className="absolute right-0 bottom-2 cursor-pointer bg-transparent hover:bg-[var(--color-yellow)] border-none flex items-center justify-center transition-colors duration-200"
+          style={{ padding: 8 }}
           aria-label="Add to cart"
+          title="Add to cart"
         >
           <svg
             width="20"
